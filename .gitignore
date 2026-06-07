@@ -1,2 +1,17 @@
-.venv/ 
-.ipynb_checkpoints/ 
+# Ignorar entornos virtuales
+.venv/
+env/
+venv/
+
+# Ignorar la carpeta de datos por completo (solo guardamos el código)
+data/
+
+# Ignorar temporales de Python
+__pycache__/
+*.pyc
+.DS_Store
+
+# Ignorar borradores y versiones viejas del scraper
+src/scraper/nuevo_scraper.py
+src/scraper/scraper_sofifa.py
+src/scraper/scraper_sofifa1.py
