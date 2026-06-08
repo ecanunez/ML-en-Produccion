@@ -1,1 +1,5 @@
 # ML en Produccion 
+El proyecto intenta generar una forma de predecir resultados en base a las caracteristicas particulares de cada jugador.
+La idea inicial es hacer una prediccion con los partidos y fixtures del mundial, sin embargo, dado que las selecciones nacionales no juegan tan seguido, los datos de entrenamiento tendrian que venir de los distintos equipos profecionales en donde juegan los jugadores.
+Esto es un problema en si mismo, ya que al jugar 42 selecciones diferentes estamos hablando de jugadores que juegan en ligas de distintos lados del mundo y ademas de distintos niveles de competitividad.
+Lo anterior impica un volumen de datos importante, y dado que estos provienen de un scrapper, se manejó la posibilidad de reducir la prediccion a una competicion internacional especifica, ya que esto se podría hacer con u menor volumen de datos.
