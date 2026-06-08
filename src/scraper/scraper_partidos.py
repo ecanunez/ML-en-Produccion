@@ -1,18 +1,18 @@
 import os
 import pandas as pd
-import requests
+import time
+import random
 from bs4 import BeautifulSoup
+from playwright.sync_api import sync_playwright
 
-# 1. CONSTANTES Y CONFIGURACIÓN (Toda la lista de CONFIG_LIGAS)
+# CONSTANTES Y CONFIGURACIÓN
 DATA_RAW_DIR = os.path.join("data", "raw", "games")
-TOTALS_DIR = os.path.join(DATA_RAW_DIR, 'totals') # Definimos esto globalmente
-os.makedirs(TOTALS_DIR, exist_ok=True)
+SEASON_DIR = os.path.join(DATA_RAW_DIR, 'seasons')
+os.makedirs(SEASON_DIR, exist_ok=True)
 
 BASE_URL = "https://www.transfermarkt.es"
-HEADERS = {"User-Agent": "Mozilla/5.0"}
-EMPORADAS = [2022, 2023, 2024, 2025]
+TEMPORADAS = [2022, 2023, 2024, 2025]
 
-# Estructura jerárquica de ligas
 CONFIG_LIGAS = {
     "Europa": {
         "1": {"nombre": "LaLiga", "id_web": "ES1", "slug": "laliga"},
@@ -56,90 +56,137 @@ CONFIG_LIGAS = {
     }
 }
 
-
-def obtener_enlaces_partidos(url_calendario):
+def obtener_enlaces_partidos(url_calendario, page):
     try:
-        response = requests.get(url_calendario, headers=HEADERS, timeout=15)
-        if response.status_code != 200: return []
-        soup = BeautifulSoup(response.text, "html.parser")
-        enlaces = [BASE_URL + link.get("href") for link in soup.find_all("a", class_="ergebnis-link") if "/spielbericht/" in link.get("href", "")]
-        return list(dict.fromkeys(enlaces))
-    except Exception: return []
-
-def extraer_datos_partido(url_partido, nombre_liga, anio_temporada):
-    try:
-        response = requests.get(url_partido, headers=HEADERS, timeout=15)
-        if response.status_code != 200: return None
-        soup = BeautifulSoup(response.text, "html.parser")
+        page.goto(url_calendario, wait_until="networkidle", timeout=60000)
+        page.wait_for_timeout(3000)
         
+        html = page.content()
+        soup = BeautifulSoup(html, "html.parser")
+        
+        enlaces = []
+        for a in soup.find_all("a", href=True):
+            if "/spielbericht/" in a['href']:
+                full_url = BASE_URL + a['href'] if a['href'].startswith("/") else a['href']
+                enlaces.append(full_url)
+        
+        enlaces_unicos = list(set(enlaces))
+        print(f"      ✅ Se encontraron {len(enlaces_unicos)} partidos.")
+        return enlaces_unicos
+    except Exception as e:
+        print(f"    ⚠️ Error en calendario: {e}")
+        return []
+
+def extraer_datos_partido(url_partido, page, nombre_liga, anio_temporada, region_liga):
+    try:
+        # Espera agresiva de red para asegurar que el marcador cargue con JS
+        page.goto(url_partido, wait_until="networkidle", timeout=60000)
+        page.wait_for_timeout(random.randint(1500, 2500))
+        
+        html = page.content()
+        soup = BeautifulSoup(html, "html.parser")
+
         equipos = soup.find_all("nobr")
-        if len(equipos) < 2: return None
+        if len(equipos) < 2:
+            return None
+
+        # Extracción segura del Marcador Real
+        resultado = "No jugado"
+        marcador_contenedor = soup.find("div", class_="sb-zeit-ergebnis")
+        if marcador_contenedor:
+            marcador_span = marcador_contenedor.find("span", class_="sb-endstand") or \
+                            marcador_contenedor.find("div", class_="sb-result-number")
+            if marcador_span:
+                resultado = " ".join(marcador_span.text.split())
         
-        ergebnis_box = soup.find("div", class_="ergebnis-box")
-        resultado = " ".join(ergebnis_box.text.split()) if ergebnis_box else "No jugado"
-        
+        # Plan de contingencia si la clase cambia
+        if resultado == "No jugado":
+            resultado_box = soup.find("div", class_="sb-team-results") or \
+                            soup.find("div", class_="ergebnis-box")
+            if resultado_box:
+                resultado = " ".join(resultado_box.text.split())
+
+        # Base del registro (Añadida la variable region aquí)
         registro = {
+            "region": region_liga,
             "liga": nombre_liga,
             "temporada": anio_temporada,
             "equipo_local": equipos[0].text.strip(),
             "equipo_visitante": equipos[1].text.strip(),
             "resultado": resultado
         }
-        
-        # --- DEFINIMOS BLOQUES AQUÍ (Esto solucionará tu error) ---
-        bloques = soup.find_all("div", class_="large-6 columns")
-        
-        for idx, i in enumerate([0, 1]):
+
+        # Extracción ULTRA-PRECISA de los 11 titulares en cancha
+        # 'yw1' contiene la tabla del equipo local, 'yw2' la del visitante
+        for idx, tabla_id in enumerate(["yw1", "yw2"]):
             key_pref = "local" if idx == 0 else "visitante"
-            if len(bloques) > i:
-                # Búsqueda flexible: busca tabla con clase 'items', 'inline-table' o cualquier tabla
-                tabla = bloques[i].find("table", class_="items") or \
-                        bloques[i].find("table", class_="inline-table") or \
-                        bloques[i].find("table")
+            tabla_titulares = soup.find("div", id=tabla_id)
+            
+            if tabla_titulares:
+                # Buscamos solo las celdas de jugadores principales en la alineación
+                celdas_jugadores = tabla_titulares.find_all("td", class_="hauptlink")
                 
-                if tabla:
-                    # Buscamos enlaces que llevan al perfil del jugador
-                    jugadores = [a.text.strip() for a in tabla.find_all("a") if "/profil/" in a.get("href", "")]
-                    for j, jug in enumerate(jugadores[:11]):
-                        registro[f"{key_pref}_jugador_{j+1}"] = jug
-        
+                # Extraemos el texto de los nombres reales de los futbolistas
+                jugadores = []
+                for celda in celdas_jugadores:
+                    link = celda.find("a")
+                    if link and "/profil/" in link.get("href", "") and link.text.strip():
+                        nombre_jugador = link.text.strip()
+                        if nombre_jugador not in jugadores:
+                            jugadores.append(nombre_jugador)
+                
+                # Asignamos estrictamente los primeros 11 (Alineación Inicial)
+                for j, jug in enumerate(jugadores[:11]):
+                    registro[f"{key_pref}_jugador_{j+1}"] = jug
+
         return registro
     except Exception as e:
         print(f"Error procesando {url_partido}: {e}")
         return None
 
-
 if __name__ == "__main__":
     print("\n=== SELECCIÓN DE REGIÓN ===")
     regiones = list(CONFIG_LIGAS.keys())
-    for i, region in enumerate(regiones, 1): print(f" {i} - {region}")
+    for i, region in enumerate(regiones, 1): 
+        print(f" {i} - {region}")
     
     opcion_reg = input("\nSelecciona el número de región: ").strip()
     
     if opcion_reg.isdigit() and 1 <= int(opcion_reg) <= len(regiones):
         region_sel = regiones[int(opcion_reg) - 1]
-        print(f"\n🚀 Iniciando extracción masiva para: {region_sel}")
+        print(f"\n🚀 Iniciando extracción con Playwright para: {region_sel}")
         
-        for liga in CONFIG_LIGAS[region_sel].values():
-            print(f"\n--- PROCESANDO LIGA: {liga['nombre']} ---")
-            lista_temporadas = []
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+            )
+            page = context.new_page()
             
-            for anio in TEMPORADAS:
-                url = f"{BASE_URL}/{liga['slug']}/gesamtspielplan/wettbewerb/{liga['id_web']}/saison_id/{anio}"
-                enlaces = obtener_enlaces_partidos(url)
-                if enlaces:
-                    datos_liga = [extraer_datos_partido(l, liga['nombre'], anio) for l in enlaces]
-                    df_temp = pd.DataFrame([d for d in datos_liga if d])
-                    lista_temporadas.append(df_temp)
-                    print(f"  ✅ Temporada {anio} completa.")
-            
-            if lista_temporadas:
-                df_final = pd.concat(lista_temporadas, ignore_index=True)
-                df_final['region'] = region_sel
+            for liga in CONFIG_LIGAS[region_sel].values():
+                print(f"\n--- PROCESANDO LIGA: {liga['nombre']} ---")
                 
-                TOTALS_DIR = os.path.join(DATA_RAW_DIR, 'totals')
-                os.makedirs(TOTALS_DIR, exist_ok=True)
-                df_final.to_csv(os.path.join(TOTALS_DIR, f"total_{liga['nombre'].lower().replace(' ', '_')}_2022_2025.csv"), index=False)
-                print(f"💾 Archivo consolidado guardado.")
+                for anio in TEMPORADAS:
+                    print(f" > Procesando {anio}...")
+                    url = f"{BASE_URL}/{liga['slug']}/gesamtspielplan/wettbewerb/{liga['id_web']}/saison_id/{anio}"
+                    
+                    enlaces = obtener_enlaces_partidos(url, page)
+                    
+                    if enlaces:
+                        datos_temporada = []
+                        for link in enlaces:
+                            # Pasamos region_sel como parámetro a la función
+                            datos = extraer_datos_partido(link, page, liga['nombre'], anio, region_sel)
+                            if datos:
+                                datos_temporada.append(datos)
+                        
+                        if datos_temporada:
+                            df_temp = pd.DataFrame(datos_temporada)
+                            file_name = f"{liga['nombre'].lower().replace(' ', '_')}_{anio}.csv"
+                            df_temp.to_csv(os.path.join(SEASON_DIR, file_name), index=False)
+                            print(f"   ✅ Temporada {anio} guardada con Región y Alineación Oficial.")
+            
+            browser.close()
+            print("\n🏁 Proceso de scraping completado. Navegador cerrado.")
     else:
         print("❌ Opción inválida.")
