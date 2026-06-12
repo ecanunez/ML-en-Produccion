@@ -60,4 +60,4 @@ def consolidar_todo_lo_existente():
 if __name__ == "__main__":
     print("=== PROCESADOR AUTOMÁTICO (SOLO UNIFICACIÓN) ===")
     consolidar_todo_lo_existente()
-    print("🏁 Proceso terminado. Archivos totales creados sin variables añadidas.")
+    print("🏁 Proceso terminado. Archivos totales creados.")
