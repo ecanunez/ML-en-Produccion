@@ -12,6 +12,5 @@ __pycache__/
 .DS_Store
 
 # Ignorar borradores y versiones viejas del scraper
-src/scraper/nuevo_scraper.py
-src/scraper/scraper_sofifa.py
-src/scraper/scraper_sofifa1.py
+src/scraper/Torneos.py
+src/scraper/scraper_torneos.py

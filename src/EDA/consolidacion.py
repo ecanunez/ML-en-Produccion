@@ -61,3 +61,18 @@ if __name__ == "__main__":
     print("=== PROCESADOR AUTOMÁTICO (SOLO UNIFICACIÓN) ===")
     consolidar_todo_lo_existente()
     print("🏁 Proceso terminado. Archivos totales creados.")
+
+
+import glob
+import pandas as pd
+
+archivos = glob.glob(
+    "data/raw/games/international_competitions/*.csv"
+)
+
+df = pd.concat(
+    [pd.read_csv(f) for f in archivos],
+    ignore_index=True
+)
+
+print(df.shape)
