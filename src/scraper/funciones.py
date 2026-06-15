@@ -104,6 +104,43 @@ def extraer_datos_partido_internacional(
             pass
 
         # =====================================
+        # FECHA
+        # =====================================
+
+        fecha = None
+
+        try:
+
+            posibles_selectores = [
+                ".sb-datum",
+                ".sb-datum.hide-for-small",
+                "p.sb-datum",
+                "div.sb-datum",
+                ".matchDate"
+            ]
+
+            for selector in posibles_selectores:
+
+                elementos = page.locator(selector)
+
+                if elementos.count() > 0:
+
+                    texto = (
+                        elementos.first
+                        .inner_text()
+                        .strip()
+                    )
+
+                    if texto:
+                        fecha = texto
+                        break
+
+        except Exception as e:
+
+            print(f"Error fecha: {e}")
+
+
+        # =====================================
         # DEBUG JUGADORES
         # =====================================
 
@@ -245,6 +282,7 @@ def extraer_datos_partido_internacional(
             "region": region_liga,
             "liga": nombre_liga,
             "temporada": anio_temporada,
+            "fecha": fecha,
             "equipo_local": equipo_l,
             "equipo_visitante": equipo_v,
             "resultado": resultado
@@ -385,12 +423,12 @@ def obtener_enlaces_partidos(url_calendario, page):
             f"{len(enlaces_unicos)} partidos."
         )
 
-        print("\nPrimeros 5 enlaces:")
+        #print("\nPrimeros 5 enlaces:")
 
-        for e in enlaces_unicos[:5]:
-            print(e)
+        #for e in enlaces_unicos[:5]:
+        #    print(e)
 
-        return enlaces_unicos
+        #return enlaces_unicos
 
     except Exception as e:
 
@@ -491,6 +529,41 @@ def extraer_datos_partido(url_partido, page, nombre_liga, anio_temporada, region
 
         except:
             pass
+
+        # =====================================
+        # FECHA
+        # =====================================
+        fecha = None
+        
+        try:
+            posibles_selectores = [
+                ".sb-datum",
+                ".sb-datum.hide-for-small",
+                ".matchDate",
+                "p.sb-datum",
+                "div.sb-datum"
+            ]
+
+            for selector in posibles_selectores:
+
+                elementos = page.locator(selector)
+
+                if elementos.count() > 0:
+
+                    texto = (
+                        elementos.first
+                        .inner_text()
+                        .strip()
+                    )
+
+                    if texto:
+                        fecha = texto
+                        break
+
+        except Exception as e:
+
+            print(f"Error fecha: {e}")
+
 
         # =====================================
         # JUGADORES TITULARES
@@ -615,6 +688,7 @@ def extraer_datos_partido(url_partido, page, nombre_liga, anio_temporada, region
             "region": region_liga,
             "liga": nombre_liga,
             "temporada": anio_temporada,
+            "fecha": fecha,
             "equipo_local": equipo_l,
             "equipo_visitante": equipo_v,
             "resultado": resultado
