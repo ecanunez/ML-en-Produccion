@@ -39,3 +39,10 @@ not_found = mapping_df[
 ]
 
 print(len(not_found))
+
+queries = [
+    "Atzili",
+    "Benson",
+    "Ben Slimane",
+    "Benhattab",
+]
