@@ -11,3 +11,5 @@ Desarrollar un modelo capaz de predecir el resultado de partidos de fútbol a pa
 Objetivo secundario
 
 Utilizar el modelo como herramienta de simulación para evaluar el impacto potencial de incorporaciones y bajas durante los períodos de transferencias.
+
+Durante la consolidación de datos se identificó que el 2.67% de los partidos carecían de fecha. La mayoría de los registros afectados correspondían a la Süper Lig. Estos registros fueron conservados en el dataset para su análisis posterior.
