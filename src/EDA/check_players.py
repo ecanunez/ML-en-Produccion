@@ -17,13 +17,13 @@ players_df = players_df[
     players_df["last_season"] >= 2021
 ]
 
-print(players_df.shape)
+# print(players_df.shape)
 
-print(
-    players_df["last_season"]
-    .value_counts()
-    .sort_index()
-)
+# print(
+#     players_df["last_season"]
+#     .value_counts()
+#     .sort_index()
+# )
 
 import pandas as pd
 
@@ -44,8 +44,8 @@ for texto in [
     "Abu Fani"
 ]:
 
-    print("\n" + "=" * 50)
-    print(texto)
+    # print("\n" + "=" * 50)
+    # print(texto)
 
     resultado = players[
         players["name"]
@@ -73,18 +73,36 @@ players["surname_3"] = (
     .apply(lambda x: build_last_tokens(x, 3))
 )
 
+# print(
+#     players[
+#         players["name"]
+#         .str.contains(
+#             "Yedder|Hassani|Beka|Fani",
+#             case=False,
+#             na=False
+#         )
+#     ][[
+#         "name",
+#         "surname_1",
+#         "surname_2",
+#         "surname_3"
+#     ]]
+# )
+
+players_df[
+    players_df["name"]
+    .str.contains("kja", case=False, na=False)
+][["player_id", "name"]]
+
 print(
-    players[
-        players["name"]
+    players_df[
+        players_df["name"]
         .str.contains(
-            "Yedder|Hassani|Beka|Fani",
+            "Slimane",
             case=False,
             na=False
         )
-    ][[
-        "name",
-        "surname_1",
-        "surname_2",
-        "surname_3"
-    ]]
+    ][
+        ["player_id", "name", "last_season"]
+    ]
 )

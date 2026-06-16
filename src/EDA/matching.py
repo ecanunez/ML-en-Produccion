@@ -39,8 +39,8 @@ exact_matches = (
     tm_players
 )
 
-print("Jugadores alineaciones:", len(match_players))
-print("Coincidencias exactas:", len(exact_matches))
+#print("Jugadores alineaciones:", len(match_players))
+#print("Coincidencias exactas:", len(exact_matches))
 
 print(
     "Cobertura:",
@@ -125,3 +125,12 @@ print(
     "Match apellido único:",
     len(matchable_by_surname)
 )
+
+players_df[
+    players_df["name"]
+    .str.contains(
+        "Slimane",
+        case=False,
+        na=False
+    )
+][["player_id","name"]]
