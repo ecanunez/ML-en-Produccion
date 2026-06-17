@@ -1,8 +1,6 @@
-import pandas as pd
+from sklearn.linear_model import LogisticRegression
 
-df = pd.read_parquet(
-    "data/interim/player_match_stats.parquet"
-)
+print(LogisticRegression)
 
-print(df.head())
-print(df.describe())
+import inspect
+print(inspect.signature(LogisticRegression))

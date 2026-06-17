@@ -222,6 +222,23 @@ def main():
     )
 
     print(
+        output[
+            [
+                "home_players_found",
+                "away_players_found"
+            ]
+        ]
+        .mean()
+    )
+
+    print(
+        (
+            output["home_players_found"]
+            + output["away_players_found"]
+        ).mean()
+    )
+
+    print(
         OUTPUT_FILE
     )
 
