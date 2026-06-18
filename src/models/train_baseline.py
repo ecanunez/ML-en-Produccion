@@ -1,34 +1,24 @@
 from pathlib import Path
+from pyexpat import features, model
 
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
-
 from sklearn.pipeline import Pipeline
-
 from sklearn.preprocessing import StandardScaler
-
 from sklearn.linear_model import LogisticRegression
-
 from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.metrics import (
-    accuracy_score,
-    f1_score,
-    classification_report,
-    confusion_matrix
+accuracy_score,
+f1_score,
+classification_report,
+confusion_matrix
 )
-
 
 ROOT = Path(__file__).resolve().parents[2]
 
-DATA_FILE = (
-    ROOT
-    / "data"
-    / "processed"
-    / "training_dataset.parquet"
-)
-
+DATA_FILE = (ROOT / "data" / "processed" / "training_dataset.parquet")
 
 def evaluate_model(
     model,
@@ -68,7 +58,8 @@ def evaluate_model(
         classification_report(
             y_test,
             preds,
-            digits=4
+            digits=4,
+            zero_division=0
         )
     )
 
@@ -82,16 +73,42 @@ def main():
     )
 
     print(
-        f"Observaciones: {len(df):,}"
+        f"Observaciones originales: "
+        f"{len(df):,}"
     )
 
+    # -------------------------
+    # Eliminar targets faltantes
+    # -------------------------
+
+    df = df[
+        df["target"].notna()
+    ].copy()
+
+    print(
+        f"Observaciones finales: "
+        f"{len(df):,}"
+    )
+
+    # -------------------------
+    # Features automáticas
+    # -------------------------
+
     features = [
-        "home_players_found",
-        "away_players_found",
-        "home_team_market_value",
-        "away_team_market_value",
-        "market_value_diff"
+        c
+        for c in df.columns
+        if c not in [
+            "match_idx",
+            "target",
+            "home_elo",
+            "away_elo"
+        ]
     ]
+
+    print(
+        f"Features utilizadas: "
+        f"{len(features)}"
+    )
 
     X = df[features]
 
@@ -106,7 +123,7 @@ def main():
             stratify=y
         )
     )
-
+        
     print(
         f"\nTrain: {len(X_train):,}"
     )
@@ -115,9 +132,9 @@ def main():
         f"Test: {len(X_test):,}"
     )
 
-    # -----------------------------------
-    # Logistic Regression
-    # -----------------------------------
+        # -------------------------
+        # Logistic Regression
+        # -------------------------
 
     logreg = Pipeline([
         (
@@ -127,7 +144,7 @@ def main():
         (
             "model",
             LogisticRegression(
-                max_iter=2000,
+                max_iter=3000,
                 random_state=42
             )
         )
@@ -145,14 +162,15 @@ def main():
         "LOGISTIC REGRESSION"
     )
 
-    # -----------------------------------
-    # Random Forest
-    # -----------------------------------
+        # -------------------------
+        # Random Forest
+        # -------------------------
 
     rf = RandomForestClassifier(
-        n_estimators=300,
-        max_depth=10,
+        n_estimators=500,
+        max_depth=12,
         min_samples_leaf=5,
+        class_weight="balanced",
         random_state=42,
         n_jobs=-1
     )
@@ -169,9 +187,9 @@ def main():
         "RANDOM FOREST"
     )
 
-    # -----------------------------------
+    # -------------------------
     # Feature Importance
-    # -----------------------------------
+    # -------------------------
 
     importance = pd.DataFrame({
         "feature": features,
@@ -184,15 +202,14 @@ def main():
     )
 
     print("\n" + "=" * 60)
-    print("FEATURE IMPORTANCE")
+    print("TOP 30 FEATURE IMPORTANCE")
     print("=" * 60)
 
     print(
-        importance.to_string(
-            index=False
-        )
+        importance
+        .head(30)
+        .to_string(index=False)
     )
-
 
 if __name__ == "__main__":
     main()

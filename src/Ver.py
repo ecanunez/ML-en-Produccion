@@ -1,6 +1,10 @@
-from sklearn.linear_model import LogisticRegression
+import pandas as pd
 
-print(LogisticRegression)
+df = pd.read_parquet(
+    "data/processed/training_dataset.parquet"
+)
 
-import inspect
-print(inspect.signature(LogisticRegression))
+print(
+    df.groupby("target")["elo_diff"]
+      .agg(["count", "mean", "median"])
+)

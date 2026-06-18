@@ -25,7 +25,11 @@ OUTPUT_FILE = (
 )
 
 
-def get_player_ids(match_row, side, player_lookup):
+def get_player_ids(
+    match_row,
+    side,
+    player_lookup
+):
 
     ids = []
 
@@ -44,6 +48,25 @@ def get_player_ids(match_row, side, player_lookup):
     return ids
 
 
+def map_position(position):
+
+    position = str(position).lower()
+
+    if "goalkeeper" in position:
+        return "GK"
+
+    if position == "defender":
+        return "DEF"
+
+    if position == "midfield":
+        return "MID"
+
+    if position == "attack":
+        return "ATT"
+
+    return "UNK"
+
+
 def compute_team_stats(
     player_ids,
     players_df
@@ -52,14 +75,59 @@ def compute_team_stats(
     squad = players_df[
         players_df["player_id"]
         .isin(player_ids)
-    ]
+    ].copy()
 
-    return {
-        "players_found": len(squad),
-        "team_market_value": squad[
-            "market_value_in_eur"
-        ].fillna(0).sum()
-    }
+    result = {}
+
+    result["players_found"] = len(
+        squad
+    )
+
+    result["team_market_value"] = (
+        squad["market_value_in_eur"]
+        .fillna(0)
+        .sum()
+    )
+
+    result["team_market_value_mean"] = (
+        squad["market_value_in_eur"]
+        .fillna(0)
+        .mean()
+    )
+
+    for group in [
+        "GK",
+        "DEF",
+        "MID",
+        "ATT"
+    ]:
+
+        subset = squad[
+            squad["position_group"]
+            == group
+        ]
+
+        result[
+            f"{group}_market_value_sum"
+        ] = (
+            subset["market_value_in_eur"]
+            .fillna(0)
+            .sum()
+        )
+
+        result[
+            f"{group}_market_value_mean"
+        ] = (
+            subset["market_value_in_eur"]
+            .fillna(0)
+            .mean()
+        )
+
+        result[
+            f"{group}_players"
+        ] = len(subset)
+
+    return result
 
 
 def main():
@@ -83,7 +151,7 @@ def main():
     )
 
     # -------------------------
-    # Mapping válido
+    # Mapping
     # -------------------------
 
     mapping = mapping[
@@ -114,9 +182,15 @@ def main():
     players = players[
         [
             "player_id",
+            "position",
             "market_value_in_eur"
         ]
     ].copy()
+
+    players["position_group"] = (
+        players["position"]
+        .apply(map_position)
+    )
 
     rows = []
 
@@ -149,45 +223,52 @@ def main():
         )
 
         row = {
-
-            "match_idx": idx,
-
-            "home_players_found":
-                home_stats[
-                    "players_found"
-                ],
-
-            "away_players_found":
-                away_stats[
-                    "players_found"
-                ],
-
-            "home_team_market_value":
-                home_stats[
-                    "team_market_value"
-                ],
-
-            "away_team_market_value":
-                away_stats[
-                    "team_market_value"
-                ]
+            "match_idx": idx
         }
 
-        row[
-            "market_value_diff"
-        ] = (
-            row[
-                "home_team_market_value"
-            ]
+        for k, v in home_stats.items():
+
+            row[f"home_{k}"] = v
+
+        for k, v in away_stats.items():
+
+            row[f"away_{k}"] = v
+
+        row["market_value_diff"] = (
+            row["home_team_market_value"]
             -
-            row[
-                "away_team_market_value"
-            ]
+            row["away_team_market_value"]
+        )
+
+        row["GK_value_diff"] = (
+            row["home_GK_market_value_sum"]
+            -
+            row["away_GK_market_value_sum"]
+        )
+
+        row["DEF_value_diff"] = (
+            row["home_DEF_market_value_sum"]
+            -
+            row["away_DEF_market_value_sum"]
+        )
+
+        row["MID_value_diff"] = (
+            row["home_MID_market_value_sum"]
+            -
+            row["away_MID_market_value_sum"]
+        )
+
+        row["ATT_value_diff"] = (
+            row["home_ATT_market_value_sum"]
+            -
+            row["away_ATT_market_value_sum"]
         )
 
         rows.append(row)
 
-    output = pd.DataFrame(rows)
+    output = pd.DataFrame(
+        rows
+    )
 
     print(
         f"\nFilas generadas: "
@@ -195,16 +276,11 @@ def main():
     )
 
     print(
-        "\nValores faltantes:"
+        "\nColumnas generadas:"
     )
 
     print(
-        output.isna()
-        .sum()
-        .sort_values(
-            ascending=False
-        )
-        .head(10)
+        output.columns.tolist()
     )
 
     OUTPUT_FILE.parent.mkdir(
@@ -222,28 +298,9 @@ def main():
     )
 
     print(
-        output[
-            [
-                "home_players_found",
-                "away_players_found"
-            ]
-        ]
-        .mean()
-    )
-
-    print(
-        (
-            output["home_players_found"]
-            + output["away_players_found"]
-        ).mean()
-    )
-
-    print(
         OUTPUT_FILE
     )
 
 
 if __name__ == "__main__":
     main()
-
-    
