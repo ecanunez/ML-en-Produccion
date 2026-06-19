@@ -1,64 +1,31 @@
 import pandas as pd
 
-mapping = pd.read_parquet(
-    "data/interim/player_mapping.parquet"
+players = pd.read_csv(
+    "data/raw/players/players.csv"
 )
 
-# print("\nAMBIGUOUS")
-# print(
-#     mapping[
-#         mapping["method"] == "ambiguous"
-#     ]
-#     .head(50)
-# )
+for nombre in [
+    "Ben Slimane",
+    "Kjaer",
+    "Ulmer",
+    "Meffert",
+    "Zoubir"
+]:
 
-# print("\nNOT FOUND")
-# print(
-#     mapping[
-#         mapping["method"] == "not_found"
-#     ]
-#     .head(50)
-# )
+    print("\n" + "=" * 50)
+    print(nombre)
 
-mapping_df = pd.read_parquet(
-    "data/interim/player_mapping.parquet"
-)
-
-not_found = mapping_df[
-    mapping_df["method"] == "not_found"
-]
-
-# print(
-#     not_found["lineup_name"]
-#     .sort_values()
-#     .head(100)
-# )
-
-not_found = mapping_df[
-    mapping_df["method"] == "not_found"
-]
-
-print(len(not_found))
-
-import pandas as pd
-
-mapping = pd.read_parquet(
-    "data/interim/player_mapping.parquet"
-)
-
-not_found = mapping[
-    mapping["method"] == "not_found"
-]
-
-print(f"\nNOT FOUND: {len(not_found)}\n")
-
-print(
-    not_found["lineup_name"]
-    .sort_values()
-    .to_string(index=False)
-)
-
-candidates_name = players_df[
-    players_df["name_norm"]
-    .str.contains(search_name, na=False)
-]
+    print(
+        players[
+            players["name"]
+            .str.contains(
+                nombre,
+                case=False,
+                na=False
+            )
+        ][[
+            "player_id",
+            "name",
+            "last_season"
+        ]]
+    )

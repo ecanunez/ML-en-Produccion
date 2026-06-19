@@ -13,3 +13,15 @@ Objetivo secundario
 Utilizar el modelo como herramienta de simulación para evaluar el impacto potencial de incorporaciones y bajas durante los períodos de transferencias.
 
 Durante la consolidación de datos se identificó que el 2.67% de los partidos carecían de fecha. La mayoría de los registros afectados correspondían a la Süper Lig. Estos registros fueron conservados en el dataset para su análisis posterior.
+
+Durante la auditoría del dataset se identificó que los valores de mercado utilizados provenían de una fotografía estática de los jugadores (players.csv). Se detectó la existencia de una fuente histórica (player_valuations.csv) que permitiría reconstruir el valor de mercado vigente al momento de cada encuentro. Esta mejora fue identificada como trabajo futuro para reducir posibles sesgos temporales.
+
+Se identificó una fuerte correlación (>0.94) entre las variables home_team_market_value y home_team_market_value_mean, así como entre away_team_market_value y away_team_market_value_mean. Tras eliminar las variables promedio, el modelo Random Forest incrementó su F1 Macro de 0.4670 a 0.4709, reduciendo además la dimensionalidad del conjunto de datos.
+
+En este punto ya escribiría una sección de feature selection:
+
+Se calcularon correlaciones entre variables numéricas.
+Se detectaron pares con correlación superior a 0.94.
+Se eliminaron variables redundantes (*_market_value_mean).
+El desempeño mejoró ligeramente (F1 Macro 0.467 → 0.471).
+Se conservaron variables correlacionadas con significado futbolístico distinto (points_diff, win_rate_diff) para evitar eliminar señal útil prematuramente.

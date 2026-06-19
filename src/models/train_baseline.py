@@ -101,7 +101,11 @@ def main():
             "match_idx",
             "target",
             "home_elo",
-            "away_elo"
+            "away_elo",
+            "home_team_market_value_mean",
+            "away_team_market_value_mean",
+            "home_GK_market_value_mean",
+            "away_GK_market_value_mean"
         ]
     ]
 
