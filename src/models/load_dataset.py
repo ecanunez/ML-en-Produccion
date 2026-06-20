@@ -8,7 +8,7 @@ DATA_FILE = (
     ROOT
     / "data"
     / "processed"
-    / "training_dataset_v2.parquet"
+    / "training_dataset.parquet"
 )
 
 

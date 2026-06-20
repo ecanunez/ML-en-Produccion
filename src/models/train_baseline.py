@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
 from evaluate_model import evaluate_model
-from src.reports.log_experiment import log_experiment
+from log_experiment import log_experiment
 
 ROOT = Path(__file__).resolve().parents[2]
 

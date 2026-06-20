@@ -4,7 +4,7 @@ import pandas as pd
 
 from load_dataset import load_dataset
 from evaluate_model import evaluate_model
-from src.reports.log_experiment import log_experiment
+from log_experiment import log_experiment
 
 X, y, features = load_dataset()
 

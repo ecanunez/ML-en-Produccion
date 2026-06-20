@@ -1,4 +1,6 @@
-date,model,dataset,n_features,accuracy,f1_macro
-2026-06-19,logistic_baseline,training_dataset.parquet,63,0.53,0.39
-2026-06-19,rf_v1,training_dataset.parquet,63,0.50,0.47
-2026-06-19,rf_tuned,training_dataset_v2.parquet,67,0.51,0.476
+date,model,dataset,n_features,accuracy,f1_macro,timestamp,train_rows,params,notes
+,LogisticRegression,training_dataset_fe_v1,61,0.5361,0.3993,2026-06-20 00:16:49.233465,12599,max_iter=3000,Baseline
+,RandomForest,training_dataset_v1,61,0.5262,0.4876,2026-06-20 00:16:54.293460,12599,"n_estimators=500,max_depth=12,min_samples_leaf=5,class_weight=balanced",Baseline
+,RandomForestClassifier,training_dataset.parquet,55,0.5206,0.482,2026-06-20 00:17:04.213886,12599,"n_estimators=500,max_depth=10,min_samples_leaf=5,min_samples_split=2,class_weight=balanced",Feature Engineering v1
+,RandomForestTuned,training_dataset.parquet,55,0.5183,0.4857,2026-06-20 00:17:14.289987,12599,"n_estimators=500,max_depth=10,min_samples_leaf=5,min_samples_split=2,class_weight=balanced",Feature Engineering v1
+,HistGradientBoosting,training_dataset.parquet,55,0.5369,0.4048,2026-06-20 00:17:21.662738,12599,"learning_rate=0.05,max_depth=6,max_iter=300,min_samples_leaf=20",Feature Engineering v1

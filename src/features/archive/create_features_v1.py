@@ -1,3 +1,20 @@
+"""
+SCRIPT HISTÓRICO
+
+Utilizado durante Feature Engineering v1 para crear:
+
+- gf_diff
+- ga_diff
+- players_found_diff
+- market_value_ratio
+
+Actualmente estas variables se generan directamente en:
+
+src/data/build_training_dataset.py
+
+Se conserva únicamente por trazabilidad.
+"""
+
 from pathlib import Path
 
 import pandas as pd

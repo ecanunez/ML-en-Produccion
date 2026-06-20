@@ -1,0 +1,10 @@
+date,model,dataset,n_features,accuracy,f1_macro,timestamp,train_rows,params,notes
+2026-06-19,logistic_baseline,training_dataset.parquet,63,0.53,0.39,,,,
+2026-06-19,rf_v1,training_dataset.parquet,63,0.5,0.47,,,,
+2026-06-19,rf_tuned,training_dataset_v2.parquet,67,0.51,0.476,,,,
+,LogisticRegression,training_dataset_fe_v1,61,0.5361,0.3993,2026-06-19 23:52:44.958783,12599.0,max_iter=3000,Baseline
+,RandomForest,training_dataset_v1,61,0.5262,0.4876,2026-06-19 23:52:50.536302,12599.0,"n_estimators=500,max_depth=12,min_samples_leaf=5,class_weight=balanced",Baseline
+,LogisticRegression,training_dataset_fe_v1,61,0.5361,0.3993,2026-06-19 23:57:01.023540,12599.0,max_iter=3000,Baseline
+,RandomForest,training_dataset_v1,61,0.5262,0.4876,2026-06-19 23:57:04.974424,12599.0,"n_estimators=500,max_depth=12,min_samples_leaf=5,class_weight=balanced",Baseline
+,RandomForestTuned,training_dataset.parquet,55,0.5183,0.4857,2026-06-19 23:59:05.467242,12599.0,"n_estimators=500,max_depth=10,min_samples_leaf=5,min_samples_split=2,class_weight=balanced",Feature Engineering v1
+,HistGradientBoosting,training_dataset.parquet,55,0.5369,0.4048,2026-06-19 23:59:14.066702,12599.0,"learning_rate=0.05,max_depth=6,max_iter=300,min_samples_leaf=20",Feature Engineering v1
