@@ -4,6 +4,7 @@ import pandas as pd
 
 from load_dataset import load_dataset
 from evaluate_model import evaluate_model
+from src.reports.log_experiment import log_experiment
 
 X, y, features = load_dataset()
 
@@ -27,7 +28,7 @@ rf = RandomForestClassifier(
 
 rf.fit(X_train, y_train)
 
-evaluate_model(
+acc, f1 = evaluate_model(
     rf,
     X_test,
     y_test,
@@ -46,3 +47,25 @@ importance = (
 
 print("\nTOP 20 FEATURES")
 print(importance.head(20))
+
+importance.to_csv(
+    "src/reports/feature_importance_rf_v2.csv",
+    index=False
+)
+
+log_experiment(
+    dataset="training_dataset.parquet",
+    model="RandomForestTuned",
+    f1_macro=f1,
+    accuracy=acc,
+    features=X.shape[1],
+    train_rows=len(X),
+    params=(
+        "n_estimators=500,"
+        "max_depth=10,"
+        "min_samples_leaf=5,"
+        "min_samples_split=2,"
+        "class_weight=balanced"
+    ),
+    notes="Feature Engineering v1"
+)

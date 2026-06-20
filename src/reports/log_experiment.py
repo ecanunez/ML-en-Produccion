@@ -10,21 +10,27 @@ def log_experiment(
     f1_macro,
     accuracy,
     features,
-    notes=""
+    train_rows,
+    notes="",
+    params=""
 ):
 
     row = pd.DataFrame([{
-        "date": pd.Timestamp.now().date(),
+        "timestamp": pd.Timestamp.now(),
         "dataset": dataset,
         "model": model,
-        "f1_macro": f1_macro,
-        "accuracy": accuracy,
-        "features": features,
+        "f1_macro": round(f1_macro, 4),
+        "accuracy": round(accuracy, 4),
+        "n_features": features,
+        "train_rows": train_rows,
+        "params": params,
         "notes": notes
     }])
 
     if LOG_FILE.exists():
+
         existing = pd.read_csv(LOG_FILE)
+
         row = pd.concat(
             [existing, row],
             ignore_index=True
@@ -35,4 +41,4 @@ def log_experiment(
         index=False
     )
 
-    print("Experimento registrado")
+    print("✓ Experimento registrado")

@@ -1,27 +1,210 @@
-# ML en Produccion 
-El proyecto intenta generar una forma de predecir resultados en base a las caracteristicas particulares de cada jugador.
-La idea inicial es hacer una prediccion con los partidos y fixtures del mundial, sin embargo, dado que las selecciones nacionales no juegan tan seguido, los datos de entrenamiento tendrian que venir de los distintos equipos profecionales en donde juegan los jugadores.
-Esto es un problema en si mismo, ya que al jugar 42 selecciones diferentes estamos hablando de jugadores que juegan en ligas de distintos lados del mundo y ademas de distintos niveles de competitividad.
-Lo anterior impica un volumen de datos importante, y dado que estos provienen de un scrapper, se manejó la posibilidad de reducir la prediccion a una competicion internacional especifica, ya que esto se podría hacer con u menor volumen de datos.
+# Matching de Jugadores y Features de Perfil
 
-Objetivo principal
+## Motivación
 
-Desarrollar un modelo capaz de predecir el resultado de partidos de fútbol a partir de las características de los jugadores alineados.
+Uno de los objetivos del proyecto es permitir, en etapas futuras, la simulación de modificaciones en las plantillas de los equipos.
 
-Objetivo secundario
+Para ello no resulta suficiente trabajar únicamente con variables agregadas a nivel club, sino que es necesario vincular los jugadores presentes en las alineaciones con información individual proveniente de Transfermarkt.
 
-Utilizar el modelo como herramienta de simulación para evaluar el impacto potencial de incorporaciones y bajas durante los períodos de transferencias.
+---
 
-Durante la consolidación de datos se identificó que el 2.67% de los partidos carecían de fecha. La mayoría de los registros afectados correspondían a la Süper Lig. Estos registros fueron conservados en el dataset para su análisis posterior.
+## Construcción del Player Mapping
 
-Durante la auditoría del dataset se identificó que los valores de mercado utilizados provenían de una fotografía estática de los jugadores (players.csv). Se detectó la existencia de una fuente histórica (player_valuations.csv) que permitiría reconstruir el valor de mercado vigente al momento de cada encuentro. Esta mejora fue identificada como trabajo futuro para reducir posibles sesgos temporales.
+Las alineaciones obtenidas mediante scraping contienen únicamente nombres de jugadores.
 
-Se identificó una fuerte correlación (>0.94) entre las variables home_team_market_value y home_team_market_value_mean, así como entre away_team_market_value y away_team_market_value_mean. Tras eliminar las variables promedio, el modelo Random Forest incrementó su F1 Macro de 0.4670 a 0.4709, reduciendo además la dimensionalidad del conjunto de datos.
+Ejemplo:
 
-En este punto ya escribiría una sección de feature selection:
+```text
+Herrera
+García
+Cruz
+Moncayola
+Ávila
+```
 
-Se calcularon correlaciones entre variables numéricas.
-Se detectaron pares con correlación superior a 0.94.
-Se eliminaron variables redundantes (*_market_value_mean).
-El desempeño mejoró ligeramente (F1 Macro 0.467 → 0.471).
-Se conservaron variables correlacionadas con significado futbolístico distinto (points_diff, win_rate_diff) para evitar eliminar señal útil prematuramente.
+Por otro lado, la base de Transfermarkt contiene identificadores únicos para cada jugador:
+
+```text
+player_id
+player_name
+market_value
+position
+date_of_birth
+international_caps
+...
+```
+
+Se desarrolló un proceso de matching para vincular ambos universos.
+
+### Estrategias utilizadas
+
+1. Exact Match
+
+Coincidencia exacta entre nombre normalizado y nombre oficial del jugador.
+
+2. Matching por apellidos
+
+Se construyeron representaciones utilizando:
+
+* último apellido
+* últimos dos apellidos
+* últimos tres apellidos
+
+para capturar diferencias en la forma de nombrar a los futbolistas.
+
+3. Prefix Match
+
+Se implementó soporte para formatos abreviados:
+
+```text
+J. Álvarez
+M. Gómez
+```
+
+buscando coincidencias por prefijo sobre distintas variantes del nombre.
+
+---
+
+## Restricción temporal
+
+Para reducir ambigüedades se limitó el universo de búsqueda a jugadores activos en temporadas recientes.
+
+```python
+last_season >= 2022
+```
+
+Dado que el dataset de partidos comienza en 2022, esta restricción eliminó miles de futbolistas históricos que generaban múltiples coincidencias posibles.
+
+La cobertura del matching mejoró significativamente tras aplicar este filtro.
+
+---
+
+## Cobertura obtenida
+
+Resultado final:
+
+```text
+Jugadores mapeados:
+≈ 7 titulares por equipo
+
+Cobertura promedio:
+home_profile_players_found ≈ 6.91
+away_profile_players_found ≈ 6.90
+```
+
+Esto implica que aproximadamente el 63% de los futbolistas presentes en cada alineación pudieron vincularse exitosamente con su perfil individual.
+
+---
+
+## Features de perfil de jugador
+
+A partir de los jugadores mapeados se construyeron variables agregadas para cada alineación.
+
+### Edad promedio
+
+```text
+home_avg_age
+away_avg_age
+```
+
+Calculada utilizando la fecha de nacimiento de cada futbolista.
+
+### Experiencia internacional promedio
+
+```text
+home_avg_caps
+away_avg_caps
+```
+
+Basada en la cantidad de partidos disputados con selecciones nacionales absolutas.
+
+### Cobertura del matching
+
+```text
+home_profile_players_found
+away_profile_players_found
+```
+
+Cantidad de jugadores identificados correctamente dentro de cada alineación.
+
+---
+
+## Variables derivadas
+
+Posteriormente se generaron variables diferenciales entre ambos equipos:
+
+```text
+age_diff
+caps_diff
+profile_players_found_diff
+```
+
+donde:
+
+```text
+age_diff
+=
+home_avg_age
+-
+away_avg_age
+```
+
+```text
+caps_diff
+=
+home_avg_caps
+-
+away_avg_caps
+```
+
+Estas variables buscan capturar diferencias estructurales entre las alineaciones más allá del valor de mercado o la fortaleza histórica de los equipos.
+
+---
+
+## Importancia para futuras etapas
+
+Esta arquitectura permite incorporar nuevas características individuales sin modificar el pipeline principal.
+
+Por ejemplo:
+
+* pie dominante
+* altura
+* posición
+* experiencia internacional
+* goles internacionales
+* minutos disputados
+* valor de mercado histórico
+
+Además habilita uno de los objetivos secundarios del proyecto:
+
+simular el impacto potencial de fichajes, ventas o cambios de alineación sobre las probabilidades estimadas por el modelo.
+
+
+# Trabajo futuro
+
+## Modelado
+
+- XGBoost
+- LightGBM
+- CatBoost
+- Calibration de probabilidades
+
+## Features
+
+- Valores de mercado históricos
+- Estadísticas recientes por jugador
+- Métricas local/visitante
+- Historial de lesiones
+- Experiencia internacional avanzada
+
+## Simulación de plantillas
+
+La arquitectura actual permite reemplazar jugadores individuales dentro de una alineación y recalcular automáticamente las features agregadas del equipo.
+
+Esto habilita escenarios de simulación para:
+
+- incorporaciones
+- transferencias
+- lesiones
+- cambios tácticos
+- alineaciones alternativas

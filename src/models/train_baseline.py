@@ -1,6 +1,4 @@
 from pathlib import Path
-from pyexpat import features, model
-
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
@@ -9,60 +7,17 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
-from sklearn.metrics import (
-accuracy_score,
-f1_score,
-classification_report,
-confusion_matrix
-)
+from evaluate_model import evaluate_model
+from src.reports.log_experiment import log_experiment
 
 ROOT = Path(__file__).resolve().parents[2]
 
-DATA_FILE = (ROOT / "data" / "processed" / "training_dataset.parquet")
-
-def evaluate_model(
-    model,
-    X_test,
-    y_test,
-    model_name
-):
-
-    preds = model.predict(X_test)
-
-    print("\n" + "=" * 60)
-    print(model_name)
-    print("=" * 60)
-
-    print(
-        f"Accuracy: "
-        f"{accuracy_score(y_test, preds):.4f}"
-    )
-
-    print(
-        f"F1 Macro: "
-        f"{f1_score(y_test, preds, average='macro'):.4f}"
-    )
-
-    print("\nConfusion Matrix")
-
-    print(
-        confusion_matrix(
-            y_test,
-            preds
-        )
-    )
-
-    print("\nClassification Report")
-
-    print(
-        classification_report(
-            y_test,
-            preds,
-            digits=4,
-            zero_division=0
-        )
-    )
-
+DATA_FILE = (
+    ROOT
+    / "data"
+    / "processed"
+    / "training_dataset.parquet"
+)
 
 def main():
 
@@ -77,10 +32,6 @@ def main():
         f"{len(df):,}"
     )
 
-    # -------------------------
-    # Eliminar targets faltantes
-    # -------------------------
-
     df = df[
         df["target"].notna()
     ].copy()
@@ -89,10 +40,6 @@ def main():
         f"Observaciones finales: "
         f"{len(df):,}"
     )
-
-    # -------------------------
-    # Features automáticas
-    # -------------------------
 
     features = [
         c
@@ -127,7 +74,7 @@ def main():
             stratify=y
         )
     )
-        
+
     print(
         f"\nTrain: {len(X_train):,}"
     )
@@ -136,9 +83,9 @@ def main():
         f"Test: {len(X_test):,}"
     )
 
-        # -------------------------
-        # Logistic Regression
-        # -------------------------
+    # ==================================================
+    # Logistic Regression
+    # ==================================================
 
     logreg = Pipeline([
         (
@@ -159,16 +106,27 @@ def main():
         y_train
     )
 
-    evaluate_model(
+    acc_logreg, f1_logreg = evaluate_model(
         logreg,
         X_test,
         y_test,
         "LOGISTIC REGRESSION"
     )
 
-        # -------------------------
-        # Random Forest
-        # -------------------------
+    log_experiment(
+        dataset="training_dataset_fe_v1",
+        model="LogisticRegression",
+        f1_macro=f1_logreg,
+        accuracy=acc_logreg,
+        features=X.shape[1],
+        train_rows=len(X),
+        params="max_iter=3000",
+        notes="Baseline"
+    )
+
+    # ==================================================
+    # Random Forest
+    # ==================================================
 
     rf = RandomForestClassifier(
         n_estimators=500,
@@ -184,35 +142,53 @@ def main():
         y_train
     )
 
-    evaluate_model(
+    acc_rf, f1_rf = evaluate_model(
         rf,
         X_test,
         y_test,
         "RANDOM FOREST"
     )
 
-    # -------------------------
+    log_experiment(
+        dataset="training_dataset_v1",
+        model="RandomForest",
+        f1_macro=f1_rf,
+        accuracy=acc_rf,
+        features=X.shape[1],
+        train_rows=len(X),
+        params=(
+            "n_estimators=500,"
+            "max_depth=12,"
+            "min_samples_leaf=5,"
+            "class_weight=balanced"
+        ),
+        notes="Baseline"
+    )
+
+    # ==================================================
     # Feature Importance
-    # -------------------------
+    # ==================================================
 
     importance = pd.DataFrame({
         "feature": features,
         "importance": rf.feature_importances_
     })
 
-    importance = importance.sort_values(
-        "importance",
-        ascending=False
+    importance = (
+        importance
+        .sort_values(
+            "importance",
+            ascending=False
+        )
     )
 
     print("\n" + "=" * 60)
     print("TOP 30 FEATURE IMPORTANCE")
     print("=" * 60)
 
-    print(
-        importance
-        .head(30)
-        .to_string(index=False)
+    importance.to_csv(
+        "src/reports/feature_importance_baseline_rf.csv",
+        index=False
     )
 
 if __name__ == "__main__":

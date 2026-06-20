@@ -3,18 +3,17 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 
 from load_dataset import load_dataset
 from evaluate_model import evaluate_model
+from src.reports.log_experiment import log_experiment
 
 
 X, y, features = load_dataset()
 
-X_train, X_test, y_train, y_test = (
-    train_test_split(
-        X,
-        y,
-        test_size=0.20,
-        random_state=42,
-        stratify=y
-    )
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y
 )
 
 hgb = HistGradientBoostingClassifier(
@@ -30,9 +29,25 @@ hgb.fit(
     y_train
 )
 
-evaluate_model(
+accuracy, f1_macro = evaluate_model(
     hgb,
     X_test,
     y_test,
     "HIST GRADIENT BOOSTING"
+)
+
+log_experiment(
+    dataset="training_dataset.parquet",
+    model="HistGradientBoosting",
+    f1_macro=f1_macro,
+    accuracy=accuracy,
+    features=X.shape[1],
+    train_rows=len(X),
+    params=(
+        "learning_rate=0.05,"
+        "max_depth=6,"
+        "max_iter=300,"
+        "min_samples_leaf=20"
+    ),
+    notes="Feature Engineering v1"
 )

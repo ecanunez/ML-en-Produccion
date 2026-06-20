@@ -1,3 +1,4 @@
-date,dataset,model,f1_macro,accuracy,features,notes
-2026-06-19,training_dataset.parquet,RandomForestTuned,0.4751,0.5119,39,Baseline tuned
-2026-06-19,training_dataset_v2.parquet,RandomForestTuned,0.4761,0.5127,43,Added market_value_ratio gf_diff ga_diff players_found_diff
+date,model,dataset,n_features,accuracy,f1_macro
+2026-06-19,logistic_baseline,training_dataset.parquet,63,0.53,0.39
+2026-06-19,rf_v1,training_dataset.parquet,63,0.50,0.47
+2026-06-19,rf_tuned,training_dataset_v2.parquet,67,0.51,0.476

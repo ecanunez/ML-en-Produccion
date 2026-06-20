@@ -3,6 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 from load_dataset import load_dataset
 from evaluate_model import evaluate_model
+from src.reports.log_experiment import log_experiment
 
 
 X, y, features = load_dataset()
@@ -36,4 +37,21 @@ evaluate_model(
     X_test,
     y_test,
     "RANDOM FOREST"
+)
+
+log_experiment(
+    dataset="training_dataset.parquet",
+    model="RandomForestClassifier",
+    f1_macro=f1,
+    accuracy=acc,
+    features=X.shape[1],
+    train_rows=len(X),
+    params=(
+        "n_estimators=500,"
+        "max_depth=10,"
+        "min_samples_leaf=5,"
+        "min_samples_split=2,"
+        "class_weight=balanced"
+    ),
+    notes="Feature Engineering v1"
 )
