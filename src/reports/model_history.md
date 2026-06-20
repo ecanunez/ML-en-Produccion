@@ -2,6 +2,12 @@
 
 ## 2026-06-19 — Incorporación de perfiles internacionales
 
+### Dataset
+
+* Dataset: training_dataset.parquet
+* Observaciones: 12.599
+* Features: 61
+
 ### Nuevas variables
 
 * home_avg_age
@@ -18,27 +24,29 @@
 
 #### Logistic Regression
 
-Accuracy: 0.5361
-
-F1 Macro: 0.3993
+* Accuracy: 0.5361
+* F1 Macro: 0.3993
 
 #### Random Forest
 
-Accuracy: 0.5262
-
-F1 Macro: 0.4876
+* Accuracy: 0.5262
+* F1 Macro: 0.4876
 
 #### Random Forest Tuned
 
-Accuracy: 0.5183
-
-F1 Macro: 0.4857
+* Accuracy: 0.5183
+* F1 Macro: 0.4857
 
 #### Hist Gradient Boosting
 
-Accuracy: 0.5369
+* Accuracy: 0.5369
+* F1 Macro: 0.4048
 
-F1 Macro: 0.4048
+### Mejor modelo
+
+* Modelo: Random Forest
+* Accuracy: 0.5262
+* F1 Macro: 0.4876
 
 ### Conclusiones
 

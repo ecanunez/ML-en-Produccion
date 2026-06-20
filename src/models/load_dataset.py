@@ -1,8 +1,14 @@
 from pathlib import Path
-
 import pandas as pd
+import sys
 
 ROOT = Path(__file__).resolve().parents[2]
+
+sys.path.append(
+    str(ROOT / "src")
+)
+
+from config.feature_config import EXCLUDED_COLUMNS
 
 DATA_FILE = (
     ROOT
@@ -35,28 +41,7 @@ def load_dataset():
     features = [
         c
         for c in df.columns
-        if c not in [
-            "match_idx",
-            "target",
-
-            "home_elo",
-            "away_elo",
-
-            "home_team_market_value_mean",
-            "away_team_market_value_mean",
-
-            "home_GK_market_value_mean",
-            "away_GK_market_value_mean",
-
-            "home_DEF_market_value_mean",
-            "away_DEF_market_value_mean",
-
-            "home_MID_market_value_mean",
-            "away_MID_market_value_mean",
-
-            "home_ATT_market_value_mean",
-            "away_ATT_market_value_mean"
-        ]
+        if c not in EXCLUDED_COLUMNS
     ]
 
     print(

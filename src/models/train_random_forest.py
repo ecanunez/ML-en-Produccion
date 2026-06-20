@@ -41,7 +41,7 @@ acc, f1 = evaluate_model(
 
 log_experiment(
     dataset="training_dataset.parquet",
-    model="RandomForestClassifier",
+    model="RandomForest",
     f1_macro=f1,
     accuracy=acc,
     features=X.shape[1],

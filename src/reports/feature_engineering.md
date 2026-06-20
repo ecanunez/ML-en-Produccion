@@ -405,3 +405,159 @@ Aunque la diferencia es la misma, la relación competitiva es distinta.
 4. La mejora global fue moderada (+0.0010 en F1 Macro), lo que sugiere que el modelo ya captura gran parte de la información disponible en las variables originales.
 
 5. Las próximas iteraciones de Feature Engineering deberían enfocarse en mejorar la predicción de empates, actualmente la clase más difícil para el modelo.
+
+# Feature Engineering v2 — Perfiles Internacionales y Balance de Equipos
+
+## Fecha
+
+2026-06-20
+
+---
+
+## Objetivo
+
+Mejorar la capacidad del modelo para identificar partidos equilibrados y aumentar la detección de empates utilizando información individual de los jugadores convocados.
+
+---
+
+## Nuevas variables de perfiles internacionales
+
+Archivo:
+
+player_profile_features.parquet
+
+### Edad
+
+* home_avg_age
+* away_avg_age
+* age_diff
+
+Hipótesis:
+
+Equipos con jugadores más maduros y experimentados podrían obtener mejores resultados en competiciones internacionales.
+
+### Experiencia internacional
+
+* home_avg_caps
+* away_avg_caps
+* caps_diff
+
+Hipótesis:
+
+La cantidad de partidos internacionales disputados representa experiencia competitiva y conocimiento de escenarios de alta exigencia.
+
+### Goles internacionales
+
+* home_avg_int_goals
+* away_avg_int_goals
+* int_goals_diff
+
+Hipótesis:
+
+Los jugadores con mayor producción ofensiva internacional aportan capacidad diferencial para definir encuentros.
+
+### Altura promedio
+
+* home_avg_height
+* away_avg_height
+* height_diff
+
+Hipótesis:
+
+La estatura promedio puede reflejar ventajas físicas en determinados contextos tácticos.
+
+### Valor promedio por jugador
+
+* home_avg_player_value
+* away_avg_player_value
+
+Hipótesis:
+
+La calidad media del plantel puede contener información complementaria al valor total del equipo.
+
+---
+
+## Variables de equilibrio entre equipos
+
+Archivo:
+
+player_balance_features.parquet
+
+### Diferencias absolutas
+
+* abs_caps_diff
+
+* abs_age_diff
+
+* abs_int_goals_diff
+
+* abs_market_value_diff
+
+* abs_GK_value_diff
+
+* abs_DEF_value_diff
+
+* abs_MID_value_diff
+
+* abs_ATT_value_diff
+
+* abs_elo_diff
+
+* abs_points_diff
+
+* abs_gd_diff
+
+Hipótesis:
+
+Los empates ocurren con mayor frecuencia cuando la diferencia real entre equipos es pequeña.
+
+### Indicadores binarios de equilibrio
+
+* elo_balanced
+* market_balanced
+* caps_balanced
+* age_balanced
+
+Hipótesis:
+
+Partidos con diferencias inferiores a determinados umbrales pueden presentar mayor probabilidad de empate.
+
+### Variables agregadas
+
+* balance_score
+* high_balance_match
+
+Hipótesis:
+
+La combinación de múltiples indicadores de equilibrio podría capturar situaciones típicas de partidos cerrados.
+
+---
+
+## Resultados observados
+
+Random Forest Tuned
+
+Antes de balance features:
+
+* Accuracy: 0.5107
+* F1 Macro: 0.4792
+
+Después de balance features:
+
+* Accuracy: 0.5147
+* F1 Macro: 0.4830
+
+Mejora observada:
+
+* +0.0040 Accuracy
+* +0.0038 F1 Macro
+
+Variables destacadas en Feature Importance:
+
+* abs_elo_diff
+* abs_market_value_diff
+* abs_caps_diff
+
+Conclusión:
+
+Las diferencias absolutas entre equipos aportan información útil al modelo y refuerzan la hipótesis de que el equilibrio competitivo es un factor relevante para explicar los empates.
