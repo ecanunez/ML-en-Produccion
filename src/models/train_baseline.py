@@ -1,4 +1,3 @@
-from pathlib import Path
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
@@ -7,63 +6,14 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
+from load_dataset import load_dataset
 from evaluate_model import evaluate_model
 from log_experiment import log_experiment
 
-ROOT = Path(__file__).resolve().parents[2]
-
-DATA_FILE = (
-    ROOT
-    / "data"
-    / "processed"
-    / "training_dataset.parquet"
-)
 
 def main():
-
-    print("Leyendo dataset...")
-
-    df = pd.read_parquet(
-        DATA_FILE
-    )
-
-    print(
-        f"Observaciones originales: "
-        f"{len(df):,}"
-    )
-
-    df = df[
-        df["target"].notna()
-    ].copy()
-
-    print(
-        f"Observaciones finales: "
-        f"{len(df):,}"
-    )
-
-    features = [
-        c
-        for c in df.columns
-        if c not in [
-            "match_idx",
-            "target",
-            "home_elo",
-            "away_elo",
-            "home_team_market_value_mean",
-            "away_team_market_value_mean",
-            "home_GK_market_value_mean",
-            "away_GK_market_value_mean"
-        ]
-    ]
-
-    print(
-        f"Features utilizadas: "
-        f"{len(features)}"
-    )
-
-    X = df[features]
-
-    y = df["target"]
+    
+    X, y, features = load_dataset()
 
     X_train, X_test, y_train, y_test = (
         train_test_split(
@@ -106,7 +56,7 @@ def main():
         y_train
     )
 
-    acc_logreg, f1_logreg = evaluate_model(
+    metrics_logreg = evaluate_model(
         logreg,
         X_test,
         y_test,
@@ -114,12 +64,15 @@ def main():
     )
 
     log_experiment(
-        dataset="training_dataset_fe_v1",
+        dataset="training_dataset.parquet",
+        dataset_modified=dataset_modified,
         model="LogisticRegression",
-        f1_macro=f1_logreg,
-        accuracy=acc_logreg,
+        f1_macro=metrics["f1_macro"],
+        accuracy=metrics["accuracy"],
+        precision_macro=metrics["precision_macro"],
+        recall_macro=metrics["recall_macro"],
         features=X.shape[1],
-        train_rows=len(X),
+        train_rows=len(X_train),
         params="max_iter=3000",
         notes="Baseline"
     )
@@ -142,7 +95,7 @@ def main():
         y_train
     )
 
-    acc_rf, f1_rf = evaluate_model(
+    metrics_rf = evaluate_model(
         rf,
         X_test,
         y_test,
@@ -150,12 +103,15 @@ def main():
     )
 
     log_experiment(
-        dataset="training_dataset_v1",
+        dataset="training_dataset.parquet",
+        dataset_modified=dataset_modified,
         model="RandomForest",
-        f1_macro=f1_rf,
-        accuracy=acc_rf,
+        f1_macro=metrics["f1_macro"],
+        accuracy=metrics["accuracy"],
+        precision_macro=metrics["precision_macro"],
+        recall_macro=metrics["recall_macro"],
         features=X.shape[1],
-        train_rows=len(X),
+        train_rows=len(X_train),
         params=(
             "n_estimators=500,"
             "max_depth=12,"

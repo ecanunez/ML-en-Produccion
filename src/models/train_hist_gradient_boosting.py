@@ -6,48 +6,57 @@ from evaluate_model import evaluate_model
 from log_experiment import log_experiment
 
 
-X, y, features = load_dataset()
+def main():
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.20,
-    random_state=42,
-    stratify=y
-)
+    X, y, features, dataset_modified = load_dataset()
 
-hgb = HistGradientBoostingClassifier(
-    learning_rate=0.05,
-    max_depth=6,
-    max_iter=300,
-    min_samples_leaf=20,
-    random_state=42
-)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.20,
+        random_state=42,
+        stratify=y
+    )
 
-hgb.fit(
-    X_train,
-    y_train
-)
+    hgb = HistGradientBoostingClassifier(
+        learning_rate=0.05,
+        max_depth=6,
+        max_iter=300,
+        min_samples_leaf=20,
+        random_state=42
+    )
 
-accuracy, f1_macro = evaluate_model(
-    hgb,
-    X_test,
-    y_test,
-    "HIST GRADIENT BOOSTING"
-)
+    hgb.fit(
+        X_train,
+        y_train
+    )
 
-log_experiment(
-    dataset="training_dataset.parquet",
-    model="HistGradientBoosting",
-    f1_macro=f1_macro,
-    accuracy=accuracy,
-    features=X.shape[1],
-    train_rows=len(X),
-    params=(
-        "learning_rate=0.05,"
-        "max_depth=6,"
-        "max_iter=300,"
-        "min_samples_leaf=20"
-    ),
-    notes="Feature Engineering v1"
-)
+    metrics = evaluate_model(
+        hgb,
+        X_test,
+        y_test,
+        "HIST GRADIENT BOOSTING"
+    )
+
+    log_experiment(
+        dataset="training_dataset.parquet",
+        dataset_modified=dataset_modified,
+        model="HistGradientBoosting",
+        f1_macro=metrics["f1_macro"],
+        accuracy=metrics["accuracy"],
+        precision_macro=metrics["precision_macro"],
+        recall_macro=metrics["recall_macro"],
+        features=X.shape[1],
+        train_rows=len(X_train),
+        params=(
+            "learning_rate=0.05,"
+            "max_depth=6,"
+            "max_iter=300,"
+            "min_samples_leaf=20"
+        ),
+        notes="Feature Engineering v1"
+    )
+
+
+if __name__ == "__main__":
+    main()

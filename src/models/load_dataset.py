@@ -1,6 +1,7 @@
 from pathlib import Path
 import pandas as pd
 import sys
+from datetime import datetime
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -16,7 +17,6 @@ DATA_FILE = (
     / "processed"
     / "training_dataset.parquet"
 )
-
 
 def load_dataset():
 
@@ -53,4 +53,15 @@ def load_dataset():
 
     y = df["target"]
 
-    return X, y, features
+    dataset_modified = datetime.fromtimestamp(
+        DATA_FILE.stat().st_mtime
+    ).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    return (
+        X,
+        y,
+        features,
+        dataset_modified
+    )

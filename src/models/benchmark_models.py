@@ -1,41 +1,99 @@
 import time
+from pathlib import Path
+
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier, HistGradientBoostingClassifier
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    HistGradientBoostingClassifier
+)
 
 from load_dataset import load_dataset
-from evaluate_models import evaluate_model
-from log_experiment import log_experiment
+from evaluate_model import evaluate_model
 
 
 # =========================================================
-# 1. CARGA DATASET
+# CONFIGURACIÓN
 # =========================================================
 
-X, y, features = load_dataset()
+ROOT = Path(__file__).resolve().parents[2]
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42,
-    stratify=y
+REPORTS_DIR = (
+    ROOT
+    / "src"
+    / "reports"
+)
+
+REPORTS_DIR.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+OUTPUT_FILE = (
+    REPORTS_DIR
+    / "benchmark_results.csv"
 )
 
 
 # =========================================================
-# 2. MODELOS
+# CARGA DEL DATASET
+# =========================================================
+
+X, y, features = load_dataset()
+
+print(
+    f"\nTotal de features: "
+    f"{len(features)}"
+)
+
+print(
+    f"Total observaciones: "
+    f"{len(X):,}"
+)
+
+print(
+    f"Valores faltantes: "
+    f"{X.isna().sum().sum():,}"
+)
+
+
+# =========================================================
+# TRAIN / TEST SPLIT
+# =========================================================
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y
+)
+
+print(
+    f"\nTrain: {len(X_train):,}"
+)
+
+print(
+    f"Test: {len(X_test):,}"
+)
+
+
+# =========================================================
+# MODELOS
 # =========================================================
 
 models = {
-    "Baseline_Dummy": DummyClassifier(strategy="most_frequent"),
+    "Baseline_Dummy": DummyClassifier(
+        strategy="most_frequent"
+    ),
 
-    "LogReg": LogisticRegression(
+    "LogisticRegression": LogisticRegression(
         max_iter=5000,
-        class_weight="balanced"
+        class_weight="balanced",
+        random_state=42
     ),
 
     "RandomForest": RandomForestClassifier(
@@ -61,67 +119,98 @@ models = {
 
 
 # =========================================================
-# 3. BENCHMARK LOOP
+# BENCHMARK
 # =========================================================
 
 results = []
 
-for name, model in models.items():
+for model_name, model in models.items():
 
-    print("\n" + "=" * 60)
-    print(f"Entrenando: {name}")
+    print("\n")
+    print("=" * 60)
+    print(f"ENTRENANDO: {model_name}")
     print("=" * 60)
 
-    start = time.time()
+    start_time = time.time()
 
-    model.fit(X_train, y_train)
-
-    train_time = time.time() - start
-
-    # OJO: tu función retorna (accuracy, f1_macro)
-    accuracy, f1_macro = evaluate_model(
-        model,
-        X_test,
-        y_test,
-        model_name=name
+    model.fit(
+        X_train,
+        y_train
     )
 
-    result = {
-        "model": name,
-        "accuracy": accuracy,
-        "f1_macro": f1_macro,
-        "train_time_sec": round(train_time, 4)
-    }
+    train_time = time.time() - start_time
 
-    results.append(result)
+    metrics = evaluate_model(
+        model=model,
+        X_test=X_test,
+        y_test=y_test,
+        model_name=model_name
+    )
 
-    log_experiment(name, result)
+    results.append(
+        {
+            "model": model_name,
+            "accuracy": round(
+                metrics["accuracy"],
+                4
+            ),
+            "f1_macro": round(
+                metrics["f1_macro"],
+                4
+            ),
+            "precision_macro": round(
+                metrics["precision_macro"],
+                4
+            ),
+            "recall_macro": round(
+                metrics["recall_macro"],
+                4
+            ),
+            "train_time_sec": round(
+                train_time,
+                2
+            )
+        }
+    )
 
 
 # =========================================================
-# 4. RESULTADOS
+# RESULTADOS
 # =========================================================
 
-df = pd.DataFrame(results)
+results_df = pd.DataFrame(
+    results
+)
 
-df = df.sort_values(
+results_df = results_df.sort_values(
     by="f1_macro",
     ascending=False
 )
 
-print("\n" + "=" * 60)
+results_df = results_df.reset_index(
+    drop=True
+)
+
+results_df.index += 1
+
+print("\n")
+print("=" * 60)
 print("BENCHMARK FINAL")
 print("=" * 60)
-print(df)
+
+print(results_df)
 
 
 # =========================================================
-# 5. GUARDAR
+# EXPORTAR CSV
 # =========================================================
 
-df.to_csv(
-    "src/reports/benchmark_results.csv",
+results_df.to_csv(
+    OUTPUT_FILE,
     index=False
 )
 
-print("\nGuardado en src/reports/benchmark_results.csv")
+print(
+    f"\nResultados guardados en:\n"
+    f"{OUTPUT_FILE}"
+)
