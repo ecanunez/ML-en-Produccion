@@ -74,7 +74,7 @@ def main():
         precision_macro=metrics["precision_macro"],
         recall_macro=metrics["recall_macro"],
         features=X.shape[1],
-        train_rows=len(X_train)
+        train_rows=len(X_train),
         params=(
             "n_estimators=500,"
             "max_depth=10,"

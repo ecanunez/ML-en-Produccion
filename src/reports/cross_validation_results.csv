@@ -1,0 +1,5 @@
+model,mean_f1_macro,std_f1_macro,min_f1_macro,max_f1_macro,cv_time_sec
+RandomForest_Tuned,0.4759,0.0115,0.4557,0.4912,30.13
+LogisticRegression,0.4693,0.0068,0.4602,0.4794,6.75
+LightGBM,0.4406,0.0061,0.4293,0.4475,33.58
+XGBoost,0.4334,0.0104,0.425,0.4529,48.21

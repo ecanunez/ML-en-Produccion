@@ -31,7 +31,10 @@ df = pd.read_parquet(
 
 # print(df[cols].corr())
 
-pd.set_option('display.max_columns', None)
+# pd.set_option('display.max_columns', None)
 
-# Print your DataFrame
-print(df)
+# # Print your DataFrame
+# print(df)
+
+print(df["target"].unique())
+print(df["target"].dtype)

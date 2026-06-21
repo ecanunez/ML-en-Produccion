@@ -1,0 +1,4 @@
+model,n_features,mean_f1_macro,std_f1_macro,min_f1_macro,max_f1_macro
+TOP40,40,0.4776,0.0116,0.4568,0.4913
+TOP30,30,0.4764,0.0111,0.4554,0.4879
+FULL,72,0.4759,0.0115,0.4557,0.4912
