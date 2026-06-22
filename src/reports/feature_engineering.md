@@ -514,3 +514,111 @@ La mayor parte de la señal predictiva está concentrada en aproximadamente 40 v
 El principal cuello de botella ya no parece ser la cantidad de variables disponibles.
 
 La evidencia obtenida mediante Feature Selection indica que las futuras mejoras probablemente provendrán de la construcción de variables más informativas y específicas del dominio futbolístico, en lugar de simplemente aumentar el número total de features.
+
+# Error Analysis y Feature Selection
+
+## Fecha
+
+2026-06-21
+
+---
+
+## Objetivo
+
+Comprender los principales errores del modelo y validar si la selección de variables mejora la capacidad predictiva.
+
+---
+
+## Error Analysis
+
+Se analizó el comportamiento del modelo Random Forest Tuned utilizando las 72 variables disponibles.
+
+### Resultados
+
+| Clase | Precision | Recall |     F1 |
+| ----- | --------: | -----: | -----: |
+| AWAY  |    0.5094 | 0.5928 | 0.5479 |
+| DRAW  |    0.3059 | 0.2749 | 0.2896 |
+| HOME  |    0.6302 | 0.5936 | 0.6113 |
+
+---
+
+### Principales errores
+
+| Error       | Cantidad |
+| ----------- | -------: |
+| DRAW → HOME |      231 |
+| HOME → DRAW |      228 |
+| HOME → AWAY |      226 |
+| DRAW → AWAY |      220 |
+| AWAY → DRAW |      160 |
+| AWAY → HOME |      158 |
+
+Los errores más frecuentes involucran la clase DRAW.
+
+---
+
+## Hallazgos sobre empates
+
+Se compararon los partidos correctamente clasificados como DRAW con aquellos que realmente terminaron empatados pero fueron clasificados como HOME o AWAY.
+
+### Diferencias observadas
+
+| Variable              | DRAW detectados | DRAW perdidos |
+| --------------------- | --------------: | ------------: |
+| abs_elo_diff          |           38.03 |         86.95 |
+| abs_market_value_diff |          15.9 M |        51.6 M |
+| balance_score         |            2.78 |          1.84 |
+| abs_caps_diff         |            9.21 |         14.30 |
+
+---
+
+### Interpretación
+
+Los empates correctamente detectados presentan características claras:
+
+* Equipos con Elo similar.
+* Diferencias reducidas de valor de mercado.
+* Planteles de experiencia comparable.
+* Mayor balance competitivo general.
+
+Por el contrario, los empates perdidos suelen involucrar equipos aparentemente desiguales según las variables disponibles.
+
+---
+
+## Validación de Feature Selection
+
+Se repitió el análisis utilizando únicamente las 40 variables más importantes.
+
+### Resultados generales
+
+| Métrica  | 72 Features |  Top40 |
+| -------- | ----------: | -----: |
+| Accuracy |      0.5147 | 0.5163 |
+| F1 Macro |      0.4830 | 0.4860 |
+
+### Clase DRAW
+
+| Métrica   | 72 Features |  Top40 |
+| --------- | ----------: | -----: |
+| Precision |      0.3059 | 0.3073 |
+| Recall    |      0.2749 | 0.2846 |
+| F1        |      0.2896 | 0.2955 |
+
+---
+
+## Conclusión
+
+La selección de variables eliminó ruido y mejoró ligeramente todas las métricas principales del modelo.
+
+Los resultados sugieren que una parte importante de la señal predictiva está concentrada en aproximadamente 40 variables relacionadas con:
+
+* Elo Rating.
+* Valor de mercado.
+* Diferencias por posición.
+* Experiencia internacional.
+* Balance competitivo.
+
+La principal limitación del modelo continúa siendo la detección de empates entre equipos que aparentan ser desiguales según las variables actualmente disponibles.
+
+Este hallazgo define el foco de trabajo para la Fase 4, donde se buscarán nuevas variables capaces de explicar empates inesperados y situaciones competitivas no capturadas por el conjunto actual de features.

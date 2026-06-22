@@ -100,6 +100,14 @@ Configuración:
 | LightGBM           |        0.4406 | 0.0061 |
 | XGBoost            |        0.4334 | 0.0104 |
 
+| Modelo               | Holdout F1 |  CV F1 |
+| -------------------- | ---------: | -----: |
+| RandomForest_Tuned   |     0.4830 | 0.4759 |
+| LogisticRegression   |     0.4702 | 0.4693 |
+| LightGBM             |     0.4509 | 0.4406 |
+| XGBoost              |     0.4379 | 0.4334 |
+| HistGradientBoosting |     0.4249 |      — |
+
 ---
 
 ## Modelo Seleccionado

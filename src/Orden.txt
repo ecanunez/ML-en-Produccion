@@ -1,0 +1,19 @@
+DATASET
+Copy-Item `
+data\processed\training_dataset.parquet `
+data\processed\training_dataset_backup_20260620.parquet
+python src/data/build_player_mapping.py
+python src/features/build_player_match_stats.py
+python src/features/build_player_profile_features.py
+python src/features/build_elo_features.py
+python src/features/build_team_strength_features.py
+python src/features/build_player_balance_features.py
+python src/data/build_training_dataset.py
+python src/Ver.py
+
+
+MODELOS
+python src/models/train_baseline.py
+python src/models/train_random_forest.py
+python src/models/train_random_forest_tuned.py
+python src/models/train_hist_gradient_boosting.py
