@@ -40,3 +40,23 @@ Las variables relacionadas con equilibrio competitivo muestran una separación c
 El modelo logra identificar empates cuando los equipos presentan niveles similares de calidad según Elo Rating, valor de mercado y experiencia internacional.
 
 La principal fuente de error proviene de empates que ocurren entre equipos aparentemente desiguales, lo que sugiere que todavía existen factores explicativos no representados en las variables actuales.
+
+## Análisis DRAW → HOME y DRAW → AWAY
+
+Los empates mal clasificados presentan señales consistentes de superioridad para uno de los equipos.
+
+| Variable          | DRAW_OK | DRAW→HOME | DRAW→AWAY |
+| ----------------- | ------: | --------: | --------: |
+| elo_diff          |    -6.7 |     +71.3 |     -85.5 |
+| market_value_diff |  -3.9 M |   +39.4 M |   -58.6 M |
+| caps_diff         |    -1.2 |      +9.3 |     -10.7 |
+| balance_score     |    2.78 |      1.97 |      1.70 |
+
+
+## Conclusión
+
+El modelo no parece fallar por incapacidad para reconocer partidos equilibrados.
+
+La mayoría de los empates perdidos corresponden a encuentros donde las variables disponibles sugieren una ventaja significativa para uno de los equipos.
+
+Esto indica que las futuras mejoras probablemente requerirán nuevas fuentes de información o variables capaces de capturar factores no reflejados actualmente por Elo, valor de mercado, forma reciente y experiencia internacional.

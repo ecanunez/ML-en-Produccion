@@ -1,5 +1,16 @@
 import pandas as pd
 
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+
+sys.path.append(
+    str(ROOT / "src" / "models")
+)
+
+from load_dataset import load_dataset
+
 df = pd.read_parquet(
     "data/processed/training_dataset.parquet"
 )
@@ -110,34 +121,100 @@ comparison = pd.DataFrame({
 #     draw_wrong["balance_score"].describe()
 # )
 
-cols = [
-    "elo_diff",
-    "abs_elo_diff",
-    "market_value_diff",
-    "abs_market_value_diff",
-    "points_diff",
-    "abs_points_diff",
-    "caps_diff",
-    "abs_caps_diff",
-    "balance_score"
-]
+# cols = [
+#     "elo_diff",
+#     "abs_elo_diff",
+#     "market_value_diff",
+#     "abs_market_value_diff",
+#     "points_diff",
+#     "abs_points_diff",
+#     "caps_diff",
+#     "abs_caps_diff",
+#     "balance_score"
+# ]
 
-draw_ok = draws[
-    draws["pred"] == "DRAW"
-]
+# draw_ok = draws[
+#     draws["pred"] == "DRAW"
+# ]
 
-draw_home = draws[
-    draws["pred"] == "HOME"
-]
+# draw_home = draws[
+#     draws["pred"] == "HOME"
+# ]
 
-draw_away = draws[
-    draws["pred"] == "AWAY"
-]
+# draw_away = draws[
+#     draws["pred"] == "AWAY"
+# ]
 
-comparison = pd.DataFrame({
-    "DRAW_OK": draw_ok[cols].mean(),
-    "DRAW_TO_HOME": draw_home[cols].mean(),
-    "DRAW_TO_AWAY": draw_away[cols].mean()
-})
+# comparison = pd.DataFrame({
+#     "DRAW_OK": draw_ok[cols].mean(),
+#     "DRAW_TO_HOME": draw_home[cols].mean(),
+#     "DRAW_TO_AWAY": draw_away[cols].mean()
+# })
 
-print(comparison.round(2))
+# print(comparison.round(2))
+
+import pandas as pd
+
+# df = pd.read_parquet(
+#     "data/interim/elo_features.parquet"
+# )
+
+# print(df.columns)
+
+# print(df[
+#     [
+#         "home_elo",
+#         "away_elo",
+#         "elo_diff"
+#     ]
+# ].head())
+
+# print()
+
+# print(df["elo_diff"].describe())
+
+# df = pd.read_parquet(
+#     "data/interim/new_elo_features.parquet"
+# )
+
+# print(df.describe())
+
+# df = pd.read_parquet(
+#     "data/processed/training_dataset.parquet"
+# )
+
+# print(
+#     df[
+#         [
+#             "elo_home_win_prob",
+#             "elo_away_win_prob",
+#             "elo_draw_proxy",
+#             "elo_favorite_strength"
+#         ]
+#     ].describe()
+# )
+
+
+from load_dataset import load_dataset
+import pandas as pd
+
+importance = pd.read_csv(
+    "src/reports/feature_importance_rf_v2.csv"
+)
+
+X, y, features, _ = load_dataset()
+
+importance_features = set(
+    importance["feature"]
+)
+
+dataset_features = set(
+    features
+)
+
+missing = sorted(
+    importance_features - dataset_features
+)
+
+print(len(missing))
+print(missing)

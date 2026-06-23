@@ -4,4 +4,7 @@ FEATURE_FILES = [
     "elo_features.parquet",
     "player_profile_features.parquet",
     "player_balance_features.parquet",
+    "new_elo_features.parquet",
+    "draw_features.parquet",
+    "interaction_features.parquet",
 ]

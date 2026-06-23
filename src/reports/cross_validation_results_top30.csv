@@ -1,0 +1,2 @@
+model,n_features,mean_f1_macro,std_f1_macro,min_f1_macro,max_f1_macro
+RandomForest_Tuned_Top30,30,0.4793,0.0106,0.4606,0.4912

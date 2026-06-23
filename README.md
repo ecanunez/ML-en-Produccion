@@ -208,3 +208,32 @@ Esto habilita escenarios de simulación para:
 - lesiones
 - cambios tácticos
 - alineaciones alternativas
+
+## Validación de inferencia
+
+El modelo fue validado mediante carga desde artefacto serializado (`model.joblib`) utilizando el módulo:
+
+src/inference/predict.py
+
+Resultados:
+
+* Modelo cargado correctamente.
+* Features Top30 recuperadas desde `top30_features.csv`.
+* Predicciones y probabilidades generadas exitosamente.
+* Pipeline listo para consumo por scripts batch o API futura.
+
+# Estado Actual
+
+Fase 1 — Data Collection ✅
+
+Fase 2 — Feature Engineering ✅
+
+Fase 3 — Model Training & Benchmarking ✅
+
+Fase 4 — Feature Selection & Ensemble Models ✅
+
+Fase 5 — Champion Model Export ✅
+
+Fase 6 — Inference Pipeline ✅
+
+Fase 7 — API Deployment ⏳

@@ -1,0 +1,13 @@
+feature_a,feature_b,correlation
+home_players_found,home_profile_players_found,0.9997
+away_players_found,away_profile_players_found,0.9996
+points_diff,win_rate_diff,0.9536
+home_team_market_value,home_avg_player_value,0.9471
+away_team_market_value,away_avg_player_value,0.9469
+home_points_last5,home_win_rate_last5,0.9426
+away_points_last5,away_win_rate_last5,0.9368
+home_avg_height,away_avg_height,0.9163
+points_diff,gd_diff,0.8777
+home_avg_age,away_avg_age,0.8599
+home_points_last5,home_gd_last5,0.8574
+away_points_last5,away_gd_last5,0.8549

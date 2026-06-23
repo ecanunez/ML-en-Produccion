@@ -2,7 +2,7 @@
 
 ## player_match_stats.parquet
 
-Variables: 10
+Variables: 13
 
 ### Forma reciente
 
@@ -118,7 +118,7 @@ Variables: 3
 
 Objetivo:
 
-Representar fuerza histórica internacional mediante ratings Elo.
+Representar fuerza histórica mediante ratings Elo.
 
 Estado:
 
@@ -200,17 +200,13 @@ Variables: 17
 ### Indicadores de equilibrio
 
 * elo_balanced
-
 * market_balanced
-
 * caps_balanced
-
 * age_balanced
 
 ### Variables agregadas
 
 * balance_score
-
 * high_balance_match
 
 Objetivo:
@@ -223,9 +219,50 @@ Estado:
 
 ---
 
+## new_elo_features.parquet
+
+Variables: 4
+
+### Probabilidades implícitas
+
+* elo_home_win_prob
+* elo_away_win_prob
+
+### Variables derivadas
+
+* elo_draw_proxy
+* elo_favorite_strength
+
+Objetivo:
+
+Transformar el rating Elo en variables más interpretables y capturar efectos no lineales asociados al favoritismo y equilibrio competitivo.
+
+Estado:
+
+✅ Utilizada en modelo final.
+
+Hallazgos:
+
+Las nuevas variables Elo aparecieron sistemáticamente entre las variables más importantes según:
+
+* Random Forest Importance
+* Permutation Importance
+* Feature Selection
+
+Variables destacadas:
+
+* elo_home_win_prob
+* elo_away_win_prob
+* elo_draw_proxy
+* elo_favorite_strength
+
+Estas variables superaron en importancia a varias métricas tradicionales derivadas de forma reciente y perfil de jugadores.
+
+---
+
 # Variables más importantes
 
-Según Random Forest Tuned y Feature Selection (2026-06-21).
+Según Random Forest Tuned y Feature Selection.
 
 ## Top 10
 
@@ -244,22 +281,32 @@ Estas variables concentran una parte importante de la señal predictiva del mode
 
 ---
 
-# Resumen
+# Resumen General
 
-| Archivo                 | Variables |
-| ----------------------- | --------: |
-| player_match_stats      |        13 |
-| team_strength_features  |        24 |
-| elo_features            |         3 |
-| player_profile_features |        13 |
-| player_balance_features |        17 |
+| Archivo                    | Variables |
+| -------------------------- | --------: |
+| player_match_stats         |        13 |
+| team_strength_features     |        24 |
+| elo_features               |         3 |
+| player_profile_features    |        13 |
+| player_balance_features    |        17 |
+| new_elo_features           |         4 |
+| draw_features              |         5 |
+| interaction_features       |         4 |
 
-| Métrica                      |  Valor |
-| ---------------------------- | -----: |
-| Features totales disponibles |     72 |
-| Mejor subconjunto encontrado |     40 |
-| Accuracy                     | 0.5147 |
-| F1 Macro                     | 0.4870 |
+
+---
+
+## Inventario total
+
+## Inventario total
+
+| Métrica                   | Valor  |
+| ------------------------- | ----:  |
+| Features disponibles      |    99  |
+| Features del mejor modelo |    30  |
+| Accuracy mejor modelo     | 0.5143 |
+| F1 Macro mejor modelo     | 0.4858 |
 
 ---
 
@@ -267,22 +314,106 @@ Estas variables concentran una parte importante de la señal predictiva del mode
 
 ## Mejor modelo actual
 
-Random Forest Tuned + Feature Selection
+Random Forest Tuned + Feature Selection Top30
 
 ### Resultados
 
-* Accuracy: 0.5147
-* F1 Macro: 0.4870
+* Accuracy: 0.5143
+* F1 Macro: 0.4858
 
-### Hallazgo principal
+### Hallazgos principales
 
-La mayor parte de la señal predictiva se concentra en aproximadamente 40 variables relacionadas con:
+La mayor parte de la señal predictiva está concentrada en aproximadamente 40 variables relacionadas con:
 
 * Elo Rating
 * Valor de mercado
 * Diferencias por posición
 * Experiencia internacional
-* Producción goleadora
+* Producción goleadora internacional
 * Equilibrio competitivo
 
-Las futuras mejoras deberían enfocarse en la construcción de variables más informativas y no únicamente en aumentar la cantidad total de features.
+### Cuello de botella actual
+
+El principal desafío del modelo continúa siendo la detección de empates.
+
+Error Analysis mostró que los empates correctamente identificados suelen presentar:
+
+* Menor diferencia Elo
+* Menor diferencia de valor de mercado
+* Mayor balance_score
+
+Por este motivo, la Fase 4 se enfocará principalmente en el diseño de variables específicas para detectar partidos equilibrados.
+
+### Próxima línea de trabajo
+
+Fase 4.2 — Features específicas para empates.
+
+Objetivo:
+
+Incrementar el recall y F1 de la clase DRAW mediante nuevas variables derivadas de equilibrio competitivo.
+
+## draw_features.parquet
+
+Variables: 5
+
+### Indicadores de empate
+
+* elo_draw_zone
+* market_draw_zone
+* experience_draw_zone
+* ultra_balanced_match
+* draw_candidate_score
+
+Objetivo:
+
+Capturar partidos potencialmente propensos al empate utilizando información de equilibrio competitivo.
+
+Estado:
+
+⚠️ Utilizada experimentalmente.
+
+Hallazgos:
+
+Las variables de empate no produjeron mejoras
+significativas por sí solas, pero algunas de ellas
+aparecen con importancia positiva en los modelos
+finales y se mantienen disponibles para futuras
+iteraciones.
+
+
+### Features descartadas experimentalmente
+
+Las variables incluidas en `draw_features.parquet` fueron evaluadas durante la Fase 4.2.
+
+Aunque mostraban una hipótesis razonable basada en el Error Analysis, no aportaron mejoras de desempeño y actualmente no forman parte de la configuración recomendada del modelo.
+
+## interaction_features.parquet
+
+Variables: 4
+
+### Interacciones
+
+* elo_market_interaction
+* elo_caps_interaction
+* attack_strength_interaction
+* value_per_elo
+
+Objetivo:
+
+Capturar relaciones no lineales entre fuerza Elo, valor de mercado, experiencia internacional y capacidad ofensiva.
+
+Estado:
+
+✅ Utilizada en modelo final.
+
+Hallazgos:
+
+Las variables de interacción se ubicaron entre las más importantes según Random Forest y Permutation Importance.
+
+Particularmente:
+
+* value_per_elo
+* elo_market_interaction
+* elo_caps_interaction
+
+aportaron señal predictiva relevante para diferenciar partidos equilibrados y favoritos claros.

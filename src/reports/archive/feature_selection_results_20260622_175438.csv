@@ -1,0 +1,8 @@
+experiment,n_features,f1_macro
+Top30,30,0.4858
+Top40,40,0.4806
+Top60,60,0.4793
+Top50,50,0.4785
+All,87,0.475
+Top10,10,0.473
+Top20,20,0.467

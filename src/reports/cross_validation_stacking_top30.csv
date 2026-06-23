@@ -1,0 +1,2 @@
+model,n_features,mean_f1_macro,std_f1_macro,min_f1_macro,max_f1_macro
+Stacking_Top30,30,0.481,0.009,0.4655,0.4883

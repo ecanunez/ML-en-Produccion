@@ -18,7 +18,8 @@ DATA_FILE = (
     / "training_dataset.parquet"
 )
 
-def load_dataset():
+
+def load_dataset(selected_features=None):
 
     print("Leyendo dataset...")
 
@@ -44,6 +45,14 @@ def load_dataset():
         if c not in EXCLUDED_COLUMNS
     ]
 
+    if selected_features is not None:
+
+        features = [
+            f
+            for f in selected_features
+            if f in features
+        ]
+
     print(
         f"Features utilizadas: "
         f"{len(features)}"
@@ -65,5 +74,6 @@ def load_dataset():
         features,
         dataset_modified
     )
+
 
 print("\nVariables nuevas:")

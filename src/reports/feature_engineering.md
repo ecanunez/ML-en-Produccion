@@ -622,3 +622,255 @@ Los resultados sugieren que una parte importante de la señal predictiva está c
 La principal limitación del modelo continúa siendo la detección de empates entre equipos que aparentan ser desiguales según las variables actualmente disponibles.
 
 Este hallazgo define el foco de trabajo para la Fase 4, donde se buscarán nuevas variables capaces de explicar empates inesperados y situaciones competitivas no capturadas por el conjunto actual de features.
+
+# Feature Engineering v4 — Elo Probabilities
+
+## Fecha
+
+2026-06-22
+
+---
+
+## Objetivo
+
+Evaluar si transformaciones derivadas del rating Elo podían aportar información adicional respecto a la variable original `elo_diff`.
+
+La hipótesis era que probabilidades implícitas de victoria y medidas de favoritismo podrían representar relaciones no lineales que el modelo no estuviera capturando completamente.
+
+---
+
+## Variables generadas
+
+### Probabilidad implícita de victoria local
+
+* elo_home_win_prob
+
+Calculada mediante la fórmula logística estándar utilizada en sistemas Elo.
+
+### Probabilidad implícita de victoria visitante
+
+* elo_away_win_prob
+
+Complementaria de la probabilidad local.
+
+### Indicador de equilibrio Elo
+
+* elo_draw_proxy
+
+Definido como:
+
+```python
+1 - abs(
+    elo_home_win_prob
+    - elo_away_win_prob
+)
+```
+
+Valores cercanos a 1 representan partidos equilibrados.
+
+### Intensidad del favoritismo
+
+* elo_favorite_strength
+
+Definido como:
+
+```python
+max(
+    elo_home_win_prob,
+    elo_away_win_prob
+) - 0.5
+```
+
+Valores altos indican un favorito claro.
+
+---
+
+## Resultados
+
+### Modelo base
+
+* Features: 72
+* Accuracy: 0.5147
+* F1 Macro: 0.4830
+
+### Modelo con Elo Probabilities
+
+* Features: 76
+* Accuracy: 0.5143
+* F1 Macro: 0.4824
+
+---
+
+## Importancia observada
+
+Las nuevas variables aparecieron entre las más importantes del modelo:
+
+* elo_home_win_prob
+* elo_away_win_prob
+* elo_draw_proxy
+* elo_favorite_strength
+
+Sin embargo, esto no se tradujo en una mejora del desempeño predictivo.
+
+---
+
+## Conclusión
+
+Las variables derivadas del Elo contienen información altamente redundante respecto a `elo_diff`.
+
+Aunque el modelo les asignó importancia, no aportaron señal predictiva adicional.
+
+La evidencia sugiere que la información contenida en Elo ya está siendo explotada adecuadamente mediante la variable original `elo_diff`.
+
+Estas variables fueron descartadas para futuras versiones del modelo.
+
+---
+
+## Aprendizaje
+
+El principal cuello de botella del sistema ya no parece estar relacionado con la estimación de fuerza relativa de los equipos.
+
+Los resultados del análisis de errores indican que las futuras mejoras probablemente provendrán de variables específicamente diseñadas para detectar partidos equilibrados y aumentar el recall de la clase DRAW.
+
+# Feature Engineering v4.2 — Draw Features
+
+## Fecha
+
+2026-06-22
+
+---
+
+## Objetivo
+
+Mejorar la detección de empates mediante variables diseñadas específicamente a partir de los hallazgos obtenidos durante el Error Analysis.
+
+El análisis mostró que los empates correctamente identificados tendían a presentar:
+
+* Menor diferencia Elo absoluta.
+* Menor diferencia de valor de mercado absoluta.
+* Mayor balance competitivo general.
+
+---
+
+## Variables incorporadas
+
+Archivo:
+
+draw_features.parquet
+
+### elo_draw_zone
+
+```python
+abs_elo_diff < 60
+```
+
+Indica partidos con diferencias Elo reducidas.
+
+---
+
+### market_draw_zone
+
+```python
+abs_market_value_diff < 20_000_000
+```
+
+Indica equipos con valores de mercado relativamente similares.
+
+---
+
+### experience_draw_zone
+
+```python
+abs_caps_diff < 12
+```
+
+Representa equipos con experiencia internacional comparable.
+
+---
+
+### ultra_balanced_match
+
+```python
+(abs_elo_diff < 40)
+&
+(abs_market_value_diff < 10_000_000)
+```
+
+Identifica partidos extremadamente equilibrados.
+
+---
+
+### draw_candidate_score
+
+Score acumulativo basado en:
+
+* abs_elo_diff
+* abs_market_value_diff
+* abs_caps_diff
+* abs_points_diff
+
+Rango:
+
+* 0 → muy desequilibrado
+* 4 → muy equilibrado
+
+---
+
+## Resultados
+
+### Modelo anterior
+
+* Features: 76
+* Accuracy: 0.5143
+* F1 Macro: 0.4824
+
+### Modelo con Draw Features
+
+* Features: 81
+* Accuracy: 0.5123
+* F1 Macro: 0.4815
+
+---
+
+## Conclusión
+
+Las nuevas variables de empate no mejoraron el desempeño global del modelo.
+
+La evidencia sugiere que el Random Forest ya estaba capturando gran parte de la información contenida en:
+
+* abs_elo_diff
+* abs_market_value_diff
+* balance_score
+
+Por tanto, las nuevas variables resultaron redundantes y fueron descartadas para futuras versiones del modelo.
+
+Este experimento valida que el equilibrio competitivo está asociado a la incertidumbre del resultado, pero no necesariamente a la ocurrencia de un empate.
+
+# Feature Selection (Junio 2026)
+
+Se realizó un experimento de selección automática utilizando Feature Importance generada por Random Forest.
+
+Resultados:
+
+| Conjunto | F1 Macro |
+| -------- | -------: |
+| Top10    |   0.4730 |
+| Top20    |   0.4670 |
+| Top30    |   0.4858 |
+| Top40    |   0.4806 |
+| Top50    |   0.4785 |
+| Top60    |   0.4793 |
+| All (87) |   0.4750 |
+
+Hallazgo principal:
+
+El subconjunto Top30 obtuvo el mejor rendimiento, superando al modelo entrenado con todas las variables disponibles.
+
+Conclusión:
+
+La incorporación de nuevas variables aumentó la capacidad predictiva del modelo, pero la eliminación de variables menos relevantes permitió reducir ruido y mejorar la generalización.
+
+Estado:
+
+✅ Top30 adoptado como conjunto oficial de variables para el modelo líder.
+
