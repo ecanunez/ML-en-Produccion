@@ -1,19 +1,13 @@
 from pathlib import Path
-
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
-
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-
 from sklearn.linear_model import LogisticRegression
-
 from sklearn.ensemble import (
     RandomForestClassifier,
     StackingClassifier
 )
-
 from sklearn.metrics import (
     accuracy_score,
     f1_score,
@@ -22,8 +16,13 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report
 )
-
 from load_dataset import load_dataset
+from src.config.project_config import (
+    RANDOM_STATE
+)
+from src.config.feature_config import (
+    TOP30_FEATURES
+)
 
 # =========================================================
 
@@ -70,7 +69,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
     test_size=0.20,
-    random_state=42,
+    random_state=RANDOM_STATE,
     stratify=y
 )
 
@@ -86,7 +85,7 @@ rf = RandomForestClassifier(
     min_samples_leaf=5,
     min_samples_split=2,
     class_weight="balanced",
-    random_state=42,
+    random_state=RANDOM_STATE,
     n_jobs=-1
 )
 
@@ -100,7 +99,7 @@ lr = Pipeline([
             LogisticRegression(
                 max_iter=5000,
                 class_weight="balanced",
-                random_state=42
+                random_state=RANDOM_STATE
             )
         )
     ]
@@ -120,7 +119,7 @@ model = StackingClassifier(
     final_estimator=LogisticRegression(
         max_iter=5000,
         class_weight="balanced",
-        random_state=42
+        random_state=RANDOM_STATE
     ),
     stack_method="predict_proba",
     cv=5,

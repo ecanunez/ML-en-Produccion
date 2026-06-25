@@ -1,220 +1,64 @@
 import pandas as pd
+import time
 
-from pathlib import Path
-import sys
+t0 = time.time()
 
-ROOT = Path(__file__).resolve().parents[1]
-
-sys.path.append(
-    str(ROOT / "src" / "models")
+players = pd.read_csv(
+    "data/raw/players/players.csv",
+    low_memory=False
 )
 
-from load_dataset import load_dataset
-
-df = pd.read_parquet(
-    "data/processed/training_dataset.parquet"
-)
-
-# cols = [
-#     c
-#     for c in df.columns
-#     if "profile" in c
-#     or "avg_age" in c
-#     or "avg_caps" in c
-#     or "player_value_diff" in c
-# ]
-
-# print(cols)
+# print(players.shape)
+# print(time.time() - t0)
 
 # print(
-#     df[cols]
-#     .describe()
-# )
-
-# print(df[cols].corr())
-
-# cols = [
-#     "age_diff",
-#     "caps_diff",
-#     "market_value_diff",
-#     "elo_diff",
-# ]
-
-# print(df[cols].corr())
-
-# pd.set_option('display.max_columns', None)
-
-# # Print your DataFrame
-# print(df)
-
-# print(df.shape)
-
-# print(df["target"].value_counts(normalize=True))
-
-import pandas as pd
-
-analysis_df = pd.read_csv(
-    "src/reports/error_analysis_predictions.csv"
-)
-
-draw_errors = analysis_df[
-    analysis_df["real"] == "DRAW"
-]
-
-#print(draw_errors)
-
-import pandas as pd
-
-df = pd.read_csv(
-    "src/reports/error_analysis_predictions.csv"
-)
-
-draws = df[df["real"] == "DRAW"]
-
-draw_correct = draws[
-    draws["pred"] == "DRAW"
-]
-
-draw_wrong = draws[
-    draws["pred"] != "DRAW"
-]
-
-# print(len(draw_correct))
-# print(len(draw_wrong))
-
-cols = [
-    "abs_elo_diff",
-    "elo_diff",
-    "abs_market_value_diff",
-    "market_value_diff",
-    "abs_points_diff",
-    "points_diff",
-    "balance_score",
-    "caps_diff",
-    "abs_caps_diff",
-    "age_diff",
-    "abs_age_diff"
-]
-
-comparison = pd.DataFrame({
-    "DRAW_detectados":
-        draw_correct[cols].mean(),
-
-    "DRAW_perdidos":
-        draw_wrong[cols].mean()
-})
-
-# print(comparison.round(2))
-
-# print(
-#       draw_correct["abs_elo_diff"].describe(),
-#       draw_wrong["abs_elo_diff"].describe()
-# )
-
-# print(
-#     draw_correct["abs_market_value_diff"].describe(),
-#     draw_wrong["abs_market_value_diff"].describe()
-# )
-
-# print(
-#     draw_correct["balance_score"].describe(),
-#     draw_wrong["balance_score"].describe()
-# )
-
-# cols = [
-#     "elo_diff",
-#     "abs_elo_diff",
-#     "market_value_diff",
-#     "abs_market_value_diff",
-#     "points_diff",
-#     "abs_points_diff",
-#     "caps_diff",
-#     "abs_caps_diff",
-#     "balance_score"
-# ]
-
-# draw_ok = draws[
-#     draws["pred"] == "DRAW"
-# ]
-
-# draw_home = draws[
-#     draws["pred"] == "HOME"
-# ]
-
-# draw_away = draws[
-#     draws["pred"] == "AWAY"
-# ]
-
-# comparison = pd.DataFrame({
-#     "DRAW_OK": draw_ok[cols].mean(),
-#     "DRAW_TO_HOME": draw_home[cols].mean(),
-#     "DRAW_TO_AWAY": draw_away[cols].mean()
-# })
-
-# print(comparison.round(2))
-
-import pandas as pd
-
-# df = pd.read_parquet(
-#     "data/interim/elo_features.parquet"
-# )
-
-# print(df.columns)
-
-# print(df[
-#     [
-#         "home_elo",
-#         "away_elo",
-#         "elo_diff"
+#     players[
+#         players["player_id"].isin([
+#             559319,
+#             1371793,
+#             258914
+#         ])
 #     ]
-# ].head())
-
-# print()
-
-# print(df["elo_diff"].describe())
-
-# df = pd.read_parquet(
-#     "data/interim/new_elo_features.parquet"
 # )
+missing = players[
+    players["height_in_cm"].isna()
+]
 
-# print(df.describe())
-
-# df = pd.read_parquet(
-#     "data/processed/training_dataset.parquet"
-# )
-
-# print(
-#     df[
-#         [
-#             "elo_home_win_prob",
-#             "elo_away_win_prob",
-#             "elo_draw_proxy",
-#             "elo_favorite_strength"
-#         ]
-#     ].describe()
-# )
-
-
-from load_dataset import load_dataset
-import pandas as pd
-
-importance = pd.read_csv(
-    "src/reports/feature_importance_rf_v2.csv"
+print(
+    missing[
+        [
+            "player_id",
+            "name",
+            "current_club_name"
+        ]
+    ]
 )
 
-X, y, features, _ = load_dataset()
-
-importance_features = set(
-    importance["feature"]
+print(
+    players.loc[
+        players["player_id"] == 1371793,
+        [
+            "player_id",
+            "name",
+            "height_in_cm",
+            "international_caps",
+            "international_goals"
+        ]
+    ]
 )
 
-dataset_features = set(
-    features
+missing = pd.read_csv(
+    "data/reports/player_match_missing.csv"
 )
 
-missing = sorted(
-    importance_features - dataset_features
-)
+print(missing.head(20))
 
-print(len(missing))
-print(missing)
+print(
+    missing[
+        [
+            "team",
+            "player_id",
+            "player"
+        ]
+    ]
+)

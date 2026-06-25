@@ -3,9 +3,10 @@ from sklearn.model_selection import (
     RandomizedSearchCV,
     StratifiedKFold
 )
-
 from load_dataset import load_dataset
-
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 def main():
 
@@ -14,7 +15,7 @@ def main():
     cv = StratifiedKFold(
         n_splits=5,
         shuffle=True,
-        random_state=42
+        random_state=RANDOM_STATE
     )
 
     param_dist = {
@@ -55,7 +56,7 @@ def main():
     }
 
     rf = RandomForestClassifier(
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1
     )
 
@@ -66,7 +67,7 @@ def main():
         scoring="f1_macro",
         cv=cv,
         verbose=2,
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1,
         return_train_score=True
     )

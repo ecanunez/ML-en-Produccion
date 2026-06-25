@@ -1,13 +1,8 @@
 from pathlib import Path
-
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
-
 from sklearn.ensemble import RandomForestClassifier
-
 from sklearn.calibration import CalibratedClassifierCV
-
 from sklearn.metrics import (
     accuracy_score,
     f1_score,
@@ -16,8 +11,10 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report
 )
-
 from load_dataset import load_dataset
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 # =========================================================
 
@@ -64,7 +61,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
     test_size=0.20,
-    random_state=42,
+    random_state=RANDOM_STATE,
     stratify=y
 )
 
@@ -80,7 +77,7 @@ rf = RandomForestClassifier(
     min_samples_leaf=5,
     min_samples_split=2,
     class_weight="balanced",
-    random_state=42,
+    random_state=RANDOM_STATE,
     n_jobs=-1
 )
 

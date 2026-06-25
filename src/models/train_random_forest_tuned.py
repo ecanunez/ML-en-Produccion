@@ -1,10 +1,12 @@
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
-
 from load_dataset import load_dataset
 from evaluate_model import evaluate_model
 from log_experiment import log_experiment
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 
 def main():
@@ -15,7 +17,7 @@ def main():
         X,
         y,
         test_size=0.20,
-        random_state=42,
+        random_state=RANDOM_STATE,
         stratify=y
     )
 
@@ -25,7 +27,7 @@ def main():
         min_samples_leaf=5,
         min_samples_split=2,
         class_weight="balanced",
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1
     )
 

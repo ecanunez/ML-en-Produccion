@@ -1,13 +1,13 @@
 from pathlib import Path
 import pandas as pd
 import numpy as np
-
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import f1_score
-
 from load_alt2_dataset import load_dataset
-
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -27,7 +27,7 @@ def get_model():
         min_samples_leaf=5,
         min_samples_split=2,
         class_weight="balanced",
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1
     )
 
@@ -44,7 +44,7 @@ def evaluate_cv(features, n_splits=5):
     skf = StratifiedKFold(
         n_splits=n_splits,
         shuffle=True,
-        random_state=42
+        random_state=RANDOM_STATE
     )
 
     scores = []

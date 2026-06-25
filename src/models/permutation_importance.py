@@ -1,9 +1,10 @@
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.inspection import permutation_importance
-
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 # ============================================================
 # CONFIG
@@ -11,8 +12,6 @@ from sklearn.inspection import permutation_importance
 
 DATA_PATH = "data/processed/training_dataset.parquet"
 TARGET = "target"
-
-RANDOM_STATE = 42
 
 
 # ============================================================

@@ -1,22 +1,21 @@
 from pathlib import Path
 import time
 import pandas as pd
-
 from sklearn.model_selection import (
     StratifiedKFold,
     cross_val_score
 )
-
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
-
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-
 from load_dataset import load_dataset
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 
 # =========================================================
@@ -75,7 +74,7 @@ print(
 cv = StratifiedKFold(
     n_splits=5,
     shuffle=True,
-    random_state=42
+    random_state=RANDOM_STATE
 )
 
 
@@ -95,7 +94,7 @@ models = {
             LogisticRegression(
                 max_iter=5000,
                 class_weight="balanced",
-                random_state=42
+                random_state=RANDOM_STATE
             )
         )
     ]),
@@ -106,7 +105,7 @@ models = {
         min_samples_leaf=5,
         min_samples_split=2,
         class_weight="balanced",
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1
     ),
 
@@ -118,7 +117,7 @@ models = {
         learning_rate=0.05,
         subsample=0.8,
         colsample_bytree=0.8,
-        random_state=42
+        random_state=RANDOM_STATE
     ),
 
     "LightGBM": LGBMClassifier(
@@ -127,7 +126,7 @@ models = {
         n_estimators=500,
         learning_rate=0.05,
         max_depth=6,
-        random_state=42,
+        random_state=RANDOM_STATE,
         verbose=-1
     )
 }

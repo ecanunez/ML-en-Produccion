@@ -6,6 +6,12 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 from funciones import extraer_datos_partido
 from funciones import obtener_enlaces_partidos
+from src.config.competition_config import (
+    COMPETITIONS
+)
+from src.config.project_config import (
+    HISTORICAL_SEASONS
+)
 
 # 1. CONSTANTES Y CONFIGURACIÓN DE RUTAS
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -15,48 +21,16 @@ os.makedirs(SEASON_DIR, exist_ok=True)
 BASE_URL = "https://www.transfermarkt.es"
 TEMPORADAS = [2022, 2023, 2024, 2025]
 
-CONFIG_LIGAS = {
-    "Europa": {
-            "1": {"nombre": "LaLiga", "id_web": "ES1", "slug": "laliga"},
-            "2": {"nombre": "Premier League", "id_web": "GB1", "slug": "premier-league"},
-            "3": {"nombre": "Bundesliga", "id_web": "L1", "slug": "bundesliga"},
-            "4": {"nombre": "Serie A", "id_web": "IT1", "slug": "serie-a"},
-            "5": {"nombre": "Ligue 1", "id_web": "FR1", "slug": "ligue-1"},
-            "6": {"nombre": "Primeira Liga", "id_web": "PO1", "slug": "liga-nos"},
-            "7": {"nombre": "Eredivisie", "id_web": "NL1", "slug": "eredivisie"},
-            "8": {"nombre": "Jupiler Pro League", "id_web": "BE1", "slug": "jupiler-pro-league"},
-            "9": {"nombre": "Süper Lig", "id_web": "TR1", "slug": "super-lig"},
-            "10": {"nombre": "Chance Liga", "id_web": "CZ1", "slug": "chance-liga"}
-},
-    "Sudamérica": {
-        "1": {"nombre": "Brasileirao", "id_web": "BRA1", "slug": "campeonato-brasileiro-serie-a"},
-        "2": {"nombre": "Liga Profesional Argentina", "id_web": "AR1N", "slug": "liga-profesional-de-futbol"},
-        "3": {"nombre": "Bolivia División Profesional", "id_web": "BODP", "slug": "division-profesional"},
-        "4": {"nombre": "Chile Primera División", "id_web": "CLPD", "slug": "primera-division"},
-        "5": {"nombre": "Colombia Primera A", "id_web": "COAA", "slug": "primera-a"},
-        "6": {"nombre": "Ecuador LigaPro", "id_web": "ECP1", "slug": "ligapro"},
-        "7": {"nombre": "Paraguay Primera División", "id_web": "PAR1", "slug": "primera-division"},
-        "8": {"nombre": "Perú Liga 1", "id_web": "PEL1", "slug": "liga-1"},
-        "9": {"nombre": "Uruguay Primera División", "id_web": "URU1", "slug": "primera-division"},
-        "10": {"nombre": "Venezuela Primera División", "id_web": "VFP1", "slug": "primera-division"}
-    },
-    "Norteamérica": {
-        "1": {"nombre": "Major League Soccer", "id_web": "MLS1", "slug": "major-league-soccer"},
-        "2": {"nombre": "Liga MX Clausura", "id_web": "MEX1", "slug": "liga-mx-clausura"},
-        "3": {"nombre": "Liga MX Apertura", "id_web": "MEX1", "slug": "liga-mx-apertura"}
-    },
-    "Asia": {
-        "1": {"nombre": "Saudi Pro League", "id_web": "SA1", "slug": "saudi-pro-league"},
-        "2": {"nombre": "J1 League", "id_web": "JAP1", "slug": "j1-league"},
-        "3": {"nombre": "K-League 1", "id_web": "KOR1", "slug": "k-league-1"}
-    },
-    "África": {
-        "1": {"nombre": "Egipto Premier League", "id_web": "EGY1", "slug": "egyptian-premier-league"},
-        "2": {"nombre": "Botola Pro", "id_web": "MAR1", "slug": "botola-pro"},
-        "3": {"nombre": "Túnez Ligue 1", "id_web": "TUN1", "slug": "ligue-1-professionnelle-1"},
-        "4": {"nombre": "Linafoot", "id_web": "COD1", "slug": "linafoot"}
-    }
+ligas = {
+    k: v
+    for k, v in COMPETITIONS.items()
+    if v["region"] == "domestic"
 }
+
+url = construir_url_calendario(
+    liga,
+    temporada
+)
 
 if __name__ == "__main__":
     print("\n=== SELECCIÓN DE REGIÓN ===")
@@ -85,7 +59,7 @@ if __name__ == "__main__":
             for liga in CONFIG_LIGAS[region_sel].values():
                 print(f"\n--- PROCESANDO LIGA: {liga['nombre']} ---")
                 
-                for anio in TEMPORADAS:
+                for temporada in HISTORICAL_SEASONS:
                     print(f" > Procesando {anio}...")
                     url = f"{BASE_URL}/{liga['slug']}/gesamtspielplan/wettbewerb/{liga['id_web']}/saison_id/{anio}"
                     

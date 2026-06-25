@@ -10,7 +10,23 @@ data/
 __pycache__/
 *.pyc
 .DS_Store
+.ipynb_checkpoints/
+
+models/**/*.joblib
 
 # Ignorar borradores y versiones viejas del scraper
 src/scraper/Torneos.py
 src/scraper/scraper_torneos.py
+
+
+
+
+
+
+
+
+
+
+
+
+models/**/*.joblib

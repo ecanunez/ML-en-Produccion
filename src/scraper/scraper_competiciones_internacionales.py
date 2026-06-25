@@ -4,6 +4,12 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 from funciones import extraer_datos_partido_internacional
 from funciones import obtener_enlaces_competicion
+from src.config.project_config import (
+    HISTORICAL_SEASONS
+)
+from src.config.competition_config import (
+    COMPETITIONS
+)
 
 BASE_URL = "https://www.transfermarkt.es"
 SAVE_DIR = os.path.join("data", "raw", "games", "international_competitions")
@@ -12,46 +18,10 @@ os.makedirs(
     exist_ok=True
 )
 
-TEMPORADAS = [2022, 2023, 2024, 2025]
-
-
-COMPETICIONES = {
-    "1": {
-        "nombre": "Champions League",
-        "slug": "uefa-champions-league",
-        "id_web": "CL"
-    },
-    "2": {
-        "nombre": "Europa League",
-        "slug": "uefa-europa-league",
-        "id_web": "EL"
-    },
-    "3": {
-        "nombre": "Copa Libertadores",
-        "slug": "copa-libertadores",
-        "id_web": "LIBC"
-    },
-    "4": {
-        "nombre": "Copa Sudamericana",
-        "slug": "copa-sudamericana",
-        "id_web": "COSU"
-    },
-    "5": {
-        "nombre": "Concacaf Champions Cup",
-        "slug": "concacaf-champions-cup",
-        "id_web": "CCC"
-    },
-    "6": {
-        "nombre": "AFC Champions League",
-        "slug": "afc-champions-league",
-        "id_web": "AFCL"
-    },
-    "7": {
-        "nombre": "CAF Champions League",
-        "slug": "caf-champions-league",
-        "id_web": "CAFCL"
-    }
-}
+url = construir_url_copa(
+    competition,
+    temporada
+)
 
 def seleccionar_competiciones():
 
@@ -105,7 +75,7 @@ def procesar_competicion(
     config
 ):
 
-    for temporada in TEMPORADAS:
+    for temporada in HISTORICAL_SEASONS:
 
         print(
             f"\nTemporada {temporada}"

@@ -1,12 +1,12 @@
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-
 from lightgbm import LGBMClassifier
-
 from load_dataset import load_dataset
 from evaluate_model import evaluate_boosting_model
 from log_experiment import log_experiment
-
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 print("\nVariables nuevas:")
 
@@ -20,7 +20,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X,
     y_encoded,
     test_size=0.20,
-    random_state=42,
+    random_state=RANDOM_STATE,
     stratify=y_encoded
 )
 
@@ -32,7 +32,7 @@ lgbm = LGBMClassifier(
     n_estimators=500,
     learning_rate=0.05,
     max_depth=6,
-    random_state=42,
+    random_state=RANDOM_STATE,
     verbose=-1,
     force_col_wise=True
 )

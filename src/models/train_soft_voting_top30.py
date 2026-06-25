@@ -1,13 +1,10 @@
 from pathlib import Path
-
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import (
 RandomForestClassifier,
 VotingClassifier
 )
-
 from sklearn.metrics import (
 accuracy_score,
 f1_score,
@@ -16,11 +13,12 @@ recall_score,
 confusion_matrix,
 classification_report
 )
-
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-
 from load_dataset import load_dataset
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 # =========================================================
 
@@ -67,7 +65,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
     test_size=0.20,
-    random_state=42,
+    random_state=RANDOM_STATE,
     stratify=y
 )
 
@@ -83,7 +81,7 @@ rf = RandomForestClassifier(
     min_samples_leaf=5,
     min_samples_split=2,
     class_weight="balanced",
-    random_state=42,
+    random_state=RANDOM_STATE,
     n_jobs=-1
 )
 
@@ -91,7 +89,7 @@ lgbm = LGBMClassifier(
     n_estimators=500,
     learning_rate=0.05,
     max_depth=6,
-    random_state=42,
+    random_state=RANDOM_STATE,
     verbose=-1
 )
 
@@ -101,7 +99,7 @@ xgb = XGBClassifier(
     max_depth=6,
     subsample=0.8,
     colsample_bytree=0.8,
-    random_state=42,
+    random_state=RANDOM_STATE,
     eval_metric="mlogloss"
 )
 

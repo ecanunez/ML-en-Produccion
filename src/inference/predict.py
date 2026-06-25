@@ -1,9 +1,11 @@
 from pathlib import Path
 
 import pandas as pd
-
 from joblib import load
 
+from src.config.project_config import (
+    MODEL_VERSION
+)
 
 # =========================================================
 # PATHS
@@ -15,39 +17,54 @@ MODEL_DIR = (
     ROOT
     / "models"
     / "champions"
-    / "v1.0_model_champion"
+    / MODEL_VERSION
 )
 
-MODEL_FILE = (
-    MODEL_DIR
-    / "model.joblib"
-)
+MODEL_FILE = MODEL_DIR / "model.joblib"
 
 FEATURES_FILE = (
     MODEL_DIR
     / "top30_features.csv"
 )
 
+# =========================================================
+# VALIDATION
+# =========================================================
+
+if not MODEL_FILE.exists():
+
+    raise FileNotFoundError(
+        f"No existe el modelo: {MODEL_FILE}"
+    )
+
+if not FEATURES_FILE.exists():
+
+    raise FileNotFoundError(
+        f"No existe el archivo de features: "
+        f"{FEATURES_FILE}"
+    )
 
 # =========================================================
 # LOAD MODEL
 # =========================================================
 
-model = load(MODEL_FILE)
+MODEL = load(MODEL_FILE)
 
-top30_features = (
-    pd.read_csv(FEATURES_FILE)["feature"]
-    .tolist()
+MODEL_FEATURES = (
+    pd.read_csv(
+        FEATURES_FILE
+    )["feature"].tolist()
 )
 
 print(
-    f"Modelo cargado: {MODEL_FILE.name}"
+    f"Modelo cargado: "
+    f"{MODEL_FILE.name}"
 )
 
 print(
-    f"Features esperadas: {len(top30_features)}"
+    f"Features esperadas: "
+    f"{len(MODEL_FEATURES)}"
 )
-
 
 # =========================================================
 # PREDICT FUNCTION
@@ -57,31 +74,48 @@ def predict_matches(df):
 
     missing = [
         col
-        for col in top30_features
+        for col in MODEL_FEATURES
         if col not in df.columns
     ]
 
     if missing:
 
         raise ValueError(
-            f"Faltan columnas: {missing}"
+            f"Faltan columnas requeridas: "
+            f"{missing}"
         )
 
-    X = df[top30_features]
+    X = df[MODEL_FEATURES]
 
-    predictions = model.predict(X)
+    predictions = MODEL.predict(X)
 
-    probabilities = model.predict_proba(X)
+    probabilities = (
+        MODEL.predict_proba(X)
+    )
 
     results = df.copy()
 
-    results["prediction"] = predictions
+    results["prediction"] = (
+        predictions
+    )
 
-    results["prob_away"] = probabilities[:, 0]
-    results["prob_draw"] = probabilities[:, 1]
-    results["prob_home"] = probabilities[:, 2]
+    results["prob_away"] = (
+        probabilities[:, 0]
+    )
+
+    results["prob_draw"] = (
+        probabilities[:, 1]
+    )
+
+    results["prob_home"] = (
+        probabilities[:, 2]
+    )
 
     return results
+
+# =========================================================
+# TEST
+# =========================================================
 
 if __name__ == "__main__":
 
@@ -92,10 +126,14 @@ if __name__ == "__main__":
         / "training_dataset.parquet"
     )
 
-    df = pd.read_parquet(sample_file)
+    df = pd.read_parquet(
+        sample_file
+    )
 
-    predictions = predict_matches(
-        df.head(5)
+    predictions = (
+        predict_matches(
+            df.head(5)
+        )
     )
 
     print(

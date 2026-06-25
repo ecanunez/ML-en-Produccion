@@ -1,14 +1,13 @@
 from pathlib import Path
 from datetime import datetime
-
 import pandas as pd
-
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
-
 from load_dataset import load_dataset
-
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -50,7 +49,7 @@ def evaluate_feature_set(feature_list):
         X,
         y,
         test_size=0.20,
-        random_state=42,
+        random_state=RANDOM_STATE,
         stratify=y
     )
 
@@ -60,7 +59,7 @@ def evaluate_feature_set(feature_list):
         min_samples_leaf=5,
         min_samples_split=2,
         class_weight="balanced",
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1
     )
 

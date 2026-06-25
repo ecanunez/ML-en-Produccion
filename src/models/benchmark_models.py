@@ -1,8 +1,6 @@
 import time
 from pathlib import Path
-
 import pandas as pd
-
 from sklearn.model_selection import train_test_split
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
@@ -10,10 +8,11 @@ from sklearn.ensemble import (
     RandomForestClassifier,
     HistGradientBoostingClassifier
 )
-
 from load_dataset import load_dataset
 from evaluate_model import evaluate_model
-
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 # =========================================================
 # CONFIGURACIÓN
@@ -68,7 +67,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
     test_size=0.20,
-    random_state=42,
+    random_state=RANDOM_STATE,
     stratify=y
 )
 
@@ -93,12 +92,12 @@ models = {
     "LogisticRegression": LogisticRegression(
         max_iter=5000,
         class_weight="balanced",
-        random_state=42
+        random_state=RANDOM_STATE
     ),
 
     "RandomForest": RandomForestClassifier(
         n_estimators=200,
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1
     ),
 
@@ -108,12 +107,12 @@ models = {
         min_samples_split=2,
         min_samples_leaf=5,
         class_weight="balanced",
-        random_state=42,
+        random_state=RANDOM_STATE,
         n_jobs=-1
     ),
 
     "HistGradientBoosting": HistGradientBoostingClassifier(
-        random_state=42
+        random_state=RANDOM_STATE
     )
 }
 

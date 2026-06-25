@@ -14,7 +14,10 @@ from sklearn.ensemble import (
     RandomForestClassifier,
     StackingClassifier
 )
-
+from src.config.project_config import (
+    MODEL_VERSION,
+    RANDOM_STATE
+)
 from load_dataset import load_dataset
 
 # =========================================================
@@ -29,7 +32,7 @@ CHAMPION_DIR = (
     ROOT
     / "models"
     / "champions"
-    / "v1.0_model_champion"
+    / MODEL_VERSION
 )
 
 CHAMPION_DIR.mkdir(
@@ -103,7 +106,7 @@ rf = RandomForestClassifier(
     min_samples_leaf=5,
     min_samples_split=2,
     class_weight="balanced",
-    random_state=42,
+    random_state=RANDOM_STATE,
     n_jobs=-1
 )
 
@@ -117,7 +120,7 @@ lr = Pipeline([
         LogisticRegression(
             max_iter=5000,
             class_weight="balanced",
-            random_state=42
+            random_state=RANDOM_STATE
         )
     )
 ])
@@ -136,7 +139,7 @@ model = StackingClassifier(
     final_estimator=LogisticRegression(
         max_iter=5000,
         class_weight="balanced",
-        random_state=42
+        random_state=RANDOM_STATE
     ),
     stack_method="predict_proba",
     cv=5,
@@ -174,7 +177,7 @@ print(
 
 copyfile(
     TOP30_FILE,
-    CHAMPION_DIR / "top30_features.csv"
+    CHAMPION_DIR / TOP30_FILE.name
 )
 
 print(
@@ -188,7 +191,7 @@ print(
 # =========================================================
 
 metadata = {
-    "version": "v1.0_model_champion",
+    "version": MODEL_VERSION,
     "created_at": datetime.now().strftime(
         "%Y-%m-%d %H:%M:%S"
     ),
@@ -198,7 +201,11 @@ metadata = {
     "dataset_timestamp": dataset_modified,
     "holdout_f1_macro": 0.4915,
     "cross_validation_f1_macro": 0.4810,
-    "accuracy": 0.5123
+    "accuracy": 0.5123,
+    "target": "result",
+    "n_classes": 3,
+    "feature_file": "top30_features.csv",
+    "model_file": "model.joblib"
 }
 
 with open(
@@ -227,7 +234,7 @@ print(
 
 readme_text = """
 
-    # v1.0_model_champion
+    # {MODEL_VERSION}
 
     Modelo oficial del proyecto.
 

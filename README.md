@@ -237,3 +237,35 @@ Fase 5 — Champion Model Export ✅
 Fase 6 — Inference Pipeline ✅
 
 Fase 7 — API Deployment ⏳
+
+## Estado del Proyecto
+
+### Versión actual
+
+v1.0
+
+### Mejor modelo
+
+Random Forest Optimizado
+
+### Métrica principal
+
+F1 Macro: 0.472
+
+### Estado
+
+✅ Dataset construido
+
+✅ Ingeniería de variables
+
+✅ Selección de características
+
+✅ Optimización de hiperparámetros
+
+✅ Pipeline de inferencia
+
+⏳ API REST
+
+⏳ Scoring de partidos futuros
+
+⏳ Deployment

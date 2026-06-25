@@ -6,17 +6,11 @@ from sklearn.metrics import (
     confusion_matrix
 )
 from sklearn.ensemble import RandomForestClassifier
-
 from load_dataset import load_dataset
 from evaluate_model import evaluate_model
-
-
-# ============================================================
-# CONFIG
-# ============================================================
-
-RANDOM_STATE = 42
-
+from src.config.project_config import (
+    RANDOM_STATE
+)
 
 # ============================================================
 # LOAD DATA
