@@ -5,9 +5,6 @@ from playwright.sync_api import sync_playwright
 from src.config.project_config import (
     SCORING_SEASON
 )
-from src.config.competition_config import (
-    DOMESTIC_COMPETITIONS
-)
 from src.scraper.scraper_utils import (
     construir_url_fixture_liga,
     obtener_partidos_futuros,

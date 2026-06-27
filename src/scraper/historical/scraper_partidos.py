@@ -1,18 +1,16 @@
 import os
 import pandas as pd
-import time
-import random
-from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-from src.scraper.scraper_utils import (
-    extraer_datos_partido_internacional,
-    obtener_enlaces_competicion,
-)
 from src.config.competition_config import (
-    COMPETITIONS
+    COMPETITIONS,
+    DOMESTIC_COMPETITIONS,
 )
 from src.config.project_config import (
     HISTORICAL_SEASONS
+)
+from src.scraper.scraper_utils import (
+    obtener_enlaces_partidos,
+    extraer_datos_partido,
 )
 
 # 1. CONSTANTES Y CONFIGURACIÓN DE RUTAS
@@ -29,14 +27,9 @@ ligas = {
     if v["region"] == "domestic"
 }
 
-url = construir_url_calendario(
-    liga,
-    temporada
-)
-
 if __name__ == "__main__":
     print("\n=== SELECCIÓN DE REGIÓN ===")
-    regiones = list(CONFIG_LIGAS.keys())
+    regiones = list(DOMESTIC_COMPETITIONS.keys())
     for i, region in enumerate(regiones, 1): 
         print(f" {i} - {region}")
     
@@ -58,19 +51,19 @@ if __name__ == "__main__":
             )
             page = context.new_page()
             
-            for liga in CONFIG_LIGAS[region_sel].values():
+            for liga in DOMESTIC_COMPETITIONS[region_sel].values():
                 print(f"\n--- PROCESANDO LIGA: {liga['nombre']} ---")
                 
                 for temporada in HISTORICAL_SEASONS:
-                    print(f" > Procesando {anio}...")
-                    url = f"{BASE_URL}/{liga['slug']}/gesamtspielplan/wettbewerb/{liga['id_web']}/saison_id/{anio}"
+                    print(f" > Procesando {temporada}...")
+                    url = f"{BASE_URL}/{liga['slug']}/gesamtspielplan/wettbewerb/{liga['id_web']}/saison_id/{temporada}"
                     
                     enlaces = obtener_enlaces_partidos(url, page)
                     datos_temporada = []
                     
                     if enlaces:
                         for idx, link in enumerate(enlaces, 1):
-                            datos = extraer_datos_partido(link, page, liga['nombre'], anio, region_sel)
+                            datos = extraer_datos_partido(link, page, liga['nombre'], temporada, region_sel)
                             if datos:
                                 datos_temporada.append(datos)
                             
@@ -79,14 +72,14 @@ if __name__ == "__main__":
                         
                         if datos_temporada:
                             df_temp = pd.DataFrame(datos_temporada)
-                            file_name = f"{liga['nombre'].lower().replace(' ', '_')}_{anio}.csv"
+                            file_name = f"{liga['nombre'].lower().replace(' ', '_')}_{temporada}.csv"
                             destino_final = os.path.join(SEASON_DIR, file_name)
                             df_temp.to_csv(destino_final, index=False)
-                            print(f"   ✅ ¡Temporada {anio} guardada con éxito! -> {file_name}")
+                            print(f"   ✅ ¡Temporada {temporada} guardada con éxito! -> {file_name}")
                         else:
-                            print(f"   ⚠️ No se lograron extraer datos válidos para la temporada {anio}.")
+                            print(f"   ⚠️ No se lograron extraer datos válidos para la temporada {temporada}.")
                     else:
-                        print(f"   ⚠️ No se encontraron enlaces para la temporada {anio}.")
+                        print(f"   ⚠️ No se encontraron enlaces para la temporada {temporada}.")
             
             browser.close()
             print("\n🏁 Proceso de scraping completado de manera limpia.")

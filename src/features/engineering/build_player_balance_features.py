@@ -2,31 +2,18 @@ import pandas as pd
 
 from src.config.dataset_config import (
     INTERIM_DATA_DIR,
-    RAW_DATA_DIR
+    PROCESSED_DATA_DIR
 )
 
-MATCHES_FILE = (
-    INTERIM_DATA_DIR
-    / "matches.parquet"
-)
-
-PLAYER_MAPPING_FILE = (
-    INTERIM_DATA_DIR
-    / "player_mapping.parquet"
-)
-
-PLAYERS_FILE = (
-    RAW_DATA_DIR
-    / "players"
-    / "players.csv"
+INPUT_FILE = (
+    PROCESSED_DATA_DIR
+    / "training_dataset.parquet"
 )
 
 OUTPUT_FILE = (
     INTERIM_DATA_DIR
     / "player_balance_features.parquet"
 )
-
-
 
 
 def main():
@@ -157,21 +144,14 @@ def main():
         index=False
     )
 
-    print(
-        "\nArchivo generado:"
-    )
-
-    print(
-        OUTPUT_FILE
-    )
+    print("\nArchivo generado:")
+    print(OUTPUT_FILE)
 
     print(
         f"\nShape: {features.shape}"
     )
 
-    print(
-        "\nVariables creadas:"
-    )
+    print("\nVariables creadas:")
 
     for col in features.columns:
         if col != "match_idx":

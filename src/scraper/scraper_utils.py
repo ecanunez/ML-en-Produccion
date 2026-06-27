@@ -4,7 +4,9 @@ from src.config.project_config import (
     BASE_URL
 )
 from src.config.competition_config import (
-    DOMESTIC_COMPETITIONS
+    COMPETITIONS,
+    DOMESTIC_COMPETITIONS,
+    INTERNATIONAL_COMPETITIONS,
 )
 from src.config.team_url_overrides import (
     TEAM_URL_OVERRIDES
@@ -178,7 +180,7 @@ def extraer_datos_partido(url_partido, page, nombre_liga, anio_temporada, region
                             if len(texto) > 2:
                                 nombres.append(texto)
 
-                        except:
+                        except Exception:
                             pass
 
                     nombres = list(dict.fromkeys(nombres))
@@ -210,7 +212,7 @@ def extraer_datos_partido(url_partido, page, nombre_liga, anio_temporada, region
                 .strip()
             )
 
-        except:
+        except Exception:
             pass
 
         # =====================================

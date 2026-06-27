@@ -1,12 +1,8 @@
-from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import (
     RandomForestClassifier,
-    StackingClassifier
+    VotingClassifier
 )
 from sklearn.metrics import (
     accuracy_score,
@@ -16,34 +12,19 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report
 )
-from load_dataset import load_dataset
-from src.config.project_config import (
-    RANDOM_STATE
-)
-from src.config.feature_config import (
-    TOP30_FEATURES
-)
+from xgboost import XGBClassifier
+from lightgbm import LGBMClassifier
 
-# =========================================================
-
-# CONFIG
-
-# =========================================================
-
-ROOT = Path(__file__).resolve().parents[2]
-
-TOP30_FILE = (
-    ROOT
-    / "src"
-    / "reports"
-    / "top30_features.csv"
-)
+from src.models.load_dataset import load_dataset
+from src.config.project_config import RANDOM_STATE, REPORTS_DIR
 
 # =========================================================
 
 # FEATURES
 
 # =========================================================
+
+TOP30_FILE = REPORTS_DIR / "top30_features.csv"
 
 top30_features = (
     pd.read_csv(TOP30_FILE)["feature"]
@@ -60,10 +41,7 @@ X, y, features, dataset_modified = load_dataset(
     selected_features=top30_features
 )
 
-print(
-    f"Features utilizadas: "
-    f"{len(features)}"
-)
+print(f"Features utilizadas: {len(features)}")
 
 X_train, X_test, y_train, y_test = train_test_split(
     X,
@@ -89,40 +67,37 @@ rf = RandomForestClassifier(
     n_jobs=-1
 )
 
-lr = Pipeline([
-        (
-            "scaler",
-            StandardScaler()
-        ),
-        (
-            "model",
-            LogisticRegression(
-                max_iter=5000,
-                class_weight="balanced",
-                random_state=RANDOM_STATE
-            )
-        )
-    ]
+lgbm = LGBMClassifier(
+    n_estimators=500,
+    learning_rate=0.05,
+    max_depth=6,
+    random_state=RANDOM_STATE,
+    verbose=-1
+)
+
+xgb = XGBClassifier(
+    n_estimators=500,
+    learning_rate=0.05,
+    max_depth=6,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=RANDOM_STATE,
+    eval_metric="mlogloss"
 )
 
 # =========================================================
 
-# STACKING
+# ENSEMBLE
 
 # =========================================================
 
-model = StackingClassifier(
+model = VotingClassifier(
     estimators=[
-        ("rf", rf),
-        ("lr", lr)
+    ("rf", rf),
+    ("lgbm", lgbm),
+    ("xgb", xgb)
     ],
-    final_estimator=LogisticRegression(
-        max_iter=5000,
-        class_weight="balanced",
-        random_state=RANDOM_STATE
-    ),
-    stack_method="predict_proba",
-    cv=5,
+    voting="soft",
     n_jobs=-1
 )
 
@@ -132,9 +107,7 @@ model = StackingClassifier(
 
 # =========================================================
 
-print(
-    "Entrenando Stacking Ensemble..."
-)
+print("Entrenando Soft Voting Ensemble...")
 
 model.fit(
     X_train,
@@ -175,7 +148,7 @@ recall = recall_score(
 )
 
 print("\n" + "=" * 60)
-print("STACKING ENSEMBLE")
+print("SOFT VOTING ENSEMBLE")
 print("=" * 60)
 
 print(

@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 from src.scraper.scraper_utils import (
     extraer_datos_partido_internacional,
@@ -10,9 +9,8 @@ from src.config.project_config import (
     HISTORICAL_SEASONS
 )
 from src.config.competition_config import (
-    COMPETITIONS
+    INTERNATIONAL_COMPETITIONS,
 )
-
 BASE_URL = "https://www.transfermarkt.es"
 SAVE_DIR = os.path.join("data", "raw", "games", "international_competitions")
 os.makedirs(
@@ -20,16 +18,11 @@ os.makedirs(
     exist_ok=True
 )
 
-url = construir_url_copa(
-    competition,
-    temporada
-)
-
 def seleccionar_competiciones():
 
     print("\n=== COMPETICIONES DISPONIBLES ===\n")
 
-    for clave, comp in COMPETICIONES.items():
+    for clave, comp in INTERNATIONAL_COMPETITIONS.items():
 
         print(
             f"{clave} - {comp['nombre']}"
@@ -49,7 +42,7 @@ def seleccionar_competiciones():
                 "slug": v["slug"],
                 "id_web": v["id_web"]
             }
-            for v in COMPETICIONES.values()
+            for v in INTERNATIONAL_COMPETITIONS.values()
         }
 
     seleccionadas = {}
@@ -58,9 +51,9 @@ def seleccionar_competiciones():
 
         op = op.strip()
 
-        if op in COMPETICIONES:
+        if op in INTERNATIONAL_COMPETITIONS:
 
-            comp = COMPETICIONES[op]
+            comp = INTERNATIONAL_COMPETITIONS[op]
 
             seleccionadas[
                 comp["nombre"]

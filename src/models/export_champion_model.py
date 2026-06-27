@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import joblib
 
 from src.models.train import run_training
@@ -6,7 +7,12 @@ from src.config.experiment_config import (
     CHAMPION_MODEL,
     CHAMPION_FEATURE_SET
 )
-from src.config.feature_sets import load_feature_set
+from src.config.project_config import (
+    MODEL_VERSION,
+)
+from src.config.feature_sets import (
+    load_feature_set
+)
 
 # ==========================================================
 # PATHS
@@ -15,12 +21,16 @@ from src.config.feature_sets import load_feature_set
 ROOT = Path(__file__).resolve().parents[2]
 
 MODEL_DIR = ROOT / "models"
+
 MODEL_DIR.mkdir(
     parents=True,
     exist_ok=True
 )
 
-MODEL_FILE = MODEL_DIR / "champion_model.pkl"
+MODEL_FILE = (
+    MODEL_DIR
+    / "champion_model.pkl"
+)
 
 # ==========================================================
 # MAIN
@@ -33,11 +43,15 @@ def main():
     print("=" * 60)
 
     print(f"Modelo: {CHAMPION_MODEL}")
-    print(f"Features: {CHAMPION_FEATURE_SET}")
+    print(f"Feature Set: {CHAMPION_FEATURE_SET}")
+
+    features = load_feature_set(
+        CHAMPION_FEATURE_SET
+    )
 
     model, metrics = run_training(
         model_name=CHAMPION_MODEL,
-        features = load_feature_set(CHAMPION_FEATURE_SET)
+        features=features
     )
 
     artifact = {
@@ -57,7 +71,7 @@ def main():
     print("\nModelo exportado en:")
     print(MODEL_FILE)
 
-    print("\nMétricas")
+    print("\nMétricas:")
 
     for key, value in metrics.items():
         print(f"{key}: {value:.4f}")

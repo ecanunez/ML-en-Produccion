@@ -1,0 +1,7 @@
+[tool.ruff]
+
+exclude = [
+    "src/models/archive",
+    "src/features/archive",
+    "src/eda",
+]

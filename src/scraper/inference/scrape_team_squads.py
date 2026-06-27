@@ -1,12 +1,8 @@
 from pathlib import Path
 import pandas as pd
 from playwright.sync_api import sync_playwright
-from src.config.team_url_overrides import (
-    TEAM_URL_OVERRIDES
-)
 from src.scraper.scraper_utils import (
     extraer_plantilla_equipo,
-    obtener_enlaces_competicion,
     buscar_url_equipo_transfermarkt
 )
 

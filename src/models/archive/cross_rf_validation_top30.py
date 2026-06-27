@@ -4,9 +4,6 @@ from sklearn.model_selection import (
     StratifiedKFold,
     cross_val_score
 )
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from load_dataset import load_dataset
 from src.config.project_config import (

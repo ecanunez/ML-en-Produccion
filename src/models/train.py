@@ -1,13 +1,15 @@
 from sklearn.model_selection import train_test_split
 
-from src.config.project_config import RANDOM_STATE
+from src.config.project_config import (
+    RANDOM_STATE,
+    MODEL_VERSION,
+)
 from src.config.experiment_config import (
     MODEL_NAME,
     FEATURE_SET
 )
 
 from src.config.feature_sets import load_feature_set
-
 from src.models.load_dataset import load_dataset
 from src.models.model_registry import get_model
 from src.models.evaluate_model import evaluate_model

@@ -1,4 +1,3 @@
-from pathlib import Path
 from src.config.project_config import ROOT
 
 
