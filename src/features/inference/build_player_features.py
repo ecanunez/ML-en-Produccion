@@ -2,12 +2,9 @@ import glob
 import os
 import pandas as pd
 
-from src.config.dataset_config import (
+from src.config.project_config import (
     RAW_DATA_DIR,
     PROCESSED_DATA_DIR,
-)
-
-from src.config.project_config import (
     REPORTS_DIR,
 )
 

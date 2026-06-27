@@ -1,5 +1,10 @@
 """
-Configuración del dataset de entrenamiento.
+Configuración del dataset.
+
+Incluye:
+- temporadas históricas
+- temporada de scoring
+- archivos que componen el dataset
 """
 
 # --------------------------------------------------
@@ -31,7 +36,7 @@ HISTORICAL_SEASONS = [
 ]
 
 # --------------------------------------------------
-# Temporada utilizada para inferencia
+# Temporada objetivo para scoring
 # --------------------------------------------------
 
 SCORING_SEASON = 2026

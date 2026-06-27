@@ -2,21 +2,8 @@ from pathlib import Path
 
 import joblib
 
-from src.models.train import run_training
-from src.config.experiment_config import (
-    CHAMPION_MODEL,
-    CHAMPION_FEATURE_SET
-)
-from src.config.project_config import (
-    MODEL_VERSION,
-)
-from src.config.feature_sets import (
-    load_feature_set
-)
+from src.models.train import train_model
 
-# ==========================================================
-# PATHS
-# ==========================================================
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -32,9 +19,6 @@ MODEL_FILE = (
     / "champion_model.pkl"
 )
 
-# ==========================================================
-# MAIN
-# ==========================================================
 
 def main():
 
@@ -42,26 +26,7 @@ def main():
     print("EXPORT CHAMPION MODEL")
     print("=" * 60)
 
-    print(f"Modelo: {CHAMPION_MODEL}")
-    print(f"Feature Set: {CHAMPION_FEATURE_SET}")
-
-    features = load_feature_set(
-        CHAMPION_FEATURE_SET
-    )
-
-    model, metrics = run_training(
-        model_name=CHAMPION_MODEL,
-        features=features
-    )
-
-    artifact = {
-        "model": model,
-        "model_name": CHAMPION_MODEL,
-        "feature_set": CHAMPION_FEATURE_SET,
-        "features": features,
-        "metrics": metrics,
-        "version": MODEL_VERSION
-    }
+    artifact = train_model()
 
     joblib.dump(
         artifact,
@@ -73,9 +38,12 @@ def main():
 
     print("\nMétricas:")
 
-    for key, value in metrics.items():
-        print(f"{key}: {value:.4f}")
+    for key, value in artifact["metrics"].items():
 
+        if isinstance(value, (int, float)):
+            print(f"{key}: {value:.4f}")
+        else:
+            print(f"{key}: {value}")
 
 if __name__ == "__main__":
     main()
