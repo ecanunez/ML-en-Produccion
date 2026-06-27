@@ -1,6 +1,7 @@
 from pathlib import Path
 import pandas as pd
 from src.config.project_config import RANDOM_STATE
+from src.config.feature_sets import load_feature_set
 
 # =========================================================
 # PATHS
