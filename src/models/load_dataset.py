@@ -1,15 +1,11 @@
 from pathlib import Path
-import pandas as pd
-import sys
 from datetime import datetime
 
+import pandas as pd
+
+from src.config.feature_config import EXCLUDED_COLUMNS
+
 ROOT = Path(__file__).resolve().parents[2]
-
-sys.path.append(
-    str(ROOT / "src")
-)
-
-from config.feature_config import EXCLUDED_COLUMNS
 
 DATA_FILE = (
     ROOT
@@ -17,7 +13,6 @@ DATA_FILE = (
     / "processed"
     / "training_dataset.parquet"
 )
-
 
 def load_dataset(selected_features=None):
 

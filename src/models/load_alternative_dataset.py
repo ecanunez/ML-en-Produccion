@@ -1,6 +1,9 @@
 from pathlib import Path
+from datetime import datetime
 
 import pandas as pd
+
+from src.config.feature_config import EXCLUDED_COLUMNS
 
 ROOT = Path(__file__).resolve().parents[2]
 

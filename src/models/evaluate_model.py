@@ -1,221 +1,154 @@
-from sklearn.metrics import (
-    accuracy_score,
-    f1_score,
-    precision_score,
-    recall_score,
-    classification_report,
-    confusion_matrix
+import argparse
+
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    StackingClassifier
 )
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
+from xgboost import XGBClassifier
+from lightgbm import LGBMClassifier
+
+from src.config.project_config import RANDOM_STATE
+from src.config.feature_registry import load_feature_set
+from src.models.load_dataset import load_dataset
+from src.models.evaluate_model import evaluate_model
 
 
-def evaluate_model(
-    model,
-    X_test,
-    y_test,
-    model_name=None,
-    verbose=True
-):
-    """
-    Evalúa un modelo de clasificación multiclase.
+# =========================================================
+# MODEL FACTORY
+# =========================================================
 
-    Parameters
-    ----------
-    model : estimator
-        Modelo entrenado.
+def get_model(name: str):
 
-    X_test : pd.DataFrame
-        Features de test.
+    if name == "rf":
+        return RandomForestClassifier(
+            n_estimators=500,
+            max_depth=10,
+            min_samples_leaf=5,
+            min_samples_split=2,
+            class_weight="balanced",
+            random_state=RANDOM_STATE,
+            n_jobs=-1
+        )
 
-    y_test : pd.Series
-        Variable objetivo de test.
+    if name == "xgb":
+        return XGBClassifier(
+            eval_metric="mlogloss",
+            random_state=RANDOM_STATE
+        )
 
-    model_name : str, optional
-        Nombre del modelo para mostrar en pantalla.
+    if name == "lgbm":
+        return LGBMClassifier(
+            random_state=RANDOM_STATE
+        )
 
-    verbose : bool, default=True
-        Si True imprime métricas detalladas.
+    if name == "stacking":
 
-    Returns
-    -------
-    dict
-        Diccionario con métricas de evaluación.
-    """
+        rf = RandomForestClassifier(
+            n_estimators=500,
+            max_depth=10,
+            min_samples_leaf=5,
+            class_weight="balanced",
+            random_state=RANDOM_STATE,
+            n_jobs=-1
+        )
 
-    preds = model.predict(X_test)
+        lr = Pipeline([
+            ("scaler", StandardScaler()),
+            ("lr", LogisticRegression(
+                max_iter=5000,
+                class_weight="balanced",
+                random_state=RANDOM_STATE
+            ))
+        ])
 
-    accuracy = accuracy_score(
-        y_test,
-        preds
+        return StackingClassifier(
+            estimators=[
+                ("rf", rf),
+                ("lr", lr)
+            ],
+            final_estimator=LogisticRegression(
+                max_iter=5000,
+                class_weight="balanced",
+                random_state=RANDOM_STATE
+            ),
+            stack_method="predict_proba",
+            cv=5,
+            n_jobs=-1
+        )
+
+    raise ValueError(f"Modelo no soportado: {name}")
+
+
+# =========================================================
+# TRAIN PIPELINE
+# =========================================================
+
+def run_training(model_name: str, feature_set: str):
+
+    # FEATURES
+    features = load_feature_set(feature_set)
+
+    # DATASET
+    X, y, _, _ = load_dataset(selected_features=features)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=0.2,
+        random_state=RANDOM_STATE,
+        stratify=y
     )
 
-    f1_macro = f1_score(
-        y_test,
-        preds,
-        average="macro"
+    # MODEL
+    model = get_model(model_name)
+
+    print("\n" + "=" * 60)
+    print(f"MODELO: {model_name}")
+    print(f"FEATURE SET: {feature_set}")
+    print("=" * 60)
+
+    # TRAIN
+    model.fit(X_train, y_train)
+
+    # EVALUATION (centralizada)
+    metrics = evaluate_model(
+        model=model,
+        X_test=X_test,
+        y_test=y_test,
+        model_name=model_name,
+        verbose=True
     )
 
-    precision_macro = precision_score(
-        y_test,
-        preds,
-        average="macro",
-        zero_division=0
+    return model, metrics
+
+
+# =========================================================
+# CLI ENTRYPOINT
+# =========================================================
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--model",
+        default="rf",
+        choices=["rf", "xgb", "lgbm", "stacking"]
     )
 
-    recall_macro = recall_score(
-        y_test,
-        preds,
-        average="macro",
-        zero_division=0
+    parser.add_argument(
+        "--features",
+        default="top30"
     )
 
-    if verbose:
+    args = parser.parse_args()
 
-        print("\n" + "=" * 60)
-
-        if model_name:
-            print(model_name)
-
-        print("=" * 60)
-
-        print(
-            f"Accuracy: "
-            f"{accuracy:.4f}"
-        )
-
-        print(
-            f"F1 Macro: "
-            f"{f1_macro:.4f}"
-        )
-
-        print(
-            f"Precision Macro: "
-            f"{precision_macro:.4f}"
-        )
-
-        print(
-            f"Recall Macro: "
-            f"{recall_macro:.4f}"
-        )
-
-        print("\nConfusion Matrix")
-
-        print(
-            confusion_matrix(
-                y_test,
-                preds
-            )
-        )
-
-        print("\nClassification Report")
-
-        print(
-            classification_report(
-                y_test,
-                preds,
-                digits=4,
-                zero_division=0
-            )
-        )
-
-    return {
-        "accuracy": accuracy,
-        "f1_macro": f1_macro,
-        "precision_macro": precision_macro,
-        "recall_macro": recall_macro
-    }
-
-def evaluate_boosting_model(
-    model,
-    X_test,
-    y_true,
-    label_encoder,
-    model_name=None,
-    verbose=True
-):
-
-    preds_encoded = model.predict(X_test)
-
-    preds = label_encoder.inverse_transform(
-        preds_encoded.astype(int)
+    run_training(
+        model_name=args.model,
+        feature_set=args.features
     )
-
-    y_true = label_encoder.inverse_transform(
-        y_true.astype(int)
-    )
-
-    accuracy = accuracy_score(
-        y_true,
-        preds
-    )
-
-    f1_macro = f1_score(
-        y_true,
-        preds,
-        average="macro"
-    )
-
-    precision_macro = precision_score(
-        y_true,
-        preds,
-        average="macro",
-        zero_division=0
-    )
-
-    recall_macro = recall_score(
-        y_true,
-        preds,
-        average="macro",
-        zero_division=0
-    )
-
-    if verbose:
-
-        print("\n" + "=" * 60)
-
-        if model_name:
-            print(model_name)
-
-        print("=" * 60)
-
-        print(
-            f"Accuracy: {accuracy:.4f}"
-        )
-
-        print(
-            f"F1 Macro: {f1_macro:.4f}"
-        )
-
-        print(
-            f"Precision Macro: {precision_macro:.4f}"
-        )
-
-        print(
-            f"Recall Macro: {recall_macro:.4f}"
-        )
-
-        print("\nConfusion Matrix")
-
-        print(
-            confusion_matrix(
-                y_true,
-                preds
-            )
-        )
-
-        print("\nClassification Report")
-
-        print(
-            classification_report(
-                y_true,
-                preds,
-                digits=4,
-                zero_division=0
-            )
-        )
-
-    return {
-        "accuracy": accuracy,
-        "f1_macro": f1_macro,
-        "precision_macro": precision_macro,
-        "recall_macro": recall_macro
-    }

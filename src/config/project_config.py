@@ -1,10 +1,24 @@
 """
 Configuración global del proyecto.
+Contiene únicamente rutas y parámetros generales.
 """
 
 from pathlib import Path
 
+# --------------------------------------------------
+# Proyecto
+# --------------------------------------------------
+
 ROOT = Path(__file__).resolve().parents[2]
+
+PROJECT_VERSION = "v1.0"
+
+BASE_URL = "https://www.transfermarkt.es"
+
+# --------------------------------------------------
+# Directorios principales
+# --------------------------------------------------
+
 DATA_DIR = ROOT / "data"
 
 RAW_DATA_DIR = DATA_DIR / "raw"
@@ -17,23 +31,20 @@ MODELS_DIR = ROOT / "models"
 
 REPORTS_DIR = ROOT / "src" / "reports"
 
-BASE_URL = "https://www.transfermarkt.es"
+# --------------------------------------------------
+# Subdirectorios
+# --------------------------------------------------
 
-PROJECT_VERSION = "v1.0"
+RAW_GAMES_DIR = RAW_DATA_DIR / "games"
 
-MODEL_VERSION = (
-    "v1.0_model_champion"
-)
+TOTALS_DIR = RAW_GAMES_DIR / "totals"
 
-RANDOM_STATE = 42
+INTL_DIR = RAW_GAMES_DIR / "international_competitions"
 
-TOP_FEATURES = 30
+PLAYERS_DIR = RAW_DATA_DIR / "players"
 
-HISTORICAL_SEASONS = [
-    2022,
-    2023,
-    2024,
-    2025
-]
+TEAM_SQUADS_DIR = RAW_DATA_DIR / "team_squads"
 
-SCORING_SEASON = 2026
+UPCOMING_MATCHES_DIR = RAW_DATA_DIR / "upcoming_matches"
+
+PROCESSED_FEATURES_DIR = PROCESSED_DATA_DIR

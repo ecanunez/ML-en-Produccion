@@ -11,7 +11,7 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report
 )
-from load_dataset import load_dataset
+from src.models.load_dataset import load_dataset
 from src.config.project_config import (
     RANDOM_STATE
 )

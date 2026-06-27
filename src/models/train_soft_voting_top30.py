@@ -1,39 +1,23 @@
-from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import (
-RandomForestClassifier,
-VotingClassifier
+    RandomForestClassifier,
+    VotingClassifier
 )
 from sklearn.metrics import (
-accuracy_score,
-f1_score,
-precision_score,
-recall_score,
-confusion_matrix,
-classification_report
+    accuracy_score,
+    f1_score,
+    precision_score,
+    recall_score,
+    confusion_matrix,
+    classification_report
 )
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-from load_dataset import load_dataset
-from src.config.project_config import (
-    RANDOM_STATE
-)
 
-# =========================================================
-
-# CONFIG
-
-# =========================================================
-
-ROOT = Path(__file__).resolve().parents[2]
-
-TOP30_FILE = (
-    ROOT
-    / "src"
-    / "reports"
-    / "top30_features.csv"
-)
+from src.models.load_dataset import load_dataset
+from src.config.project_config import RANDOM_STATE, REPORTS_DIR
+from src.config.dataset_config import TOP30_FEATURES_PATH
 
 # =========================================================
 
@@ -41,9 +25,11 @@ TOP30_FILE = (
 
 # =========================================================
 
+TOP30_FILE = REPORTS_DIR / "top30_features.csv"
+
 top30_features = (
-pd.read_csv(TOP30_FILE)["feature"]
-.tolist()
+    pd.read_csv(TOP30_FILE)["feature"]
+    .tolist()
 )
 
 # =========================================================
@@ -56,10 +42,7 @@ X, y, features, dataset_modified = load_dataset(
     selected_features=top30_features
 )
 
-print(
-    f"Features utilizadas: "
-    f"{len(features)}"
-)
+print(f"Features utilizadas: {len(features)}")
 
 X_train, X_test, y_train, y_test = train_test_split(
     X,

@@ -1,103 +1,59 @@
 from pathlib import Path
-from shutil import copyfile
 from datetime import datetime
 import json
-
 import pandas as pd
-
 from joblib import dump
-
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import (
-    RandomForestClassifier,
-    StackingClassifier
-)
+from sklearn.ensemble import RandomForestClassifier, StackingClassifier
 from src.config.project_config import (
+    ROOT,
     MODEL_VERSION,
-    RANDOM_STATE
+    RANDOM_STATE,
+    REPORTS_DIR
 )
-from load_dataset import load_dataset
+from src.config.dataset_config import load_feature_set
+from src.models.load_dataset import load_dataset
+
 
 # =========================================================
-
 # PATHS
-
 # =========================================================
 
-ROOT = Path(__file__).resolve().parents[2]
+CHAMPION_DIR = ROOT / "models" / "champions" / MODEL_VERSION
+CHAMPION_DIR.mkdir(parents=True, exist_ok=True)
 
-CHAMPION_DIR = (
-    ROOT
-    / "models"
-    / "champions"
-    / MODEL_VERSION
-)
+MODEL_FILE = CHAMPION_DIR / "model.joblib"
+METADATA_FILE = CHAMPION_DIR / "metadata.json"
+README_FILE = CHAMPION_DIR / "README.md"
 
-CHAMPION_DIR.mkdir(
-    parents=True,
-    exist_ok=True
-)
 
-TOP30_FILE = (
-    ROOT
-    / "src"
-    / "reports"
-    / "top30_features.csv"
-)
+print("\nCHAMPION_DIR:", CHAMPION_DIR)
 
-MODEL_FILE = (
-    CHAMPION_DIR
-    / "model.joblib"
-)
-
-METADATA_FILE = (
-    CHAMPION_DIR
-    / "metadata.json"
-)
-
-README_FILE = (
-    CHAMPION_DIR
-    / "README.md"
-)
-
-print("\nROOT:")
-print(ROOT)
-
-print("\nCHAMPION_DIR:")
-print(CHAMPION_DIR)
 
 # =========================================================
-
-# FEATURES
-
+# FEATURES (FROM CONFIG)
 # =========================================================
 
-top30_features = (
-    pd.read_csv(TOP30_FILE)["feature"]
-    .tolist()
-)
+FEATURE_SET_NAME = "top30"
+
+top_features = load_feature_set(FEATURE_SET_NAME)
+
 
 # =========================================================
-
 # DATASET
-
 # =========================================================
 
 X, y, features, dataset_modified = load_dataset(
-    selected_features=top30_features
+    selected_features=top_features
 )
 
-print(
-    f"\nFeatures utilizadas: "
-    f"{len(features)}"
-)
+print(f"\nFeatures utilizadas: {len(features)}")
+
 
 # =========================================================
-
-# BASE MODELS
-
+# MODEL
 # =========================================================
 
 rf = RandomForestClassifier(
@@ -111,25 +67,13 @@ rf = RandomForestClassifier(
 )
 
 lr = Pipeline([
-    (
-        "scaler",
-        StandardScaler()
-        ),
-    (
-        "model",
-        LogisticRegression(
-            max_iter=5000,
-            class_weight="balanced",
-            random_state=RANDOM_STATE
-        )
-    )
+    ("scaler", StandardScaler()),
+    ("model", LogisticRegression(
+        max_iter=5000,
+        class_weight="balanced",
+        random_state=RANDOM_STATE
+    ))
 ])
-
-# =========================================================
-
-# STACKING CHAMPION
-
-# =========================================================
 
 model = StackingClassifier(
     estimators=[
@@ -146,153 +90,106 @@ model = StackingClassifier(
     n_jobs=-1
 )
 
+
+# =========================================================
+# TRAIN
+# =========================================================
+
 print("\nEntrenando modelo campeón...")
 
-model.fit(
-    X,
-    y
-)
+model.fit(X, y)
+
 
 # =========================================================
-
 # SAVE MODEL
-
 # =========================================================
 
-dump(
-    model,
-    MODEL_FILE
-)
+dump(model, MODEL_FILE)
 
-print(
-    f"\nModelo guardado en:\n"
-    f"{MODEL_FILE}"
-)
+print("\nModelo guardado en:")
+print(MODEL_FILE)
+
 
 # =========================================================
-
-# COPY FEATURES
-
-# =========================================================
-
-copyfile(
-    TOP30_FILE,
-    CHAMPION_DIR / TOP30_FILE.name
-)
-
-print(
-    "\nTop30 copiada."
-)
-
-# =========================================================
-
-# METADATA
-
+# METADATA (CONSISTENTE CON CONFIG)
 # =========================================================
 
 metadata = {
     "version": MODEL_VERSION,
-    "created_at": datetime.now().strftime(
-        "%Y-%m-%d %H:%M:%S"
-    ),
+    "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+
     "model": "Stacking Ensemble",
-    "features_used": len(features),
-    "dataset_rows": int(len(X)),
-    "dataset_timestamp": dataset_modified,
-    "holdout_f1_macro": 0.4915,
-    "cross_validation_f1_macro": 0.4810,
-    "accuracy": 0.5123,
+
+    "dataset": {
+        "rows": int(len(X)),
+        "timestamp": dataset_modified
+    },
+
+    "features": {
+        "set": FEATURE_SET_NAME,
+        "count": len(features)
+    },
+
+    "training": {
+        "random_state": RANDOM_STATE
+    },
+
     "target": "result",
     "n_classes": 3,
-    "feature_file": "top30_features.csv",
-    "model_file": "model.joblib"
+
+    "model_file": str(MODEL_FILE.name)
 }
 
-with open(
-    METADATA_FILE,
-    "w",
-    encoding="utf-8"
-) as f:
 
-    json.dump(
-        metadata,
-        f,
-        indent=4,
-        ensure_ascii=False
-    )
+with open(METADATA_FILE, "w", encoding="utf-8") as f:
+    json.dump(metadata, f, indent=4, ensure_ascii=False)
 
+print("\nMetadata guardada.")
 
-print(
-    "\nMetadata guardada."
-)
 
 # =========================================================
-
 # README
-
 # =========================================================
 
-readme_text = """
+readme_text = f"""
+# {MODEL_VERSION}
 
-    # {MODEL_VERSION}
+Modelo campeón del proyecto.
 
-    Modelo oficial del proyecto.
+## Arquitectura
 
-    ## Arquitectura
+Stacking Ensemble:
+- Random Forest
+- Logistic Regression
+- Meta-model: Logistic Regression
 
-    Stacking Ensemble
+## Features
 
-    ### Base Models
+Feature set: {FEATURE_SET_NAME}
+Cantidad: {len(features)}
 
-    * Random Forest Tuned
-    * Logistic Regression
+## Dataset
 
-    ### Meta Model
+Observaciones: {len(X)}
+Timestamp: {dataset_modified}
 
-    * Logistic Regression
+## Resultados
 
-    ## Features
+(TBD: provenientes de evaluación externa)
 
-    Top30 seleccionadas mediante Feature Importance.
+## Fecha
 
-    ## Resultados
-
-    Accuracy: 0.5123
-
-    Holdout F1 Macro: 0.4915
-
-    Cross Validation F1 Macro: 0.4810
-
-    ## Dataset
-
-    training_dataset.parquet
-
-    Observaciones: 12,599
-
-    ## Fecha
-
-    2026-06-22
-    """
-
-with open(
-    README_FILE,
-    "w",
-    encoding="utf-8"
-) as f:
-
-    f.write(
-        readme_text.strip()
-    )
+{datetime.now().strftime("%Y-%m-%d")}
+"""
 
 
-print(
-    "\nREADME generado."
-)
+with open(README_FILE, "w", encoding="utf-8") as f:
+    f.write(readme_text.strip())
+
+
+print("\nREADME generado.")
 
 print("\n" + "=" * 60)
 print("MODELO CAMPEÓN EXPORTADO")
 print("=" * 60)
-
-print(
-    f"\nUbicación:\n{CHAMPION_DIR}"
-)
+print("\nUbicación:", CHAMPION_DIR)
