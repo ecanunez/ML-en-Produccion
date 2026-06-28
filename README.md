@@ -1,196 +1,287 @@
-# ML-en-Produccion
+# ⚽ Football Match Prediction System
 
-Sistema de Machine Learning para la predicción de resultados de partidos de fútbol profesional utilizando datos históricos, información de plantillas y variables derivadas de jugadores y equipos.
+Sistema de Machine Learning para la predicción de resultados de partidos de fútbol utilizando datos tabulares construidos mediante scraping de Transfermarkt.
 
-El proyecto implementa el ciclo completo de un sistema de Machine Learning en producción, incluyendo:
-
-* recolección automática de datos mediante scraping;
-* construcción y procesamiento de datasets;
-* ingeniería de variables;
-* entrenamiento y evaluación de modelos;
-* selección y exportación del modelo campeón;
-* generación de predicciones para partidos futuros.
+El proyecto fue desarrollado con foco en buenas prácticas de Machine Learning en producción, incluyendo construcción del dataset, ingeniería de variables, selección de características, optimización del modelo, pipelines reproducibles, API de inferencia y despliegue mediante Docker.
 
 ---
 
 # Estado del proyecto
 
-**Versión actual:** **v1.0**
-
 | Componente          | Estado |
 | ------------------- | :----: |
-| Data Collection     |    ✅   |
-| Data Processing     |    ✅   |
+| Dataset             |    ✅   |
+| EDA                 |    ✅   |
 | Feature Engineering |    ✅   |
-| Model Training      |    ✅   |
+| Feature Selection   |    ✅   |
+| Model Benchmark     |    ✅   |
 | Champion Model      |    ✅   |
 | Historical Pipeline |    ✅   |
 | Inference Pipeline  |    ✅   |
-| Batch Prediction    |    ✅   |
-| API REST            |    ⏳   |
+| FastAPI             |    ✅   |
+| Docker              |   🚧   |
 
 ---
 
-# Modelo campeón
+# Objetivo
 
-El modelo actualmente seleccionado es un **Stacking Ensemble**, entrenado utilizando el conjunto de **Top 30 Features** obtenido durante la etapa de selección de variables.
+Predecir el resultado de un partido de fútbol como un problema de clasificación multiclase.
 
-Resultados obtenidos sobre el conjunto de test:
+Clases:
 
-| Métrica         |      Valor |
-| --------------- | ---------: |
-| Accuracy        | **0.5123** |
-| F1 Macro        | **0.4915** |
-| Precision Macro | **0.4934** |
-| Recall Macro    | **0.4934** |
+* HOME
+* DRAW
+* AWAY
 
-El modelo se exporta como un artefacto autocontenido:
-
-```text
-models/champion_model.pkl
-```
+El modelo utiliza exclusivamente información disponible antes del inicio del partido para evitar **data leakage** y garantizar consistencia entre entrenamiento e inferencia.
 
 ---
 
 # Arquitectura
 
-El proyecto está organizado alrededor de dos pipelines independientes.
+El proyecto se divide en dos grandes pipelines independientes.
 
-## Pipeline histórico
-
-```text
-Raw Data
-    ↓
-Data Processing
-    ↓
-Feature Engineering
-    ↓
-Training Dataset
-    ↓
-Model Training
-    ↓
-Champion Model
+```
+Historical Data
+        │
+        ▼
+ Feature Engineering
+        │
+        ▼
+ Feature Selection
+        │
+        ▼
+ Model Benchmark
+        │
+        ▼
+ Champion Model
+        │
+        ├──────────────┐
+        │              │
+        ▼              ▼
+Inference Pipeline    FastAPI
+        │              │
+        ▼              ▼
+ Scoring Dataset   Online Predictions
 ```
 
-## Pipeline de inferencia
+Más información:
 
-```text
-Upcoming Matches
-        ↓
-Team Squads
-        ↓
-Team Features
-        ↓
-Player Features
-        ↓
-Scoring Dataset
-        ↓
-Champion Model
-        ↓
-Predictions
-```
+* `docs/architecture.md`
+* `docs/project_structure.md`
+* `docs/pipelines.md`
 
 ---
 
-# Ejecución
+# Estructura del proyecto
 
-## Reconstruir completamente el modelo
+```
+data/
+docs/
+models/
+notebooks/
+src/
+
+Dockerfile
+requirements.txt
+README.md
+```
+
+La descripción completa de la estructura se encuentra en:
+
+`docs/project_structure.md`
+
+---
+
+# Champion Model
+
+Modelo seleccionado:
+
+**Stacking Ensemble**
+
+Características principales:
+
+* Top 30 Features
+* Random Forest + Logistic Regression
+* Meta-model Logistic Regression
+
+Métricas:
+
+| Métrica         |  Valor |
+| --------------- | -----: |
+| Accuracy        | 0.5123 |
+| F1 Macro        | 0.4915 |
+| Precision Macro | 0.4934 |
+| Recall Macro    | 0.4934 |
+
+Información completa:
+
+`docs/model_card.md`
+
+---
+
+# Historical Pipeline
+
+Reconstruye completamente el proceso de entrenamiento:
+
+* construcción del dataset
+* feature engineering
+* selección de variables
+* entrenamiento
+* benchmark
+* exportación del Champion Model
+
+Ejecutar:
 
 ```bash
 python -m src.pipelines.run_historical_pipeline
 ```
 
-Este pipeline:
-
-* consolida los datos históricos;
-* construye el dataset de entrenamiento;
-* genera todas las variables;
-* entrena el modelo;
-* exporta el modelo campeón.
-
 ---
 
-## Generar predicciones para partidos futuros
+# Inference Pipeline
+
+Construye automáticamente el dataset de inferencia utilizando plantillas actuales y próximos partidos.
+
+Incluye:
+
+* scraping de fixtures
+* scraping de plantillas
+* construcción de team features
+* construcción de player features
+* generación del scoring dataset
+* predicciones batch
+
+Ejecutar:
 
 ```bash
 python -m src.pipelines.run_inference_pipeline
 ```
 
-Este pipeline:
+---
 
-* obtiene los próximos partidos;
-* descarga las plantillas actuales;
-* construye las variables de inferencia;
-* genera el scoring dataset;
-* produce las predicciones finales.
+# API
+
+La API fue desarrollada utilizando **FastAPI**.
+
+Documentación automática:
+
+```
+http://localhost:8000/docs
+```
+
+Endpoints disponibles:
+
+### Información
+
+* GET `/`
+* GET `/health`
+* GET `/model`
+
+### Exploración
+
+* GET `/competitions`
+* GET `/matches`
+
+### Predicciones
+
+* POST `/predict_match`
+* POST `/predict_batch_matches`
+* POST `/predict_features`
+* POST `/predict_batch_features`
 
 ---
 
-## Ejecutar únicamente el modelo de inferencia
+# Instalación
+
+Crear entorno virtual:
 
 ```bash
-python -m src.inference.predict
+python -m venv .venv
+```
+
+Activar entorno.
+
+Instalar dependencias:
+
+```bash
+pip install -r requirements.txt
 ```
 
 ---
 
-# Principales outputs
+# Ejecutar la API
 
-Durante la ejecución del proyecto se generan, entre otros, los siguientes archivos:
+```bash
+uvicorn src.api.main:app --reload
+```
 
-```text
-data/processed/
+Abrir:
 
-training_dataset.parquet
-scoring_dataset.parquet
-predictions.csv
+```
+http://localhost:8000/docs
+```
 
-models/
+---
 
-champion_model.pkl
+# Docker
+
+El proyecto incluye un contenedor Docker para desplegar la API de inferencia.
+
+Construcción:
+
+```bash
+docker build -t football-ml-api .
+```
+
+Ejecución:
+
+```bash
+docker run -p 8000:8000 football-ml-api
 ```
 
 ---
 
 # Documentación
 
-La documentación técnica del proyecto se encuentra en la carpeta:
+La documentación técnica se encuentra en la carpeta `docs`.
 
-```text
-docs/
-```
-
-Documentos disponibles:
-
-* **README.md** — índice de la documentación.
-* **architecture.md** — arquitectura general del sistema.
-* **project_structure.md** — organización del repositorio.
-* **pipelines.md** — descripción de los pipelines.
-* **model_card.md** — documentación del modelo campeón.
-
-Los reportes generados durante el desarrollo del proyecto pueden consultarse en:
-
-```text
-src/reports/
-```
+* architecture.md
+* model_card.md
+* pipelines.md
+* project_structure.md
 
 ---
 
-# Próximos pasos
+# Trabajo futuro
 
-Las principales líneas de evolución previstas son:
+El diseño del proyecto permite extender fácilmente el sistema.
 
-* incorporación de nuevas ligas nacionales fuera de Europa;
-* ampliación de competiciones internacionales;
-* actualización dinámica del ELO durante la inferencia;
-* incorporación de estadísticas recientes por jugador;
-* simulación de transferencias y modificaciones de plantillas;
-* calibración de probabilidades;
-* despliegue mediante una API REST;
-* contenerización con Docker.
+Líneas futuras de desarrollo:
+
+* incorporación de nuevas ligas y continentes
+* actualización automática del Champion Model
+* simulación de fichajes y cambios de plantilla
+* incorporación de métricas avanzadas por jugador
+* despliegue en AWS
+* monitoreo del modelo
+* recalibración periódica
+
+---
+
+# Tecnologías
+
+* Python
+* Pandas
+* Scikit-Learn
+* FastAPI
+* Playwright
+* BeautifulSoup
+* Joblib
+* Docker
 
 ---
 
 # Licencia
 
-Proyecto desarrollado con fines académicos y de investigación.
+Proyecto desarrollado con fines académicos para la materia **Machine Learning en Producción**.

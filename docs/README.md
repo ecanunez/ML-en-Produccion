@@ -4,6 +4,8 @@
 - [Estructura del proyecto](project_structure.md)
 - [Pipelines](pipelines.md)
 - [Model Card](model_card.md)
+- [Production Considerations](production_considerations.md)
+- [API](api.md)
 
 # ML-en-Produccion
 
@@ -34,6 +36,33 @@ La arquitectura fue diseñada para facilitar futuras extensiones, como la incorp
 
 ---
 
+## Exploratory Data Analysis (EDA)
+
+Durante la construcción del dataset se realizó un análisis exploratorio con el objetivo de comprender la calidad de los datos, identificar posibles fuentes de sesgo y validar las variables utilizadas por el modelo.
+
+El análisis incluyó:
+
+* distribución de la variable objetivo (HOME / DRAW / AWAY);
+* análisis de valores faltantes;
+* cobertura del proceso de matching de jugadores;
+* análisis descriptivo de las variables construidas;
+* estudio de correlaciones entre características;
+* evaluación de importancia de variables;
+* análisis de errores del modelo campeón.
+
+Los reportes completos pueden consultarse en:
+
+```text
+src/reports/
+
+dataset_report.md
+feature_engineering.md
+error_analysis.md
+model_history.md
+model_selection_report.md
+```
+---
+
 # Estado del proyecto
 
 | Etapa | Estado |
@@ -47,7 +76,8 @@ La arquitectura fue diseñada para facilitar futuras extensiones, como la incorp
 | Champion Model Export | ✅ |
 | Historical Pipeline | ✅ |
 | Inference Pipeline | ✅ |
-| API Deployment | ⏳ |
+| API Deployment | ✅ |
+| Docker | ⏳ |
 
 Versión actual:
 
@@ -128,12 +158,10 @@ La documentación del proyecto se encuentra organizada en los siguientes documen
 | project_structure.md | Organización del repositorio |
 | pipelines.md | Descripción de los pipelines históricos e inferencia |
 | model_card.md | Documentación del modelo campeón |
+| production_considerations.md | Data leakage, training-serving skew y reproducibilidad |
+| api.md | Documentación de la API REST |
 
-Los reportes técnicos generados durante el desarrollo pueden consultarse en:
-
-```text
-src/reports/
-```
+Los reportes técnicos generados durante el desarrollo se encuentran en `src/reports/`, incluyendo análisis del dataset, ingeniería de variables, selección de características, historial de modelos y análisis de errores.
 
 ---
 
@@ -236,6 +264,26 @@ Cada predicción incluye:
 - probabilidad de victoria local.
 
 ---
+# Dependencias y reproducibilidad
+
+El proyecto utiliza dos archivos de dependencias.
+
+### requirements.txt
+
+Contiene las dependencias necesarias para ejecutar la versión actual del proyecto, incluyendo la API, los pipelines y el sistema de inferencia.
+
+Instalación:
+
+```bash
+pip install -r requirements.txt
+```
+
+### requirements_v1.0.txt
+
+Corresponde al entorno utilizado durante la generación y exportación del Champion Model v1.0.
+
+Se conserva con fines de reproducibilidad y trazabilidad del modelo.
+
 
 # Trabajo futuro
 
@@ -271,9 +319,9 @@ La arquitectura fue diseñada para permitir, en futuras versiones:
 
 ## Deployment
 
-- API REST
-- Docker
-- despliegue en la nube
+- ✅ FastAPI
+- ⏳ Docker
+- ⏳ Cloud Deployment (AWS u otra plataforma)
 
 ---
 
