@@ -1,271 +1,196 @@
-# Matching de Jugadores y Features de Perfil
+# ML-en-Produccion
 
-## Motivación
+Sistema de Machine Learning para la predicción de resultados de partidos de fútbol profesional utilizando datos históricos, información de plantillas y variables derivadas de jugadores y equipos.
 
-Uno de los objetivos del proyecto es permitir, en etapas futuras, la simulación de modificaciones en las plantillas de los equipos.
+El proyecto implementa el ciclo completo de un sistema de Machine Learning en producción, incluyendo:
 
-Para ello no resulta suficiente trabajar únicamente con variables agregadas a nivel club, sino que es necesario vincular los jugadores presentes en las alineaciones con información individual proveniente de Transfermarkt.
-
----
-
-## Construcción del Player Mapping
-
-Las alineaciones obtenidas mediante scraping contienen únicamente nombres de jugadores.
-
-Ejemplo:
-
-```text
-Herrera
-García
-Cruz
-Moncayola
-Ávila
-```
-
-Por otro lado, la base de Transfermarkt contiene identificadores únicos para cada jugador:
-
-```text
-player_id
-player_name
-market_value
-position
-date_of_birth
-international_caps
-...
-```
-
-Se desarrolló un proceso de matching para vincular ambos universos.
-
-### Estrategias utilizadas
-
-1. Exact Match
-
-Coincidencia exacta entre nombre normalizado y nombre oficial del jugador.
-
-2. Matching por apellidos
-
-Se construyeron representaciones utilizando:
-
-* último apellido
-* últimos dos apellidos
-* últimos tres apellidos
-
-para capturar diferencias en la forma de nombrar a los futbolistas.
-
-3. Prefix Match
-
-Se implementó soporte para formatos abreviados:
-
-```text
-J. Álvarez
-M. Gómez
-```
-
-buscando coincidencias por prefijo sobre distintas variantes del nombre.
+* recolección automática de datos mediante scraping;
+* construcción y procesamiento de datasets;
+* ingeniería de variables;
+* entrenamiento y evaluación de modelos;
+* selección y exportación del modelo campeón;
+* generación de predicciones para partidos futuros.
 
 ---
 
-## Restricción temporal
+# Estado del proyecto
 
-Para reducir ambigüedades se limitó el universo de búsqueda a jugadores activos en temporadas recientes.
+**Versión actual:** **v1.0**
 
-```python
-last_season >= 2022
-```
-
-Dado que el dataset de partidos comienza en 2022, esta restricción eliminó miles de futbolistas históricos que generaban múltiples coincidencias posibles.
-
-La cobertura del matching mejoró significativamente tras aplicar este filtro.
-
----
-
-## Cobertura obtenida
-
-Resultado final:
-
-```text
-Jugadores mapeados:
-≈ 7 titulares por equipo
-
-Cobertura promedio:
-home_profile_players_found ≈ 6.91
-away_profile_players_found ≈ 6.90
-```
-
-Esto implica que aproximadamente el 63% de los futbolistas presentes en cada alineación pudieron vincularse exitosamente con su perfil individual.
+| Componente          | Estado |
+| ------------------- | :----: |
+| Data Collection     |    ✅   |
+| Data Processing     |    ✅   |
+| Feature Engineering |    ✅   |
+| Model Training      |    ✅   |
+| Champion Model      |    ✅   |
+| Historical Pipeline |    ✅   |
+| Inference Pipeline  |    ✅   |
+| Batch Prediction    |    ✅   |
+| API REST            |    ⏳   |
 
 ---
 
-## Features de perfil de jugador
+# Modelo campeón
 
-A partir de los jugadores mapeados se construyeron variables agregadas para cada alineación.
+El modelo actualmente seleccionado es un **Stacking Ensemble**, entrenado utilizando el conjunto de **Top 30 Features** obtenido durante la etapa de selección de variables.
 
-### Edad promedio
+Resultados obtenidos sobre el conjunto de test:
 
-```text
-home_avg_age
-away_avg_age
-```
+| Métrica         |      Valor |
+| --------------- | ---------: |
+| Accuracy        | **0.5123** |
+| F1 Macro        | **0.4915** |
+| Precision Macro | **0.4934** |
+| Recall Macro    | **0.4934** |
 
-Calculada utilizando la fecha de nacimiento de cada futbolista.
-
-### Experiencia internacional promedio
-
-```text
-home_avg_caps
-away_avg_caps
-```
-
-Basada en la cantidad de partidos disputados con selecciones nacionales absolutas.
-
-### Cobertura del matching
+El modelo se exporta como un artefacto autocontenido:
 
 ```text
-home_profile_players_found
-away_profile_players_found
+models/champion_model.pkl
 ```
-
-Cantidad de jugadores identificados correctamente dentro de cada alineación.
 
 ---
 
-## Variables derivadas
+# Arquitectura
 
-Posteriormente se generaron variables diferenciales entre ambos equipos:
+El proyecto está organizado alrededor de dos pipelines independientes.
 
-```text
-age_diff
-caps_diff
-profile_players_found_diff
-```
-
-donde:
+## Pipeline histórico
 
 ```text
-age_diff
-=
-home_avg_age
--
-away_avg_age
+Raw Data
+    ↓
+Data Processing
+    ↓
+Feature Engineering
+    ↓
+Training Dataset
+    ↓
+Model Training
+    ↓
+Champion Model
 ```
+
+## Pipeline de inferencia
 
 ```text
-caps_diff
-=
-home_avg_caps
--
-away_avg_caps
+Upcoming Matches
+        ↓
+Team Squads
+        ↓
+Team Features
+        ↓
+Player Features
+        ↓
+Scoring Dataset
+        ↓
+Champion Model
+        ↓
+Predictions
 ```
-
-Estas variables buscan capturar diferencias estructurales entre las alineaciones más allá del valor de mercado o la fortaleza histórica de los equipos.
 
 ---
 
-## Importancia para futuras etapas
+# Ejecución
 
-Esta arquitectura permite incorporar nuevas características individuales sin modificar el pipeline principal.
+## Reconstruir completamente el modelo
 
-Por ejemplo:
+```bash
+python -m src.pipelines.run_historical_pipeline
+```
 
-* pie dominante
-* altura
-* posición
-* experiencia internacional
-* goles internacionales
-* minutos disputados
-* valor de mercado histórico
+Este pipeline:
 
-Además habilita uno de los objetivos secundarios del proyecto:
+* consolida los datos históricos;
+* construye el dataset de entrenamiento;
+* genera todas las variables;
+* entrena el modelo;
+* exporta el modelo campeón.
 
-simular el impacto potencial de fichajes, ventas o cambios de alineación sobre las probabilidades estimadas por el modelo.
+---
 
+## Generar predicciones para partidos futuros
 
-# Trabajo futuro
+```bash
+python -m src.pipelines.run_inference_pipeline
+```
 
-## Modelado
+Este pipeline:
 
-- XGBoost
-- LightGBM
-- CatBoost
-- Calibration de probabilidades
+* obtiene los próximos partidos;
+* descarga las plantillas actuales;
+* construye las variables de inferencia;
+* genera el scoring dataset;
+* produce las predicciones finales.
 
-## Features
+---
 
-- Valores de mercado históricos
-- Estadísticas recientes por jugador
-- Métricas local/visitante
-- Historial de lesiones
-- Experiencia internacional avanzada
+## Ejecutar únicamente el modelo de inferencia
 
-## Simulación de plantillas
+```bash
+python -m src.inference.predict
+```
 
-La arquitectura actual permite reemplazar jugadores individuales dentro de una alineación y recalcular automáticamente las features agregadas del equipo.
+---
 
-Esto habilita escenarios de simulación para:
+# Principales outputs
 
-- incorporaciones
-- transferencias
-- lesiones
-- cambios tácticos
-- alineaciones alternativas
+Durante la ejecución del proyecto se generan, entre otros, los siguientes archivos:
 
-## Validación de inferencia
+```text
+data/processed/
 
-El modelo fue validado mediante carga desde artefacto serializado (`model.joblib`) utilizando el módulo:
+training_dataset.parquet
+scoring_dataset.parquet
+predictions.csv
 
-src/inference/predict.py
+models/
 
-Resultados:
+champion_model.pkl
+```
 
-* Modelo cargado correctamente.
-* Features Top30 recuperadas desde `top30_features.csv`.
-* Predicciones y probabilidades generadas exitosamente.
-* Pipeline listo para consumo por scripts batch o API futura.
+---
 
-# Estado Actual
+# Documentación
 
-Fase 1 — Data Collection ✅
+La documentación técnica del proyecto se encuentra en la carpeta:
 
-Fase 2 — Feature Engineering ✅
+```text
+docs/
+```
 
-Fase 3 — Model Training & Benchmarking ✅
+Documentos disponibles:
 
-Fase 4 — Feature Selection & Ensemble Models ✅
+* **README.md** — índice de la documentación.
+* **architecture.md** — arquitectura general del sistema.
+* **project_structure.md** — organización del repositorio.
+* **pipelines.md** — descripción de los pipelines.
+* **model_card.md** — documentación del modelo campeón.
 
-Fase 5 — Champion Model Export ✅
+Los reportes generados durante el desarrollo del proyecto pueden consultarse en:
 
-Fase 6 — Inference Pipeline ✅
+```text
+src/reports/
+```
 
-Fase 7 — API Deployment ⏳
+---
 
-## Estado del Proyecto
+# Próximos pasos
 
-### Versión actual
+Las principales líneas de evolución previstas son:
 
-v1.0
+* incorporación de nuevas ligas nacionales fuera de Europa;
+* ampliación de competiciones internacionales;
+* actualización dinámica del ELO durante la inferencia;
+* incorporación de estadísticas recientes por jugador;
+* simulación de transferencias y modificaciones de plantillas;
+* calibración de probabilidades;
+* despliegue mediante una API REST;
+* contenerización con Docker.
 
-### Mejor modelo
+---
 
-Random Forest Optimizado
+# Licencia
 
-### Métrica principal
-
-F1 Macro: 0.472
-
-### Estado
-
-✅ Dataset construido
-
-✅ Ingeniería de variables
-
-✅ Selección de características
-
-✅ Optimización de hiperparámetros
-
-✅ Pipeline de inferencia
-
-⏳ API REST
-
-⏳ Scoring de partidos futuros
-
-⏳ Deployment
+Proyecto desarrollado con fines académicos y de investigación.

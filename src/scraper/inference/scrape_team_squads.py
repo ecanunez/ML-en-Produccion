@@ -1,4 +1,3 @@
-from pathlib import Path
 import pandas as pd
 from playwright.sync_api import sync_playwright
 from src.scraper.scraper_utils import (

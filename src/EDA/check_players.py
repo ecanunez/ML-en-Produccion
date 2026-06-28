@@ -25,8 +25,6 @@ players_df = players_df[
 #     .sort_index()
 # )
 
-import pandas as pd
-
 players = pd.read_csv(
     "data/raw/players/players.csv"
 )
