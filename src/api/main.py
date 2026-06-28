@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import FastAPI, HTTPException
 
 from src.api.schemas import (
@@ -12,6 +14,8 @@ from src.api.schemas import (
     MatchPredictionResponse,
     ModelInfoResponse,
     PredictionResponse,
+    TeamInfoResponse,
+    TeamPredictionRequest,
 )
 
 from src.api.services import PredictionService
@@ -29,6 +33,10 @@ app = FastAPI(
 
 prediction_service = PredictionService()
 
+
+# =========================================================
+# GENERAL
+# =========================================================
 
 @app.get("/")
 def root():
@@ -57,6 +65,10 @@ def model_info():
     return prediction_service.model_info()
 
 
+# =========================================================
+# DISCOVERY
+# =========================================================
+
 @app.get(
     "/competitions",
     response_model=list[CompetitionInfoResponse],
@@ -67,17 +79,35 @@ def list_competitions():
 
 
 @app.get(
+    "/teams",
+    response_model=list[TeamInfoResponse],
+)
+def list_teams(
+    competition: Optional[str] = None
+):
+
+    return prediction_service.list_teams(
+        competition=competition
+    )
+
+
+
+@app.get(
     "/matches",
     response_model=list[MatchInfoResponse],
 )
 def list_matches(
-    competition: str | None = None
+    competition: Optional[str] = None
 ):
 
     return prediction_service.list_matches(
         competition=competition
     )
 
+
+# =========================================================
+# PREDICTIONS USING MATCH ID
+# =========================================================
 
 @app.post(
     "/predict_match",
@@ -88,11 +118,13 @@ def predict_match(
 ):
 
     try:
+
         return prediction_service.predict_match(
             request.match_id
         )
 
     except ValueError as e:
+
         raise HTTPException(
             status_code=400,
             detail=str(e),
@@ -108,6 +140,7 @@ def predict_batch_matches(
 ):
 
     try:
+
         predictions = prediction_service.predict_batch_matches(
             request.match_ids
         )
@@ -117,11 +150,44 @@ def predict_batch_matches(
         }
 
     except ValueError as e:
+
         raise HTTPException(
             status_code=400,
             detail=str(e),
         ) from e
 
+
+# =========================================================
+# PREDICTIONS USING TEAM NAMES
+# =========================================================
+
+@app.post(
+    "/predict_by_teams",
+    response_model=MatchPredictionResponse,
+)
+def predict_by_teams(
+    request: TeamPredictionRequest
+):
+
+    try:
+
+        return prediction_service.predict_by_teams(
+            home_team=request.home_team,
+            away_team=request.away_team,
+            competition=request.competition,
+        )
+
+    except ValueError as e:
+
+        raise HTTPException(
+            status_code=400,
+            detail=str(e),
+        ) from e
+
+
+# =========================================================
+# PREDICTIONS USING FEATURES
+# =========================================================
 
 @app.post(
     "/predict_features",
@@ -132,6 +198,7 @@ def predict_features(
 ):
 
     try:
+
         result = prediction_service.predict_features(
             request.features
         )
@@ -141,6 +208,7 @@ def predict_features(
         return result
 
     except ValueError as e:
+
         raise HTTPException(
             status_code=400,
             detail=str(e),
@@ -156,6 +224,7 @@ def predict_batch_features(
 ):
 
     try:
+
         predictions = []
 
         for match in request.matches:
@@ -166,15 +235,14 @@ def predict_batch_features(
 
             result["metadata"] = match.metadata
 
-            predictions.append(
-                result
-            )
+            predictions.append(result)
 
         return {
             "predictions": predictions
         }
 
     except ValueError as e:
+
         raise HTTPException(
             status_code=400,
             detail=str(e),

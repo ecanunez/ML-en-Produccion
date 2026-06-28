@@ -63,7 +63,7 @@ class PredictionService:
             "metrics": self.metrics,
         }
 
-    def list_competitions(self):
+    def list_competitions(self) -> list[dict[str, Any]]:
 
         if "competition" not in self.scoring_df.columns:
             return []
@@ -76,11 +76,42 @@ class PredictionService:
             .sort_values("competition")
         )
 
-        return competitions.to_dict(
-            orient="records"
+        return [
+            {
+                "competition": str(row["competition"]),
+                "n_matches": int(row["n_matches"]),
+            }
+            for _, row in competitions.iterrows()
+        ]
+
+    def list_teams(
+        self,
+        competition: str | None = None
+    ) -> list[dict[str, str]]:
+
+        df = self.scoring_df.copy()
+
+        if competition is not None:
+            df = df[
+                df["competition"] == competition
+            ]
+
+        teams = sorted(
+            set(df["home_team"].dropna())
+            | set(df["away_team"].dropna())
         )
 
-    def list_matches(self, competition=None):
+        return [
+            {
+                "team": str(team)
+            }
+            for team in teams
+        ]
+
+    def list_matches(
+        self,
+        competition: str | None = None
+    ) -> list[dict[str, Any]]:
 
         df = self.scoring_df.copy()
 
@@ -161,22 +192,20 @@ class PredictionService:
             row
         )
 
-        result = {
+        return {
             "match_id": match_id,
-            "home_team": row["home_team"].iloc[0],
-            "away_team": row["away_team"].iloc[0],
+            "home_team": str(row["home_team"].iloc[0]),
+            "away_team": str(row["away_team"].iloc[0]),
             "competition": (
-                row["competition"].iloc[0]
+                str(row["competition"].iloc[0])
                 if "competition" in row.columns
                 else None
             ),
-            "prediction": prediction,
+            "prediction": str(prediction),
             "prob_away": float(probabilities[0]),
             "prob_draw": float(probabilities[1]),
             "prob_home": float(probabilities[2]),
         }
-
-        return result
 
     def predict_batch_matches(
         self,
@@ -187,6 +216,43 @@ class PredictionService:
             self.predict_match(match_id)
             for match_id in match_ids
         ]
+
+    def predict_by_teams(
+        self,
+        home_team: str,
+        away_team: str,
+        competition: str | None = None,
+    ) -> dict[str, Any]:
+
+        df = self.scoring_df.copy()
+
+        if competition is not None:
+            df = df[
+                df["competition"] == competition
+            ]
+
+        matches = df[
+            (df["home_team"] == home_team)
+            & (df["away_team"] == away_team)
+        ]
+
+        if matches.empty:
+            raise ValueError(
+                "No se encontró un partido con esos equipos."
+            )
+
+        if len(matches) > 1:
+            raise ValueError(
+                "Se encontró más de un partido. Especificar competición."
+            )
+
+        match_id = int(
+            matches["match_id"].iloc[0]
+        )
+
+        return self.predict_match(
+            match_id
+        )
 
     def _build_input_frame(
         self,
@@ -227,9 +293,8 @@ class PredictionService:
         probabilities = self.model.predict_proba(X)[0]
 
         return {
-            "prediction": prediction,
+            "prediction": str(prediction),
             "prob_away": float(probabilities[0]),
             "prob_draw": float(probabilities[1]),
             "prob_home": float(probabilities[2]),
         }
-    

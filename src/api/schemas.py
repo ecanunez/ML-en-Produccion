@@ -3,6 +3,10 @@ from typing import Any
 from pydantic import BaseModel
 
 
+# =========================================================
+# REQUESTS
+# =========================================================
+
 class MatchFeatures(BaseModel):
     features: dict[str, float | int | None]
     metadata: dict[str, Any] | None = None
@@ -19,6 +23,16 @@ class MatchPredictionRequest(BaseModel):
 class BatchMatchPredictionRequest(BaseModel):
     match_ids: list[int]
 
+
+class TeamPredictionRequest(BaseModel):
+    competition: str | None = None
+    home_team: str
+    away_team: str
+
+
+# =========================================================
+# RESPONSES
+# =========================================================
 
 class PredictionResponse(BaseModel):
     prediction: str
@@ -67,3 +81,7 @@ class ModelInfoResponse(BaseModel):
 class CompetitionInfoResponse(BaseModel):
     competition: str
     n_matches: int
+
+
+class TeamInfoResponse(BaseModel):
+    team: str
