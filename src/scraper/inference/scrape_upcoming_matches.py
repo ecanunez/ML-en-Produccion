@@ -1,27 +1,29 @@
-from pathlib import Path
 from datetime import datetime
+
 import pandas as pd
 from playwright.sync_api import sync_playwright
-from src.config.project_config import (
-    SCORING_SEASON
+
+from src.config.dataset_config import (
+    SCORING_SEASON,
 )
+
+from src.config.project_config import (
+    UPCOMING_MATCHES_DIR,
+)
+
 from src.scraper.scraper_utils import (
     construir_url_fixture_liga,
     obtener_partidos_futuros,
-    seleccionar_competiciones
+    seleccionar_competiciones,
 )
 
 
-OUTPUT_DIR = (
-    Path("data")
-    / "upcoming"
-)
+OUTPUT_DIR = UPCOMING_MATCHES_DIR
 
 OUTPUT_DIR.mkdir(
     parents=True,
     exist_ok=True
 )
-
 
 def main():
 

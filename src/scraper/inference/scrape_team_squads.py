@@ -5,16 +5,24 @@ from src.scraper.scraper_utils import (
     extraer_plantilla_equipo,
     buscar_url_equipo_transfermarkt
 )
+from src.config.project_config import (
+    RAW_DATA_DIR,
+)
 
+UPCOMING_DIR = (
+    RAW_DATA_DIR
+    / "upcoming_matches"
+)
 
-UPCOMING_DIR = Path("data/upcoming")
-OUTPUT_DIR = Path("data/raw/team_squads")
+OUTPUT_DIR = (
+    RAW_DATA_DIR
+    / "team_squads"
+)
 
 OUTPUT_DIR.mkdir(
     parents=True,
     exist_ok=True
 )
-
 
 def obtener_ultimo_upcoming():
 
