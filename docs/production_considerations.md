@@ -131,7 +131,7 @@ La documentación interactiva se genera automáticamente mediante OpenAPI / Swag
 
 # Docker
 
-La API puede ejecutarse dentro de un contenedor Docker, proporcionando un entorno reproducible para el despliegue.
+La API se encuentra containerizada mediante Docker y fue validada ejecutando el servicio de inferencia dentro de un contenedor Linux utilizando la imagen oficial de Python.
 
 La imagen contiene únicamente los componentes necesarios para la inferencia, manteniendo separado el proceso de entrenamiento del servicio de predicción.
 

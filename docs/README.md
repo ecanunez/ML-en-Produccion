@@ -77,7 +77,7 @@ model_selection_report.md
 | Historical Pipeline | ✅ |
 | Inference Pipeline | ✅ |
 | API Deployment | ✅ |
-| Docker | ⏳ |
+| Docker | ✅ |
 
 Versión actual:
 
@@ -320,7 +320,7 @@ La arquitectura fue diseñada para permitir, en futuras versiones:
 ## Deployment
 
 - ✅ FastAPI
-- ⏳ Docker
+- ✅ Docker
 - ⏳ Cloud Deployment (AWS u otra plataforma)
 
 ---

@@ -19,7 +19,7 @@ El proyecto fue desarrollado con foco en buenas prácticas de Machine Learning e
 | Historical Pipeline |    ✅   |
 | Inference Pipeline  |    ✅   |
 | FastAPI             |    ✅   |
-| Docker              |   🚧   |
+| Docker              |    ✅   |
 
 ---
 
