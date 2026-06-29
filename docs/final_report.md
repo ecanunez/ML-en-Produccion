@@ -632,30 +632,68 @@ En la versión actual, Docker fue utilizado para validar la ejecución local de 
 
 ## 13. Discusión
 
-Este va a ser el capítulo donde más vamos a disfrutar escribiendo.
+Más que la implementación de un modelo de clasificación, el principal resultado de este proyecto fue el proceso de diseño que permitió transformar un problema complejo en un sistema de Machine Learning reproducible y preparado para producción. A lo largo del desarrollo fue necesario tomar decisiones relacionadas con la adquisición de datos, la representación del problema, la ingeniería de variables, la selección de modelos y el diseño de la arquitectura del sistema. En conjunto, estas decisiones tuvieron un impacto mucho mayor sobre el resultado final que la simple elección de un algoritmo de clasificación.
 
-Porque ahí sí aparecen:
+Este capítulo reflexiona sobre las principales decisiones adoptadas durante el proyecto, analizando sus fortalezas, las limitaciones de la solución desarrollada y las oportunidades de evolución que deja abiertas la arquitectura propuesta. Más que presentar nuevos resultados, el objetivo es discutir las implicancias de las decisiones tomadas y sintetizar los principales aprendizajes obtenidos durante el desarrollo del sistema.
 
-ventajas;
-desventajas;
-decisiones;
-alternativas;
-simulación de planteles;
+### 13.1 Aprendizajes del proceso de diseño
 
-### trabajo futuro.
+Una de las principales enseñanzas obtenidas durante el desarrollo del proyecto fue comprender que la calidad de un sistema de Machine Learning depende tanto del proceso de diseño como del algoritmo finalmente seleccionado. Si bien el entrenamiento permitió identificar un modelo con buen desempeño, el recorrido realizado mostró que las decisiones adoptadas en etapas mucho más tempranas tuvieron un impacto decisivo sobre el resultado alcanzado.
 
-- Una de las principales ventajas de la arquitectura propuesta es que la representación del partido se construye a partir de atributos agregados de los jugadores y no únicamente de información histórica de los equipos. Esta decisión abre la posibilidad de desarrollar futuras herramientas de simulación que permitan estimar el impacto de modificaciones en la composición de las plantillas, evaluando escenarios hipotéticos antes de la disputa de un encuentro.
+El primer aprendizaje estuvo relacionado con la construcción del dataset. Desarrollar una base de datos propia implicó un esfuerzo considerable de adquisición, integración y validación de información proveniente de distintas fuentes. Sin embargo, este trabajo permitió controlar completamente la representación del problema, incorporar conocimiento específico del dominio y construir variables imposibles de obtener a partir de datasets ya procesados. En retrospectiva, esta decisión constituyó uno de los pilares fundamentales del proyecto.
 
-- Una posible evolución del sistema consiste en utilizar el modelo no solo como herramienta predictiva, sino también como herramienta de apoyo a la toma de decisiones deportivas. Dado que las variables de entrada describen las características de los planteles, resulta posible simular modificaciones en la composición de un equipo (por ejemplo, incorporaciones o bajas de jugadores) y evaluar el impacto estimado sobre las probabilidades de obtener determinados resultados. Este enfoque podría convertir al sistema en un soporte para procesos de planificación deportiva y análisis de mercado de pases.
+Un segundo aprendizaje fue reconocer la importancia de la representación del problema. Inicialmente podría pensarse que el rendimiento del sistema dependería principalmente del algoritmo de clasificación utilizado. No obstante, los distintos experimentos realizados mostraron que la forma en que se describía cada partido tuvo una influencia igual o incluso mayor sobre el desempeño del modelo. La incorporación de variables relacionadas con la fortaleza de los equipos, las características agregadas de los jugadores y las comparaciones entre ambos planteles permitió construir una representación más rica y consistente del contexto previo a cada encuentro.
 
-Todo lo que fuimos guardando durante el informe.
+Desde el punto de vista de la ingeniería de software, otra enseñanza importante fue comprobar el valor de diseñar la arquitectura pensando desde el inicio en su utilización futura. La separación entre entrenamiento e inferencia, la modularización del código, el versionado de los modelos y la reutilización de los procesos de transformación incrementaron inicialmente el esfuerzo de desarrollo, pero facilitaron significativamente el mantenimiento del sistema, su reproducibilidad y su posterior despliegue mediante una API REST.
 
-## 14. Conclusiones
+Finalmente, el proyecto permitió confirmar la importancia de definir un alcance realista para una primera versión del sistema. La idea inicial contemplaba la construcción de una herramienta capaz de analizar el impacto de modificaciones en la composición de los planteles sobre el resultado esperado de un partido. Durante el desarrollo fue necesario acotar este objetivo para concentrarse en la construcción de un sistema robusto de predicción de encuentros individuales. Lejos de representar una renuncia al objetivo original, esta decisión permitió desarrollar una base sólida sobre la cual será posible incorporar nuevas capacidades en versiones futuras.
 
-Una sola página.
+En conjunto, estos aprendizajes refuerzan una idea que atravesó todo el proyecto: el desarrollo de un sistema de Machine Learning no consiste únicamente en entrenar un modelo con buenas métricas, sino en diseñar cuidadosamente la representación del problema, la calidad de los datos y la arquitectura que permitirá que ese modelo pueda utilizarse y evolucionar de manera confiable a lo largo del tiempo.
 
-Muy limpia.
+### 13.2 Fortalezas de la solución
 
-Cerrando la historia.
+Una de las principales fortalezas de la solución desarrollada es que logra integrar en un mismo sistema aspectos propios de la Ciencia de Datos y de la Ingeniería de Software. A lo largo del proyecto no solo se buscó obtener un modelo con buen desempeño predictivo, sino también construir una arquitectura que permitiera mantenerlo, reproducirlo y utilizarlo en un contexto similar al de un entorno de producción.
 
-- Esta observación reforzó una de las principales conclusiones del proyecto: la calidad de la representación del problema resulta tan importante como el algoritmo utilizado para resolverlo.
+Desde el punto de vista metodológico, la construcción de un dataset propio y el desarrollo de una representación del partido basada en la información de los jugadores permitieron incorporar conocimiento específico del dominio al proceso de aprendizaje. Esta estrategia ofreció una mayor flexibilidad para diseñar variables relevantes y evitó depender exclusivamente de datasets previamente elaborados para otros propósitos.
+
+Otra fortaleza importante radica en la organización del sistema. La separación entre adquisición de datos, entrenamiento e inferencia permitió desacoplar procesos con objetivos diferentes y facilitó tanto el mantenimiento del proyecto como la incorporación de nuevas funcionalidades. Esta arquitectura también favoreció la reutilización de componentes y simplificó el desarrollo de la API REST y del pipeline de inferencia.
+
+Asimismo, el proyecto incorporó desde sus primeras etapas prácticas orientadas a la reproducibilidad, como el versionado del modelo campeón, la conservación de los metadatos asociados al entrenamiento y la utilización de un entorno de ejecución reproducible mediante Docker. Si bien estas decisiones no impactan directamente sobre las métricas del modelo, incrementan significativamente la confiabilidad y mantenibilidad del sistema.
+
+Finalmente, una de las fortalezas más importantes de la solución propuesta es que la arquitectura desarrollada no se encuentra limitada al problema específico resuelto en esta primera versión. La forma en que fueron representados los equipos, las variables y los procesos deja preparada una base sólida para incorporar nuevas fuentes de información, ampliar la cobertura del sistema y desarrollar funcionalidades adicionales sin necesidad de rediseñar la estructura general del proyecto.
+
+### 13.3 Limitaciones
+
+Como toda primera versión de un sistema, la solución desarrollada presenta limitaciones que responden tanto a las características del problema como a las decisiones de alcance adoptadas durante el proyecto. En retrospectiva, muchas de estas limitaciones no representan deficiencias de la arquitectura, sino el resultado de priorizar la construcción de una base sólida sobre la cual continuar evolucionando el sistema.
+
+Desde el punto de vista del modelo predictivo, la representación utilizada describe el estado de ambos equipos a partir de la información disponible antes de cada encuentro. En consecuencia, no incorpora factores altamente dinámicos que también pueden influir sobre el resultado de un partido, como lesiones de último momento, sanciones, cambios tácticos, condiciones climáticas o decisiones técnicas adoptadas inmediatamente antes del inicio del juego. La incorporación de este tipo de información podría enriquecer la representación del problema, aunque también incrementaría considerablemente la complejidad del proceso de adquisición y actualización de los datos.
+
+Otra limitación está relacionada con el alcance funcional de esta primera versión. Si bien la representación construida se basa en las características de los jugadores que integran cada plantel, el sistema fue diseñado para responder una única pregunta: predecir el resultado esperado de un partido. Otras aplicaciones potenciales de esta representación, como el análisis de escenarios alternativos o la evaluación del impacto de modificaciones en la composición de los equipos, quedaron deliberadamente fuera del alcance del proyecto con el objetivo de concentrar los esfuerzos en la construcción de una solución robusta y reproducible.
+
+Finalmente, algunos procesos propios de un entorno de producción aún requieren intervención manual, como la actualización de las fuentes de información o el reentrenamiento periódico del modelo. Si bien la arquitectura fue diseñada para facilitar estas tareas, una implementación completamente automatizada excedía los objetivos planteados para la presente versión.
+
+En conjunto, estas limitaciones reflejan el alcance definido para el proyecto más que restricciones inherentes a la arquitectura desarrollada. Por este motivo, constituyen oportunidades concretas de evolución para futuras versiones del sistema antes que obstáculos para su utilización actual.
+
+### 13.4 Trabajo futuro
+
+La arquitectura desarrollada durante este proyecto fue concebida con el objetivo de facilitar su evolución hacia nuevas funcionalidades sin necesidad de modificar los principios fundamentales sobre los cuales fue construida. En este sentido, las posibilidades de trabajo futuro no consisten únicamente en mejorar el desempeño predictivo del modelo, sino principalmente en ampliar las capacidades del sistema a partir de la representación del problema ya desarrollada.
+
+Una de las principales ventajas de la solución propuesta es que cada partido se representa a partir de atributos agregados de los jugadores y del contexto competitivo de ambos equipos, en lugar de depender exclusivamente de información histórica de los clubes. Esta decisión deja abierta la posibilidad de desarrollar herramientas de simulación capaces de estimar el impacto que tendrían modificaciones en la composición de los planteles antes de la disputa de un encuentro.
+
+De esta forma, el modelo podría evolucionar desde una herramienta orientada exclusivamente a la predicción hacia un sistema de apoyo a la toma de decisiones deportivas; la posibilidad de incorporar o retirar jugadores de manera hipotética, recalcular las variables del equipo y evaluar cómo cambian las probabilidades estimadas permitiría analizar distintos escenarios de planificación deportiva, mercado de pases o conformación de planteles utilizando la misma arquitectura desarrollada en esta primera versión.
+
+Asimismo, futuras versiones podrían incorporar nuevas fuentes de información relacionadas con lesiones, sanciones, condiciones climáticas, alineaciones confirmadas o variables tácticas, enriqueciendo progresivamente la representación del problema sin modificar la estructura general del sistema. Del mismo modo, la automatización de procesos como la actualización de los datos históricos, el monitoreo del desempeño del modelo y el reentrenamiento periódico permitiría aproximar aún más la solución a un entorno de operación continua.
+
+En conjunto, estas líneas de evolución muestran que el principal resultado del proyecto no es únicamente el modelo obtenido, sino la construcción de una arquitectura flexible capaz de crecer junto con nuevas preguntas y nuevos escenarios de aplicación. En este sentido, la versión desarrollada constituye una base sólida sobre la cual continuar expandiendo las capacidades del sistema en futuras etapas de desarrollo.
+
+# 14. Conclusiones
+
+El objetivo inicial de este proyecto fue desarrollar un sistema capaz de predecir el resultado de partidos de fútbol utilizando información disponible antes de la disputa de cada encuentro. Sin embargo, a lo largo del desarrollo quedó en evidencia que este desafío trascendía ampliamente la construcción de un modelo de clasificación y requería resolver problemas relacionados con la adquisición de datos, la representación del dominio, la ingeniería de variables, la arquitectura del sistema y su preparación para un entorno de producción.
+
+La solución desarrollada demuestra que es posible integrar información proveniente de múltiples fuentes para construir una representación consistente del estado de ambos equipos antes de un partido, entrenar un modelo reproducible y exponer sus capacidades mediante una arquitectura modular preparada para evolucionar. En este sentido, el principal aporte del proyecto no radica únicamente en las métricas alcanzadas por el modelo campeón, sino en la construcción de un sistema completo que integra procesos de adquisición de datos, entrenamiento, inferencia y despliegue siguiendo principios propios de Machine Learning en Producción.
+
+Uno de los principales aprendizajes obtenidos fue comprender que muchas de las decisiones con mayor impacto sobre el resultado final fueron tomadas antes del entrenamiento del modelo. La calidad del dataset, la representación del problema y el diseño de la arquitectura demostraron ser tan importantes como la elección del algoritmo utilizado para realizar las predicciones.
+
+Finalmente, la arquitectura propuesta deja abierta una línea de evolución natural para futuras versiones del sistema. La representación del partido basada en las características agregadas de los jugadores constituye una base sólida para desarrollar herramientas de simulación y apoyo a la toma de decisiones deportivas, ampliando progresivamente el alcance del proyecto más allá de la predicción de resultados.
+
+En conjunto, el trabajo realizado permitió alcanzar los objetivos planteados para esta primera versión y establecer una plataforma flexible sobre la cual continuar desarrollando nuevas capacidades, manteniendo como eje central la construcción de soluciones de Machine Learning reproducibles, mantenibles y orientadas a producción.
