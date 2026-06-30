@@ -49,6 +49,12 @@ UPCOMING_MATCHES_DIR = RAW_DATA_DIR / "upcoming_matches"
 
 PROCESSED_FEATURES_DIR = PROCESSED_DATA_DIR
 
+
+# --------------------------------------------------
+# Constantes
+# --------------------------------------------------
+
+
 MODEL_VERSION = "v1.0_model_champion"
 
 RANDOM_STATE = 42

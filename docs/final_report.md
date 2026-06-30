@@ -77,6 +77,7 @@ Esta representación presenta una ventaja adicional desde el punto de vista del 
 
 Finalmente, si bien esta formulación simplifica un problema inherentemente complejo, permite capturar una parte significativa de la información relevante previa a cada encuentro y constituye una base sólida sobre la cual incorporar nuevas variables y fuentes de información en futuras versiones del sistema.
 
+![Figura 1. Representación del problema](assets/figures/figure_01_problem_representation.svg)
 
 ## 4. Construcción del Dataset
 
@@ -91,31 +92,6 @@ Como fuente principal de información se seleccionó el sitio **Transfermarkt**,
 El proceso de construcción del dataset se diseñó como un pipeline compuesto por varias etapas independientes. En primer lugar, se descargó el historial de partidos de las competiciones seleccionadas. Posteriormente se obtuvieron los datos de los jugadores y sus valores de mercado, construyéndose un proceso de vinculación entre cada partido y los futbolistas que participaron en él. Finalmente, toda esta información se integró en un único dataset histórico sobre el cual se desarrolló la etapa de ingeniería de variables.
 
 La separación del proceso en etapas independientes permitió simplificar el mantenimiento del sistema, facilitar la detección de errores durante la construcción de los datos y favorecer la reutilización de componentes tanto para el entrenamiento del modelo como para el pipeline de inferencia desarrollado posteriormente.
-
-                  Adquisición de datos
-                 (proceso independiente)
-
-          Transfermarkt
-                 │
-                 ▼
-             Scrapers
-                 │
-                 ▼
-          Raw Historical Data
-                 │
-─────────────────┼──────────────────────────
-                 │
-                 ▼
-        Pipeline Histórico
-
-        Raw Data
-             │
-             ▼
-      Construcción Dataset
-             ▼
- Feature Engineering
-             ▼
- Training Dataset
 
 ### 4.1 Adquisición de datos y construcción del dataset
 
@@ -151,16 +127,7 @@ También se evaluó la calidad del proceso de asociación entre partidos y jugad
 
 En conjunto, estas verificaciones permitieron confirmar que el dataset presentaba un nivel adecuado de calidad y consistencia para avanzar hacia las siguientes etapas del proyecto, proporcionando además una comprensión más profunda de sus fortalezas y limitaciones antes de iniciar el proceso de ingeniería de variables.
 
-┌────────────────────────────────────────────┐
-│        VALIDACIÓN DEL DATASET              │
-├────────────────────────────────────────────┤
-│ Partidos históricos           12.599       │
-│ Clases                        3            │
-│ Observaciones eliminadas       4           │
-│ Missing críticos               0           │
-│ Cobertura Player Mapping      6.8 / 11     │
-│ Distribución target      44 / 25 / 31 %    │
-└────────────────────────────────────────────┘
+![Tabla 1. Resumen de validación del dataset](assets/tables/table_01_dataset_summary.png)
 
 ### 5.2 Comprensión de las variables
 
@@ -373,15 +340,7 @@ Los resultados obtenidos durante esta etapa también permitieron identificar aqu
 
 Este proceso de evaluación sistemática proporcionó la evidencia necesaria para seleccionar un conjunto reducido de modelos candidatos, que posteriormente fueron sometidos a una etapa más exhaustiva de optimización antes de definir el modelo campeón del proyecto.
 
-| Modelo               | Accuracy | F1 Macro |
-| -------------------- | -------: | -------: |
-| Baseline             |      ... |      ... |
-| Logistic Regression  |      ... |      ... |
-| Random Forest        |      ... |      ... |
-| HistGradientBoosting |      ... |      ... |
-| XGBoost              |      ... |      ... |
-| LightGBM             |      ... |      ... |
-| Stacking Ensemble    |      ... |      ... |
+![Tabla 2. Benchmark de modelos evaluados](assets/tables/table_02_model_benchmark.png)
 
 
 ### 8.3 Optimización del modelo
@@ -408,6 +367,8 @@ La elección del modelo campeón representa la culminación del proceso iterativ
 
 El modelo seleccionado fue posteriormente exportado junto con toda la información necesaria para garantizar su reproducibilidad, incluyendo la versión utilizada, el conjunto de variables empleado durante el entrenamiento, las métricas obtenidas y los metadatos asociados al proceso de construcción. Esta información constituye la base del pipeline de inferencia y asegura que las predicciones futuras se realicen bajo las mismas condiciones que dieron origen al modelo campeón.
 
+![Tabla 3. Ficha técnica del modelo campeón](assets/tables/table_03_champion_model.png)
+
 ### 8.5 Modelo final
 
 Como resultado del proceso de entrenamiento, evaluación y optimización desarrollado a lo largo del proyecto, se obtuvo un modelo final preparado para integrarse al pipeline de inferencia y ser utilizado durante la generación de predicciones sobre nuevos partidos.
@@ -430,26 +391,6 @@ Uno de los principios más importantes adoptados durante el diseño fue la separ
 
 Las secciones siguientes describen las principales decisiones arquitectónicas adoptadas y la forma en que los distintos componentes interactúan para conformar el sistema completo.
 
-                 Transfermarkt
-                       │
-               Scrapers independientes
-                       │
-                Datos históricos
-                       │
-              Feature Engineering
-                       │
-               Training Dataset
-                       │
-                 Model Training
-                       │
-               Champion Model
-                       │
-         ┌─────────────┴─────────────┐
-         │                           │
-   Inference Pipeline           FastAPI
-         │                           │
-  Predictions.csv              REST API
-
 ### 9.1 Separación entre entrenamiento e inferencia
 
 Uno de los principios arquitectónicos más importantes adoptados durante el desarrollo del proyecto fue la separación explícita entre las etapas de entrenamiento e inferencia. Aunque ambas utilizan información proveniente de una misma fuente y comparten parte de la infraestructura desarrollada, responden a objetivos completamente diferentes y poseen ciclos de vida independientes.
@@ -462,21 +403,6 @@ Separar ambos procesos permitió desacoplar el desarrollo del modelo de su utili
 
 Esta separación también favorece el mantenimiento y la evolución del proyecto. Las mejoras introducidas en el pipeline de entrenamiento pueden desarrollarse y validarse de forma independiente, mientras que el pipeline de inferencia permanece estable utilizando la última versión aprobada del modelo. De esta manera, el sistema incorpora un flujo de trabajo donde el entrenamiento constituye un proceso ocasional y la inferencia representa la operación cotidiana del sistema.
 
-                 SISTEMA
-
-            ┌───────────────┐
-            │ Entrenamiento │
-            └───────┬───────┘
-                    │
-             Champion Model
-                    │
-                    ▼
-            ┌───────────────┐
-            │   Inferencia  │
-            └───────────────┘
-                    │
-              Predicciones
-
 ### 9.2 Organización modular
 
 A medida que el proyecto fue incorporando nuevas funcionalidades, la complejidad del sistema aumentó considerablemente. Además del entrenamiento del modelo, fue necesario desarrollar procesos de adquisición de datos, construcción del dataset, ingeniería de variables, inferencia, despliegue mediante una API y mecanismos de documentación y versionado. Frente a este escenario, se optó por una organización modular del código fuente basada en la separación de responsabilidades.
@@ -488,6 +414,8 @@ Esta organización también permitió reutilizar procesos en diferentes etapas d
 Otro beneficio de esta arquitectura modular es la facilidad para incorporar nuevas funcionalidades sin modificar el resto del sistema. La incorporación de nuevos scrapers, nuevas familias de variables o nuevos algoritmos de entrenamiento puede realizarse de manera localizada, minimizando el impacto sobre los componentes ya existentes y favoreciendo la evolución del proyecto a lo largo del tiempo.
 
 Esta estrategia permitió construir una arquitectura flexible y mantenible, donde cada componente posee una responsabilidad claramente definida y puede evolucionar de forma relativamente independiente del resto del sistema. Este enfoque facilita tanto el desarrollo colaborativo como el despliegue del proyecto en un entorno de producción.
+
+![Figura 2. Representación del problema](assets/figures/figure_02_historical_pipeline.svg)
 
 ### 9.3 Pipelines
 
@@ -513,30 +441,7 @@ Esta organización también facilita la incorporación de nuevas funcionalidades
 
 Desde una perspectiva más amplia, el proyecto se convierte en un sistema integrado, donde cada componente cumple una función específica dentro de un flujo de trabajo común. Esta visión integral constituye uno de los principales resultados del desarrollo realizado y proporciona la base necesaria para las etapas de despliegue y operación descritas en los capítulos siguientes.
 
-                 Transfermarkt
-                        │
-             (Scraping independiente)
-                        │
-                        ▼
-                Datos históricos
-                        │
-                        ▼
-             Pipeline histórico
-                        │
-        Dataset + Ingeniería de variables
-                        │
-                        ▼
-               Champion Model
-                        │
-             ┌──────────┴──────────┐
-             │                     │
-             ▼                     ▼
-     Pipeline de inferencia     API REST
-             │                     │
-             └──────────┬──────────┘
-                        ▼
-                  Predicciones
-
+![Figura 3. Arquitectura general del sistema](assets/figures/figure_03_system_architecture.svg)
 
 ## 10. Consideraciones para Producción
 
