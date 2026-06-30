@@ -1,4 +1,51 @@
-# Obligatorio — Machine Learning en Producción — Curso 2026
+
+\begin{titlepage}
+\centering
+
+\vspace*{3cm}
+
+{\Huge\bfseries\color{primary} Machine Learning en Producción \par}
+
+\vspace{1.2cm}
+
+{\LARGE Predicción de resultados de partidos de fútbol \par}
+
+\vspace{0.4cm}
+
+{\Large mediante representación basada en jugadores \par}
+
+\vfill
+
+{\large Agustina Núñez \par}
+
+\vspace{0.5cm}
+
+{\large 2026 \par}
+
+\end{titlepage}
+
+\tableofcontents
+
+\clearpage
+
+
+## Posgrado de Big Data e Inteligencia Artificial — Universidad ORT Uruguay
+
+---
+
+**Fecha de entrega:** 15/07/26 por el sistema de Gestión.
+---
+
+### Integrantes
+
+ * Agustina Nuñez Pomatta - 315124
+
+### Versionado
+Visita mi repositorio en [GitHub de Mi Proyecto](https://github.com/ecanunez/ML-en-Produccion).
+
+PageBreak()
+
+# Informe Técnico
 
 ## 1. Introducción
 
@@ -11,6 +58,8 @@ La principal fuente de información utilizada fue el sitio Transfermarkt, del cu
 Durante el desarrollo también se prestó especial atención a aspectos propios de sistemas de Machine Learning en producción, tales como la prevención de data leakage, la consistencia entre entrenamiento e inferencia (training-serving skew), la reproducibilidad de los experimentos, el versionado de modelos y la containerización de la aplicación mediante Docker.
 
 Como resultado, se obtuvo un sistema completo capaz de generar predicciones sobre partidos futuros utilizando un modelo de clasificación entrenado sobre datos históricos y desplegado mediante una API REST documentada con FastAPI y OpenAPI. La arquitectura desarrollada permite además incorporar nuevas competiciones, extender las variables utilizadas y evolucionar el sistema hacia escenarios de despliegue en la nube o simulación de cambios en las plantillas de jugadores.
+
+story.append(PageBreak())
 
 ## 2. Objetivos
 
@@ -37,6 +86,8 @@ Para alcanzar este objetivo general se plantearon los siguientes objetivos espec
 * Exponer el modelo seleccionado mediante una API REST documentada que permita realizar predicciones individuales y por lotes, facilitando su integración con aplicaciones externas.
 
 * Containerizar la aplicación utilizando Docker para garantizar la portabilidad y simplificar su despliegue en diferentes entornos de ejecución.
+
+story.append(PageBreak())
 
 ## 3. Representación del problema
 
@@ -66,6 +117,8 @@ Finalmente, si bien esta formulación simplifica un problema inherentemente comp
 
 ![Figura 1. Representación del problema](../assets/figures/problem_representation.svg)
 
+story.append(PageBreak())
+
 ## 4. Construcción del Dataset
 
 Una vez definida la representación del problema, el siguiente desafío consistió en obtener un conjunto de datos que permitiera entrenar el modelo bajo las restricciones establecidas en la etapa anterior. En particular, era necesario disponer de información histórica correspondiente al estado de los equipos antes del inicio de cada partido, garantizando además que el mismo proceso pudiera reproducirse posteriormente para realizar predicciones sobre encuentros futuros.
@@ -89,6 +142,8 @@ La adquisición de datos comprende las tareas de web scraping sobre la fuente de
 Una vez descargados los datos históricos, el pipeline de entrenamiento opera exclusivamente sobre archivos almacenados localmente. Esta decisión permite reducir significativamente los tiempos de ejecución, garantizar la reproducibilidad del proceso y eliminar la dependencia de conexiones de red o posibles modificaciones en la fuente de datos durante la etapa de entrenamiento.
 
 La separación entre adquisición de datos y construcción del dataset constituye además una ventaja desde el punto de vista del mantenimiento, ya que ambos procesos pueden evolucionar de manera independiente sin afectar el resto de la arquitectura del sistema.
+
+story.append(PageBreak())
 
 ## 5. Análisis Exploratorio de Datos (EDA)
 
@@ -139,6 +194,8 @@ En esta etapa se utilizaron distintas técnicas de interpretabilidad, entre ella
 De forma complementaria, se realizó un análisis específico de los errores de clasificación, prestando especial atención a aquellos partidos cuya predicción resultaba sistemáticamente más compleja. Este estudio puso de manifiesto que los encuentros con resultados de empate presentaban una mayor dificultad para todos los modelos evaluados, comportamiento consistente con la naturaleza del problema y con la menor separabilidad existente entre equipos de fortaleza similar.
 
 En conjunto, estos análisis permitieron comprender mejor tanto el comportamiento del dataset como el del modelo entrenado, proporcionando evidencia objetiva para las decisiones adoptadas durante las etapas posteriores de optimización y selección del modelo campeón.
+
+story.append(PageBreak())
 
 ## 6. Ingeniería de Variables
 
@@ -214,6 +271,8 @@ Si bien el proceso de ingeniería de variables permitió construir una represent
 
 Por este motivo, la siguiente etapa del proyecto estuvo dedicada a la selección de características, con el objetivo de identificar el conjunto de variables que ofreciera el mejor equilibrio entre capacidad predictiva, simplicidad del modelo y facilidad de mantenimiento.
 
+story.append(PageBreak())
+
 ## 7. Selección de Características
 
 La etapa de ingeniería de variables permitió construir una representación considerablemente más rica del problema de clasificación. Sin embargo, el incremento en la cantidad de características disponibles planteó un nuevo desafío: no todas las variables aportan la misma información al proceso de aprendizaje y, en muchos casos, varias de ellas describen conceptos similares desde perspectivas diferentes.
@@ -251,6 +310,8 @@ Como consecuencia de estos experimentos se seleccionó un conjunto de treinta va
 Además de mejorar la eficiencia del modelo, esta decisión simplificó el mantenimiento del proyecto y redujo el riesgo de incorporar variables redundantes en futuras versiones del sistema. El conjunto seleccionado fue utilizado como base para el entrenamiento del modelo campeón presentado en los capítulos siguientes.
 
 ![Figura 2. Seleccion de Variables](..assets/figures/feature_selection.svg)
+
+story.append(PageBreak())
 
 ## 8. Entrenamiento y Optimización
 
@@ -327,6 +388,8 @@ De esta forma concluye la etapa de desarrollo del modelo predictivo y comienza l
 
 ![Figura 3. Proceso de entrenamiento](..assets/figures/historical_pipeline.svg)
 
+story.append(PageBreak())
+
 ## 9. Arquitectura del Sistema
 
 A medida que el proyecto evolucionó, dejó de consistir únicamente en el entrenamiento de un modelo de clasificación para convertirse en un sistema completo de Machine Learning. Este cambio implicó diseñar una arquitectura capaz de organizar procesos con objetivos muy diferentes, como la adquisición de datos históricos, la construcción del dataset, el entrenamiento del modelo, la generación de predicciones y el consumo del sistema mediante una API.
@@ -386,6 +449,8 @@ Esta organización también facilita la incorporación de nuevas funcionalidades
 Desde una perspectiva más amplia, el proyecto se convierte en un sistema integrado, donde cada componente cumple una función específica dentro de un flujo de trabajo común. Esta visión integral constituye uno de los principales resultados del desarrollo realizado y proporciona la base necesaria para las etapas de despliegue y operación descritas en los capítulos siguientes.
 
 ![Figura 4. Arquitectura general del sistema](..assets/figures/system_architecture.svg)
+
+PageBreak()
 
 ## 10. Consideraciones para Producción
 
@@ -453,6 +518,8 @@ Finalmente, la arquitectura fue diseñada para facilitar la incorporación de nu
 
 Lejos de representar deficiencias del sistema, estas limitaciones reflejan el alcance definido para la presente versión y constituyen la base sobre la cual podrán desarrollarse futuras mejoras tanto desde el punto de vista del modelo como de la infraestructura de producción.
 
+story.append(PageBreak())
+
 ## 11. API REST
 
 La construcción del modelo no completa por sí sola la puesta en producción del sistema, sino que para que el modelo pueda ser utilizado por otros procesos, usuarios o aplicaciones, es necesario exponerlo mediante una interfaz clara y estable. Con este propósito se desarrolló una API REST que permite consumir el modelo campeón sin depender directamente de los scripts internos del proyecto.
@@ -467,6 +534,8 @@ La API también incorpora validación de entradas mediante esquemas definidos co
 
 En conjunto, la API REST convierte al modelo entrenado en un servicio reutilizable, documentado y preparado para integrarse con aplicaciones externas o procesos automatizados de predicción.
 
+story.append(PageBreak())
+
 ## 12. Docker
 
 Una vez desarrollada la API, el siguiente desafío consistió en garantizar que el sistema pudiera ejecutarse de manera consistente en distintos entornos. En proyectos de Machine Learning, las diferencias entre versiones de Python, dependencias, librerías del sistema operativo o rutas de archivos pueden generar errores difíciles de reproducir. Por este motivo se decidió containerizar la aplicación utilizando Docker.
@@ -478,6 +547,8 @@ La containerización también contribuye a la reproducibilidad del sistema. Una 
 Desde el punto de vista del despliegue, Docker constituye una base natural para futuras etapas del proyecto. La misma imagen puede utilizarse posteriormente en plataformas cloud, servicios de contenedores o entornos de integración continua, simplificando la transición desde el desarrollo local hacia un ambiente productivo.
 
 En la versión actual, Docker fue utilizado para validar la ejecución local de la API dentro de un contenedor. Si bien aún no se implementó un despliegue cloud completo, la aplicación quedó preparada para avanzar hacia esa etapa sin modificar la lógica principal del sistema.
+
+story.append(PageBreak())
 
 ## 13. Discusión
 
@@ -535,7 +606,9 @@ Asimismo, futuras versiones podrían incorporar nuevas fuentes de información r
 
 En conjunto, estas líneas de evolución muestran que el principal resultado del proyecto no es únicamente el modelo obtenido, sino la construcción de una arquitectura flexible capaz de crecer junto con nuevas preguntas y nuevos escenarios de aplicación. En este sentido, la versión desarrollada constituye una base sólida sobre la cual continuar expandiendo las capacidades del sistema en futuras etapas de desarrollo.
 
-## 14. Conclusiones
+story.append(PageBreak())
+
+# 14. Conclusiones
 
 El objetivo inicial de este proyecto fue desarrollar un sistema capaz de predecir el resultado de partidos de fútbol utilizando información disponible antes de la disputa de cada encuentro. Sin embargo, a lo largo del desarrollo quedó en evidencia que este desafío trascendía ampliamente la construcción de un modelo de clasificación y requería resolver problemas relacionados con la adquisición de datos, la representación del dominio, la ingeniería de variables, la arquitectura del sistema y su preparación para un entorno de producción.
 

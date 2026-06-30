@@ -1,0 +1,32 @@
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+
+\definecolor{primary}{HTML}{045694}
+\definecolor{textgray}{HTML}{333333}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  urlcolor=primary
+}
+
+\titleformat{\section}
+  {\clearpage\Large\bfseries\color{primary}}
+  {\thesection}
+  {0.8em}
+  {}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{primary}}
+  {\thesubsection}
+  {0.8em}
+  {}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{primary}}
+  {\thesubsubsection}
+  {0.8em}
+  {}

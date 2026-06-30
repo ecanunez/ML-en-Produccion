@@ -1,5 +1,3 @@
-# Obligatorio — Machine Learning en Producción — Curso 2026
-
 ## 1. Introducción
 
 El objetivo de este proyecto es desarrollar un sistema de Machine Learning capaz de predecir el resultado de partidos de fútbol profesional utilizando información disponible antes del inicio de cada encuentro. El problema se aborda como una tarea de clasificación multiclase, donde el modelo debe estimar si el resultado final será una victoria del equipo local (HOME), un empate (DRAW) o una victoria del equipo visitante (AWAY).
@@ -64,7 +62,7 @@ Esta representación presenta una ventaja adicional desde el punto de vista del 
 
 Finalmente, si bien esta formulación simplifica un problema inherentemente complejo, permite capturar una parte significativa de la información relevante previa a cada encuentro y constituye una base sólida sobre la cual incorporar nuevas variables y fuentes de información en futuras versiones del sistema.
 
-![Figura 1. Representación del problema](../assets/figures/problem_representation.svg)
+![Figura 1. Representación del problema](assets/figures/problem_representation.svg)
 
 ## 4. Construcción del Dataset
 
@@ -114,7 +112,7 @@ También se evaluó la calidad del proceso de asociación entre partidos y jugad
 
 En conjunto, estas verificaciones permitieron confirmar que el dataset presentaba un nivel adecuado de calidad y consistencia para avanzar hacia las siguientes etapas del proyecto, proporcionando además una comprensión más profunda de sus fortalezas y limitaciones antes de iniciar el proceso de ingeniería de variables.
 
-![Tabla 1. Resumen de validación del dataset](..assets/tables/table_01_dataset_summary.png)
+![Tabla 1. Resumen de validación del dataset](assets/tables/table_01_dataset_summary.png)
 
 ### 5.2 Comprensión de las variables
 
@@ -250,7 +248,7 @@ Como consecuencia de estos experimentos se seleccionó un conjunto de treinta va
 
 Además de mejorar la eficiencia del modelo, esta decisión simplificó el mantenimiento del proyecto y redujo el riesgo de incorporar variables redundantes en futuras versiones del sistema. El conjunto seleccionado fue utilizado como base para el entrenamiento del modelo campeón presentado en los capítulos siguientes.
 
-![Figura 2. Seleccion de Variables](..assets/figures/feature_selection.svg)
+![Figura 2. Seleccion de Variables](assets/figures/feature_selection.svg)
 
 ## 8. Entrenamiento y Optimización
 
@@ -284,7 +282,7 @@ Los resultados obtenidos durante esta etapa también permitieron identificar aqu
 
 Este proceso de evaluación sistemática proporcionó la evidencia necesaria para seleccionar un conjunto reducido de modelos candidatos, que posteriormente fueron sometidos a una etapa más exhaustiva de optimización antes de definir el modelo campeón del proyecto.
 
-![Tabla 2. Benchmark de modelos evaluados](..assets/tables/table_02_model_benchmark.png)
+![Tabla 2. Benchmark de modelos evaluados](assets/tables/table_02_model_benchmark.png)
 
 
 ### 8.3 Optimización del modelo
@@ -311,7 +309,7 @@ La elección del modelo campeón representa la culminación del proceso iterativ
 
 El modelo seleccionado fue posteriormente exportado junto con toda la información necesaria para garantizar su reproducibilidad, incluyendo la versión utilizada, el conjunto de variables empleado durante el entrenamiento, las métricas obtenidas y los metadatos asociados al proceso de construcción. Esta información constituye la base del pipeline de inferencia y asegura que las predicciones futuras se realicen bajo las mismas condiciones que dieron origen al modelo campeón.
 
-![Tabla 3. Ficha técnica del modelo campeón](..assets/tables/table_03_champion_model.png)
+![Tabla 3. Ficha técnica del modelo campeón](assets/tables/table_03_champion_model.png)
 
 ### 8.5 Modelo final
 
@@ -325,7 +323,7 @@ El modelo final constituye, por tanto, un artefacto completamente desacoplado de
 
 De esta forma concluye la etapa de desarrollo del modelo predictivo y comienza la fase orientada a su utilización como componente de un sistema de Machine Learning en producción, cuya arquitectura y mecanismos de despliegue se describen en los capítulos siguientes.
 
-![Figura 3. Proceso de entrenamiento](..assets/figures/historical_pipeline.svg)
+![Figura 3. Proceso de entrenamiento](assets/figures/historical_pipeline.svg)
 
 ## 9. Arquitectura del Sistema
 
@@ -385,7 +383,7 @@ Esta organización también facilita la incorporación de nuevas funcionalidades
 
 Desde una perspectiva más amplia, el proyecto se convierte en un sistema integrado, donde cada componente cumple una función específica dentro de un flujo de trabajo común. Esta visión integral constituye uno de los principales resultados del desarrollo realizado y proporciona la base necesaria para las etapas de despliegue y operación descritas en los capítulos siguientes.
 
-![Figura 4. Arquitectura general del sistema](..assets/figures/system_architecture.svg)
+![Figura 4. Arquitectura general del sistema](assets/figures/system_architecture.svg)
 
 ## 10. Consideraciones para Producción
 
