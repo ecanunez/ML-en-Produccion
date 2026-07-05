@@ -788,3 +788,77 @@ def extraer_plantilla_equipo(
             continue
 
     return jugadores
+
+def extraer_logo_equipo(
+    page,
+):
+    """
+    Extrae la URL del escudo desde la página
+    del equipo de Transfermarkt.
+
+    Parameters
+    ----------
+    page : Playwright Page
+
+    Returns
+    -------
+    str | None
+        URL del escudo.
+    """
+
+    selectores = [
+        ".data-header__profile-container img",
+        ".data-header__club img",
+        ".data-header img",
+    ]
+
+    atributos = [
+        "src",
+        "data-src",
+        "data-original",
+        "srcset",
+    ]
+
+    for selector in selectores:
+
+        elementos = page.locator(selector)
+
+        if elementos.count() == 0:
+            continue
+
+        for i in range(elementos.count()):
+
+            img = elementos.nth(i)
+
+            for atributo in atributos:
+
+                valor = img.get_attribute(
+                    atributo
+                )
+
+                if not valor:
+                    continue
+
+                if valor.startswith(
+                    "data:image"
+                ):
+                    continue
+
+                if atributo == "srcset":
+
+                    valor = (
+                        valor
+                        .split(",")[0]
+                        .split(" ")[0]
+                    )
+
+                if valor.startswith("//"):
+
+                    valor = (
+                        "https:"
+                        + valor
+                    )
+
+                return valor
+
+    return None

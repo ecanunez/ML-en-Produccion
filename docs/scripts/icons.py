@@ -183,3 +183,5 @@ def draw_icon(
             )
 
     dwg.add(group)
+
+

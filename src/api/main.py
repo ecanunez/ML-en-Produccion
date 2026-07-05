@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException
-
+from src.api.demo import router as demo_router
 from src.api.schemas import (
     BatchMatchPredictionRequest,
     BatchMatchPredictionResponse,

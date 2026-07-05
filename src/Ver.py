@@ -1,64 +1,40 @@
-import pandas as pd
-import time
+from pathlib import Path
+from playwright.sync_api import sync_playwright, TimeoutError
 
-t0 = time.time()
+ROOT = Path(__file__).resolve().parents[1]
 
-players = pd.read_csv(
-    "data/raw/players/players.csv",
-    low_memory=False
-)
+URL = "https://www.fifa.com/es/tournaments/mens/worldcup/canadamexicousa2026/teams/canada/team-news"
 
-# print(players.shape)
-# print(time.time() - t0)
+OUTPUT = ROOT / "data" / "prediction_worldcup" / "raw" / "fifa_canada_debug.html"
+OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
-# print(
-#     players[
-#         players["player_id"].isin([
-#             559319,
-#             1371793,
-#             258914
-#         ])
-#     ]
-# )
-missing = players[
-    players["height_in_cm"].isna()
-]
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=True)
 
-print(
-    missing[
-        [
-            "player_id",
-            "name",
-            "current_club_name"
-        ]
-    ]
-)
+    page = browser.new_page(
+        user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        )
+    )
 
-print(
-    players.loc[
-        players["player_id"] == 1371793,
-        [
-            "player_id",
-            "name",
-            "height_in_cm",
-            "international_caps",
-            "international_goals"
-        ]
-    ]
-)
+    try:
+        page.goto(
+            URL,
+            wait_until="domcontentloaded",
+            timeout=90000
+        )
+    except TimeoutError:
+        print("Timeout en goto, pero se intenta guardar el HTML cargado hasta ahora.")
 
-missing = pd.read_csv(
-    "data/reports/player_match_missing.csv"
-)
+    page.wait_for_timeout(10000)
 
-print(missing.head(20))
+    OUTPUT.write_text(
+        page.content(),
+        encoding="utf-8"
+    )
 
-print(
-    missing[
-        [
-            "team",
-            "player_id",
-            "player"
-        ]
-    ]
-)
+    browser.close()
+
+print(f"HTML guardado en: {OUTPUT}")

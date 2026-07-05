@@ -3,8 +3,10 @@
 env/
 venv/
 
-# Ignorar la carpeta de datos por completo (solo guardamos el código)
+# Ignorar la carpetas de datos
 data/
+src/api/templates/
+src/api/static/
 
 # Ignorar temporales de Python
 __pycache__/
@@ -17,7 +19,6 @@ models/**/*.joblib
 # Ignorar borradores y versiones viejas del scraper
 src/scraper/Torneos.py
 src/scraper/scraper_torneos.py
-
 
 
 
