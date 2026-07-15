@@ -10,7 +10,7 @@ from components import (
     add_title,
 )
 from icons import draw_icon
-from style import PRIMARY, PRIMARY_LIGHT, TEXT
+from style import FONT, PRIMARY, PRIMARY_LIGHT, TEXT
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,6 +21,14 @@ FEATURE_SELECTION_RESULTS = (
     / "src"
     / "reports"
     / "feature_selection_results.csv"
+)
+
+WORLDCUP_CONFUSION = (
+    ROOT
+    / "data"
+    / "prediction_worldcup"
+    / "reports"
+    / "worldcup_evaluation_confusion_matrix.csv"
 )
 
 
@@ -1121,11 +1129,99 @@ def generate_feature_selection():
     print(f"Figura guardada en: {output_file}")
 
 
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+def generate_worldcup_confusion_matrix():
+    df = pd.read_csv(
+        WORLDCUP_CONFUSION,
+        index_col=0,
+    )
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+
+    im = ax.imshow(
+        df.values,
+        cmap="Blues",
+    )
+
+    ax.set_xticks(range(len(df.columns)))
+    ax.set_xticklabels(
+        [c.replace("pred_", "") for c in df.columns],
+        fontname=FONT,
+    )
+
+    ax.set_yticks(range(len(df.index)))
+    ax.set_yticklabels(
+        [r.replace("actual_", "") for r in df.index],
+        fontname=FONT,
+    )
+
+    ax.set_xlabel(
+        "Predicción",
+        fontname=FONT,
+        fontsize=11,
+        color=TEXT,
+    )
+
+    ax.set_ylabel(
+        "Valor real",
+        fontname=FONT,
+        fontsize=11,
+        color=TEXT,
+    )
+
+    ax.set_title(
+        "Matriz de confusión",
+        fontsize=14,
+        color=PRIMARY,
+        fontweight="bold",
+        fontname=FONT,
+        pad=15,
+    )
+
+    for i in range(df.shape[0]):
+        for j in range(df.shape[1]):
+            value = int(df.iloc[i, j])
+
+            ax.text(
+                j,
+                i,
+                str(value),
+                ha="center",
+                va="center",
+                color="black",
+                fontsize=12,
+                fontname=FONT,
+            )
+
+    fig.colorbar(
+        im,
+        ax=ax,
+        shrink=0.8,
+    )
+
+    output = OUTPUT_DIR / "worldcup_confusion_matrix.png"
+
+    fig.savefig(
+        output,
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    plt.close(fig)
+
+    print(f"Figura guardada en: {output}")
+
+
+
 def main():
     generate_problem_representation()
     generate_historical_pipeline()
     generate_system_architecture()
     generate_feature_selection()
+    generate_worldcup_confusion_matrix()
 
 
 if __name__ == "__main__":

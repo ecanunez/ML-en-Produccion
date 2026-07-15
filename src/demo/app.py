@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 import unicodedata
-
+import os
 import pandas as pd
 import requests
 import streamlit as st
@@ -18,7 +18,10 @@ st.set_page_config(
 # PATHS
 # =========================================================
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = os.getenv(
+    "API_URL",
+    "http://127.0.0.1:8000",
+)
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 

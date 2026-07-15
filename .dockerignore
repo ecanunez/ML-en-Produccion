@@ -1,21 +1,88 @@
+# =========================================================
+# ENTORNO Y CACHÉ PYTHON
+# =========================================================
+
 .venv/
+venv/
+env/
+
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+
+# =========================================================
+# GIT E IDE
+# =========================================================
+
 .git/
 .gitignore
 
+.vscode/
+.idea/
+
+
+# =========================================================
+# DESARROLLO Y ARCHIVOS NO NECESARIOS
+# =========================================================
+
 notebooks/
+
 src/reports/
 src/models/archive/
 src/features/archive/
 src/eda/
 
+
+# =========================================================
+# DATOS HISTÓRICOS Y DE ENTRENAMIENTO
+# =========================================================
+
 data/raw/
 data/interim/
-data/processed/backups/
-data/processed/*.csv
 
-models/champions/
+data/reports/
+
+data/processed/backups/
+data/processed/archive/
+
+data/processed/training_dataset*.parquet
+
+data/processed/team_features/
+data/processed/team_player_features/
+
+
+# =========================================================
+# MUNDIAL: ARCHIVOS PESADOS O DE DEPURACIÓN
+# =========================================================
+
+data/prediction_worldcup/raw/
+data/prediction_worldcup/interim/
+data/prediction_worldcup/processed/
+data/prediction_worldcup/reports/
+data/prediction_worldcup/predictions/backups/
+
+
+# =========================================================
+# DOCUMENTACIÓN GENERADA
+# =========================================================
+
+docs/output/
+docs/_annex_worldcup_build.html
+docs/_annex_worldcup_build.md
+
+
+# =========================================================
+# SISTEMA OPERATIVO Y TEMPORALES
+# =========================================================
+
+*.log
+*.tmp
 
 .DS_Store
 Thumbs.db

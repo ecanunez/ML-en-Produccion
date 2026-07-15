@@ -1,0 +1,39 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+COPY requirements_deploy.txt ./requirements_deploy.txt
+
+RUN python -m pip install --upgrade pip \
+    && pip install -r requirements_deploy.txt
+
+COPY src ./src
+
+COPY models/champion_model.pkl \
+     ./models/champion_model.pkl
+
+COPY models/champions/v1.0_model_champion \
+     ./models/champions/v1.0_model_champion
+
+COPY data/assets \
+     ./data/assets
+
+COPY data/processed/predictions.csv \
+     ./data/processed/predictions.csv
+
+COPY data/processed/scoring_dataset.csv \
+     ./data/processed/scoring_dataset.csv
+
+COPY data/processed/scoring_dataset.parquet \
+     ./data/processed/scoring_dataset.parquet
+
+COPY data/prediction_worldcup/predictions \
+     ./data/prediction_worldcup/predictions
+
+EXPOSE 8000
+
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

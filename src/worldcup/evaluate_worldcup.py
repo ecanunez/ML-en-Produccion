@@ -26,10 +26,26 @@ SNAPSHOT_PATH = INTERIM_DIR / "worldcup_team_snapshot_enriched.parquet"
 MODEL_PATH = ROOT / "models" / "champions" / "v1.0_model_champion" / "model.joblib"
 TOP30_PATH = ROOT / "src" / "reports" / "top30_features.csv"
 
-OUTPUT_PREDICTIONS = REPORTS_DIR / "worldcup_evaluation_predictions.csv"
-OUTPUT_METRICS = REPORTS_DIR / "worldcup_evaluation_metrics.json"
-OUTPUT_CONFUSION = REPORTS_DIR / "worldcup_evaluation_confusion_matrix.csv"
-OUTPUT_RULE_SEARCH = REPORTS_DIR / "worldcup_decision_rule_search.csv"
+OUTPUT_PREDICTIONS = (
+    REPORTS_DIR / "worldcup_evaluation_predictions.csv"
+)
+
+OUTPUT_METRICS = (
+    REPORTS_DIR / "worldcup_evaluation_metrics.json"
+)
+
+OUTPUT_CONFUSION = (
+    REPORTS_DIR / "worldcup_evaluation_confusion_matrix.csv"
+)
+
+OUTPUT_RULE_SEARCH = (
+    REPORTS_DIR / "worldcup_decision_rule_search.csv"
+)
+
+OUTPUT_CLASSIFICATION_REPORT = (
+    REPORTS_DIR / "worldcup_evaluation_classification_report.csv"
+)
+
 
 RANKING_API_URL = (
     "https://inside.fifa.com/api/live-world-ranking/"
@@ -242,7 +258,6 @@ def evaluate_worldcup():
         df["home_team_market_value"]
         - df["away_team_market_value"]
     )
-
     df["abs_market_value_diff"] = df["market_value_diff"].abs()
 
     df["GK_value_diff"] = (
@@ -269,6 +284,7 @@ def evaluate_worldcup():
     df["abs_age_diff"] = df["age_diff"].abs()
 
     df["caps_diff"] = df["home_avg_caps"] - df["away_avg_caps"]
+
     df["int_goals_diff"] = (
         df["home_avg_int_goals"]
         - df["away_avg_int_goals"]
@@ -441,6 +457,16 @@ def evaluate_worldcup():
         columns=[f"pred_{c}" for c in classes],
     )
 
+    report_df = pd.DataFrame(
+        classification_report(
+            y_true,
+            output["prediction_adjusted"],
+            labels=classes,
+            zero_division=0,
+            output_dict=True,
+        )
+    ).transpose()
+
     output.to_csv(
         OUTPUT_PREDICTIONS,
         index=False,
@@ -455,6 +481,11 @@ def evaluate_worldcup():
 
     cm.to_csv(
         OUTPUT_CONFUSION,
+        encoding="utf-8-sig",
+    )
+
+    report_df.to_csv(
+        OUTPUT_CLASSIFICATION_REPORT,
         encoding="utf-8-sig",
     )
 
@@ -475,19 +506,13 @@ def evaluate_worldcup():
     print(f"Best F1 Macro: {metrics['best_f1_macro']:.4f}")
 
     print("\nClassification Report ajustado:")
-    print(
-        classification_report(
-            y_true,
-            output["prediction_adjusted"],
-            labels=classes,
-            zero_division=0,
-        )
-    )
+    print(report_df)
 
     print("\nArchivos guardados:")
     print(OUTPUT_PREDICTIONS)
     print(OUTPUT_RULE_SEARCH)
     print(OUTPUT_CONFUSION)
+    print(OUTPUT_CLASSIFICATION_REPORT)
     print(OUTPUT_METRICS)
 
     return output

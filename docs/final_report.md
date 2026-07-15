@@ -114,7 +114,7 @@ También se evaluó la calidad del proceso de asociación entre partidos y jugad
 
 En conjunto, estas verificaciones permitieron confirmar que el dataset presentaba un nivel adecuado de calidad y consistencia para avanzar hacia las siguientes etapas del proyecto, proporcionando además una comprensión más profunda de sus fortalezas y limitaciones antes de iniciar el proceso de ingeniería de variables.
 
-![Tabla 1. Resumen de validación del dataset](..assets/tables/table_01_dataset_summary.png)
+![Tabla 1. Resumen de validación del dataset](..assets/tables/dataset_summary.png)
 
 ### 5.2 Comprensión de las variables
 
@@ -284,7 +284,7 @@ Los resultados obtenidos durante esta etapa también permitieron identificar aqu
 
 Este proceso de evaluación sistemática proporcionó la evidencia necesaria para seleccionar un conjunto reducido de modelos candidatos, que posteriormente fueron sometidos a una etapa más exhaustiva de optimización antes de definir el modelo campeón del proyecto.
 
-![Tabla 2. Benchmark de modelos evaluados](..assets/tables/table_02_model_benchmark.png)
+![Tabla 2. Benchmark de modelos evaluados](..assets/tables/model_benchmark.png)
 
 
 ### 8.3 Optimización del modelo
@@ -311,7 +311,7 @@ La elección del modelo campeón representa la culminación del proceso iterativ
 
 El modelo seleccionado fue posteriormente exportado junto con toda la información necesaria para garantizar su reproducibilidad, incluyendo la versión utilizada, el conjunto de variables empleado durante el entrenamiento, las métricas obtenidas y los metadatos asociados al proceso de construcción. Esta información constituye la base del pipeline de inferencia y asegura que las predicciones futuras se realicen bajo las mismas condiciones que dieron origen al modelo campeón.
 
-![Tabla 3. Ficha técnica del modelo campeón](..assets/tables/table_03_champion_model.png)
+![Tabla 3. Ficha técnica del modelo campeón](..assets/tables/champion_model.png)
 
 ### 8.5 Modelo final
 

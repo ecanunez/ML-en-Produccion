@@ -1,10 +1,9 @@
 from pathlib import Path
-
 import matplotlib.pyplot as plt
 import pandas as pd
 from joblib import load
-
 from style import FONT, GRID, PRIMARY, PRIMARY_LIGHT, TEXT
+import json
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -15,7 +14,22 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 TRAINING_DATASET = ROOT / "data" / "processed" / "training_dataset.parquet"
 BENCHMARK_RESULTS = ROOT / "src" / "reports" / "benchmark_results.csv"
 CHAMPION_MODEL = ROOT / "models" / "champion_model.pkl"
+WORLDCUP_REPORTS_DIR = (
+    ROOT
+    / "data"
+    / "prediction_worldcup"
+    / "reports"
+)
 
+WORLDCUP_METRICS = (
+    WORLDCUP_REPORTS_DIR
+    / "worldcup_evaluation_metrics.json"
+)
+
+WORLDCUP_CLASSIFICATION_REPORT = (
+    WORLDCUP_REPORTS_DIR
+    / "worldcup_classification_report.csv"
+)
 
 NUMERIC_COLUMNS = {
     "Accuracy",
@@ -167,8 +181,8 @@ def generate_dataset_summary_table():
     save_table(
         data=data,
         columns=["Indicador", "Resultado"],
-        filename="table_01_dataset_summary.png",
-        title="Tabla 1. Resumen de validación del dataset",
+        filename="dataset_summary.png",
+        title="Resumen de validación del dataset",
         numeric_columns=set(),
     )
 
@@ -209,8 +223,8 @@ def generate_model_benchmark_table():
     save_table(
         data=data,
         columns=["Modelo", "Accuracy", "F1 Macro"],
-        filename="table_02_model_benchmark.png",
-        title="Tabla 2. Benchmark de modelos evaluados",
+        filename="model_benchmark.png",
+        title="Benchmark de modelos evaluados",
     )
 
 
@@ -245,9 +259,93 @@ def generate_champion_model_table():
     save_table(
         data=data,
         columns=["Campo", "Valor"],
-        filename="table_03_champion_model.png",
-        title="Tabla 3. Ficha técnica del modelo campeón",
+        filename="champion_model.png",
+        title="Ficha técnica del modelo campeón",
         numeric_columns=set(),
+    )
+
+
+def generate_worldcup_global_metrics_table():
+    with WORLDCUP_METRICS.open(
+        encoding="utf-8",
+    ) as f:
+        metrics = json.load(f)
+
+    data = [
+        [
+            "Accuracy",
+            format_float(metrics["original_accuracy"]),
+            format_float(metrics["best_accuracy"]),
+        ],
+        [
+            "F1 Macro",
+            format_float(metrics["original_f1_macro"]),
+            format_float(metrics["best_f1_macro"]),
+        ],
+    ]
+
+    save_table(
+        data=data,
+        columns=[
+            "Métrica",
+            "Regla estándar",
+            "Regla ajustada",
+        ],
+        filename="worldcup_global_metrics.png",
+        title="Métricas globales de validación externa",
+        numeric_columns={
+            "Regla estándar",
+            "Regla ajustada",
+        },
+    )
+
+
+def generate_worldcup_classification_report_table():
+    report = pd.read_csv(
+        WORLDCUP_CLASSIFICATION_REPORT,
+        index_col=0,
+    )
+
+    report = report.loc[
+        ["AWAY", "DRAW", "HOME"]
+    ]
+
+    data = []
+
+    for cls, row in report.iterrows():
+        data.append(
+            [
+                cls,
+                format_float(
+                    row["precision"],
+                    decimals=2,
+                ),
+                format_float(
+                    row["recall"],
+                    decimals=2,
+                ),
+                format_float(
+                    row["f1-score"],
+                    decimals=2,
+                ),
+            ]
+        )
+
+    save_table(
+        data=data,
+        columns=[
+            "Clase",
+            "Precision",
+            "Recall",
+            "F1-score",
+        ],
+        filename="worldcup_classification_report.png",
+        title="Desempeño por clase en la validación externa",
+        numeric_columns={
+            "Precision",
+            "Recall",
+            "F1-score",
+        },
     )
 
 
@@ -255,6 +353,8 @@ def main():
     generate_dataset_summary_table()
     generate_model_benchmark_table()
     generate_champion_model_table()
+    generate_worldcup_global_metrics_table()
+    generate_worldcup_classification_report_table()
 
 
 if __name__ == "__main__":

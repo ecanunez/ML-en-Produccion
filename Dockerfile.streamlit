@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+COPY requirements_deploy.txt ./requirements_deploy.txt
+
+RUN python -m pip install --upgrade pip \
+    && pip install -r requirements_deploy.txt
+
+COPY src ./src
+
+COPY docs/scripts ./docs/scripts
+
+COPY data/assets ./data/assets
+
+COPY data/prediction_worldcup/predictions \
+     ./data/prediction_worldcup/predictions
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "src/demo/app.py", "--server.address=0.0.0.0", "--server.port=8501", "--server.headless=true"]

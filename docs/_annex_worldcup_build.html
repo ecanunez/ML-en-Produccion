@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Agustina Núñez" />
+  <meta name="dcterms.date" content="2026-01-01" />
+  <title>Anexo A - Validación externa</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+<style>
+:root {
+  --primary: #045694;
+  --primary-light: #EAF3FA;
+  --text: #333333;
+  --muted: #666666;
+}
+
+@page {
+  size: A4;
+  margin: 18mm;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    line-height: 1.45;
+    font-size: 11pt;
+    text-align: justify;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: left;
+}
+
+/* Portada */
+#title-block-header {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    break-after: page;
+    text-align: center;
+}
+
+#title-block-header .title {
+    color: var(--primary);
+    font-size: 34pt;
+    font-weight: 700;
+    margin-bottom: 28px;
+    text-align: center;
+    width: 100%;
+}
+
+#title-block-header .subtitle {
+    font-size: 18pt;
+    max-width: 760px;
+    margin: 0 auto 80px auto;
+    text-align: center;
+}
+
+#title-block-header .author,
+#title-block-header .date {
+    text-align: center;
+}
+
+#title-block-header .author,
+#title-block-header .date {
+  font-size: 13pt;
+  color: var(--muted);
+}
+
+/* Índice */
+nav#TOC {
+  break-after: page;
+}
+
+nav#TOC h1,
+nav#TOC h2 {
+  color: var(--primary);
+}
+
+/* En tu documento los capítulos principales son h2 */
+h2 {
+  color: var(--primary);
+  break-before: page;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 8px;
+  margin-top: 0;
+}
+
+h3,
+h4 {
+  color: var(--primary);
+}
+
+h3 {
+  margin-top: 28px;
+}
+
+h4 {
+  margin-top: 20px;
+}
+
+/* Evita página en blanco rara después del índice */
+nav#TOC + h2 {
+  break-before: auto;
+}
+
+/* Imágenes */
+img {
+  max-width: 100%;
+  display: block;
+  margin: 24px auto;
+  break-inside: avoid;
+}
+
+figure {
+  break-inside: avoid;
+}
+
+/* Código */
+pre {
+  background: #f6f8fa;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 9.5pt;
+}
+
+code {
+  font-size: 9.5pt;
+}
+
+.repository {
+    margin-top: 90px;
+    text-align: center;
+}
+
+.repository h3 {
+    color: var(--primary);
+    font-size: 18pt;
+    margin-bottom: 10px;
+}
+
+.repository a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 13pt;
+}
+
+.repository a:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Anexo A - Validación externa</h1>
+<p class="subtitle">Modelo campeón sobre la Copa Mundial de la FIFA
+2026</p>
+<p class="author">Agustina Núñez</p>
+<p class="date">2026</p>
+
+    <div class="repository">
+        <h3>Repositorio del proyecto</h3>
+        <a href="https://github.com/ecanunez/ML-en-Produccion">
+            https://github.com/ecanunez/ML-en-Produccion
+        </a>
+    </div>
+    
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#introducción" id="toc-introducción">1.
+Introducción</a></li>
+<li><a href="#objetivo-de-la-validación"
+id="toc-objetivo-de-la-validación">2. Objetivo de la validación</a></li>
+<li><a href="#pipeline-de-evaluación" id="toc-pipeline-de-evaluación">3.
+Pipeline de evaluación</a>
+<ul>
+<li><a href="#obtención-de-la-información-previa-de-cada-partido"
+id="toc-obtención-de-la-información-previa-de-cada-partido">3.1
+Obtención de la información previa de cada partido</a></li>
+<li><a href="#construcción-del-snapshot-de-las-selecciones"
+id="toc-construcción-del-snapshot-de-las-selecciones">3.2 Construcción
+del snapshot de las selecciones</a></li>
+<li><a href="#generación-de-variables"
+id="toc-generación-de-variables">3.3 Generación de variables</a></li>
+<li><a href="#inferencia-con-el-modelo-campeón"
+id="toc-inferencia-con-el-modelo-campeón">3.4 Inferencia con el modelo
+campeón</a></li>
+</ul></li>
+<li><a href="#ajuste-de-la-regla-de-decisión"
+id="toc-ajuste-de-la-regla-de-decisión">4. Ajuste de la regla de
+decisión</a></li>
+<li><a href="#resultados-obtenidos" id="toc-resultados-obtenidos">5.
+Resultados obtenidos</a>
+<ul>
+<li><a href="#métricas-globales" id="toc-métricas-globales">5.1 Métricas
+globales</a></li>
+<li><a href="#desempeño-por-clase" id="toc-desempeño-por-clase">5.2
+Desempeño por clase</a></li>
+<li><a href="#matriz-de-confusión" id="toc-matriz-de-confusión">5.3
+Matriz de confusión</a></li>
+</ul></li>
+<li><a href="#análisis-de-resultados" id="toc-análisis-de-resultados">6.
+Análisis de resultados</a></li>
+<li><a href="#conclusiones" id="toc-conclusiones">7.
+Conclusiones</a></li>
+</ul>
+</nav>
+<h2 id="introducción">1. Introducción</h2>
+<p>Una vez finalizado el desarrollo del sistema de predicción y
+seleccionado el modelo campeón para producción, se realizó una
+validación externa utilizando partidos correspondientes a la Copa
+Mundial de la FIFA 2026.</p>
+<p>El propósito de esta evaluación fue analizar la capacidad de
+generalización del modelo frente a datos completamente nuevos, distintos
+de aquellos utilizados durante las etapas de entrenamiento, validación y
+selección del algoritmo. A diferencia de la evaluación tradicional
+basada en particiones del conjunto histórico, esta instancia reproduce
+un escenario de producción en el que el modelo debe realizar
+predicciones sobre encuentros futuros empleando únicamente la
+información disponible antes del inicio de cada partido.</p>
+<p>Para ello se desarrolló un pipeline específico que permitió construir
+automáticamente todas las variables requeridas por el modelo campeón a
+partir de información actualizada de las selecciones participantes,
+incluyendo rankings FIFA, convocatorias, características agregadas de
+los planteles y demás variables derivadas utilizadas durante el
+entrenamiento.</p>
+<p>Finalmente, las predicciones obtenidas fueron comparadas con los
+resultados oficiales de los partidos disputados durante el torneo,
+permitiendo cuantificar el desempeño del modelo en un contexto
+completamente independiente del conjunto de entrenamiento y evaluar su
+comportamiento bajo condiciones reales de utilización.</p>
+<h2 id="objetivo-de-la-validación">2. Objetivo de la validación</h2>
+<p>La validación externa tuvo como objetivo evaluar el desempeño del
+modelo campeón sobre un conjunto de datos completamente independiente
+del utilizado durante su desarrollo.</p>
+<p>Mientras que las métricas presentadas en el informe principal fueron
+obtenidas a partir del conjunto histórico de entrenamiento mediante
+particiones de entrenamiento y prueba, la evaluación realizada en este
+anexo utiliza encuentros correspondientes a la Copa Mundial de la FIFA
+2026, competición que no formó parte del proceso de construcción del
+modelo.</p>
+<p>Esta metodología permite analizar la capacidad de generalización del
+sistema frente a nuevos escenarios, verificando si las relaciones
+aprendidas durante el entrenamiento continúan siendo válidas cuando el
+modelo es aplicado sobre datos reales y previamente desconocidos.</p>
+<p>Asimismo, esta evaluación reproduce un escenario cercano al de
+producción, ya que todas las predicciones fueron realizadas utilizando
+exclusivamente información disponible antes del inicio de cada
+encuentro. En consecuencia, el experimento constituye una validación
+<em>out-of-sample</em>, donde ni los partidos evaluados ni la
+información utilizada para generar sus variables habían sido empleados
+durante el entrenamiento del modelo.</p>
+<p>Los objetivos específicos de esta validación fueron:</p>
+<ul>
+<li>Verificar la capacidad de generalización del modelo campeón sobre
+una competición distinta de las utilizadas para el entrenamiento.</li>
+<li>Evaluar el funcionamiento del pipeline completo de inferencia
+desarrollado para producción.</li>
+<li>Analizar el comportamiento del modelo frente a datos reales
+obtenidos automáticamente mediante los procesos de scraping y
+construcción de variables.</li>
+<li>Identificar posibles limitaciones del modelo, particularmente en la
+predicción de empates, y evaluar estrategias de mejora basadas en las
+probabilidades estimadas por el clasificador. ## 2. Objetivo de la
+validación</li>
+</ul>
+<p>La validación externa tuvo como objetivo evaluar el desempeño del
+modelo campeón sobre un conjunto de datos completamente independiente
+del utilizado durante su desarrollo.</p>
+<p>Mientras que las métricas presentadas en el informe principal fueron
+obtenidas a partir del conjunto histórico de entrenamiento mediante
+particiones de entrenamiento y prueba, la evaluación realizada en este
+anexo utiliza encuentros correspondientes a la Copa Mundial de la FIFA
+2026, competición que no formó parte del proceso de construcción del
+modelo.</p>
+<p>Esta metodología permite analizar la capacidad de generalización del
+sistema frente a nuevos escenarios, verificando si las relaciones
+aprendidas durante el entrenamiento continúan siendo válidas cuando el
+modelo es aplicado sobre datos reales y previamente desconocidos.</p>
+<p>Asimismo, esta evaluación reproduce un escenario cercano al de
+producción, ya que todas las predicciones fueron realizadas utilizando
+exclusivamente información disponible antes del inicio de cada
+encuentro. En consecuencia, el experimento constituye una validación
+<em>out-of-sample</em>, donde ni los partidos evaluados ni la
+información utilizada para generar sus variables habían sido empleados
+durante el entrenamiento del modelo.</p>
+<p>Los objetivos específicos de esta validación fueron:</p>
+<ul>
+<li>Verificar la capacidad de generalización del modelo campeón sobre
+una competición distinta de las utilizadas para el entrenamiento.</li>
+<li>Evaluar el funcionamiento del pipeline completo de inferencia
+desarrollado para producción.</li>
+<li>Analizar el comportamiento del modelo frente a datos reales
+obtenidos automáticamente mediante los procesos de scraping y
+construcción de variables.</li>
+<li>Identificar posibles limitaciones del modelo, particularmente en la
+predicción de empates, y evaluar estrategias de mejora basadas en las
+probabilidades estimadas por el clasificador.</li>
+</ul>
+<h2 id="pipeline-de-evaluación">3. Pipeline de evaluación</h2>
+<p>Con el objetivo de reproducir un escenario de producción lo más
+realista posible, se desarrolló un pipeline específico para la Copa
+Mundial de la FIFA 2026. Este pipeline permitió construir
+automáticamente todas las variables requeridas por el modelo campeón
+utilizando únicamente información disponible antes de la disputa de cada
+encuentro.</p>
+<p>El proceso completo fue diseñado para mantener la misma lógica
+empleada durante la etapa de entrenamiento, garantizando la consistencia
+entre las variables utilizadas para ajustar el modelo y aquellas
+empleadas durante la inferencia.</p>
+<p>El pipeline de evaluación estuvo compuesto por cuatro etapas
+principales:</p>
+<ol type="1">
+<li>Obtención de la información previa de cada partido.</li>
+<li>Construcción del snapshot de las selecciones nacionales.</li>
+<li>Generación del conjunto de variables de entrada.</li>
+<li>Ejecución de las predicciones mediante el modelo campeón.</li>
+</ol>
+<p>Cada una de estas etapas se describe a continuación.</p>
+<h3 id="obtención-de-la-información-previa-de-cada-partido">3.1
+Obtención de la información previa de cada partido</h3>
+<p>Como punto de partida se recopiló el calendario oficial de partidos
+correspondiente a la Copa Mundial de la FIFA 2026.</p>
+<p>Para cada encuentro se identificaron las selecciones participantes y
+la fecha de disputa, información utilizada posteriormente para
+reconstruir el estado de ambos equipos inmediatamente antes del inicio
+del partido.</p>
+<p>Esta información constituye la base temporal sobre la cual se
+generaron todas las variables utilizadas por el modelo, evitando el uso
+de datos posteriores al encuentro y previniendo cualquier forma de
+filtración de información (<em>data leakage</em>).</p>
+<h3 id="construcción-del-snapshot-de-las-selecciones">3.2 Construcción
+del snapshot de las selecciones</h3>
+<p>Una vez identificado el calendario de partidos, se construyó un
+<em>snapshot</em> para cada selección nacional participante. El objetivo
+de este proceso fue representar el estado de cada equipo inmediatamente
+antes del comienzo de cada encuentro, utilizando exclusivamente
+información disponible hasta ese momento.</p>
+<p>Durante la etapa de entrenamiento, las variables asociadas a cada
+equipo fueron construidas utilizando los once futbolistas que
+efectivamente disputaron cada partido, información que solo es conocida
+cuando el encuentro ya ha finalizado. Sin embargo, en un escenario de
+inferencia dicha información no se encuentra disponible al momento de
+realizar la predicción.</p>
+<p>Por este motivo, para la validación sobre la Copa Mundial de la FIFA
+2026 las características de cada selección fueron construidas a partir
+de los <strong>26 jugadores convocados</strong> para el torneo. A partir
+de esta información se calcularon las variables agregadas de cada equipo
+siguiendo la misma metodología utilizada durante el entrenamiento.</p>
+<p>Además de la información correspondiente a los planteles, el snapshot
+incorporó el ranking FIFA previo a cada partido. Esta variable se
+utilizó como una aproximación objetiva a la fortaleza relativa de las
+selecciones nacionales, ya que resume el rendimiento internacional
+acumulado de cada equipo y proporciona una medida comparable entre
+países. A partir de este ranking se calcularon las variables de
+fortaleza relativa utilizadas posteriormente por el modelo para
+representar el equilibrio competitivo entre ambos equipos antes del
+inicio del encuentro.</p>
+<p>Esta adaptación metodológica permitió reproducir de manera más fiel
+un escenario de producción, utilizando únicamente información que podría
+conocerse antes del inicio de cada encuentro y evitando el uso de datos
+que, en una aplicación real, aún no estarían disponibles.</p>
+<h3 id="generación-de-variables">3.3 Generación de variables</h3>
+<p>Una vez construido el <em>snapshot</em> de cada selección, se
+procedió a generar el conjunto de variables de entrada requerido por el
+modelo campeón.</p>
+<p>Para ello se reutilizó el mismo proceso de ingeniería de variables
+desarrollado durante la etapa de entrenamiento, garantizando que las
+características calculadas durante la inferencia fueran consistentes con
+aquellas empleadas para ajustar el modelo. De esta manera, se evitó
+cualquier diferencia entre los datos utilizados durante el entrenamiento
+y los utilizados posteriormente en producción.</p>
+<p>El proceso incluyó la generación de variables descriptivas de los
+planteles, indicadores de fortaleza relativa entre las selecciones y
+variables derivadas a partir de las diferencias observadas entre ambos
+equipos. En particular, se calcularon las mismas variables asociadas al
+ranking FIFA, al valor de mercado de los planteles, a la experiencia
+internacional de los jugadores y a las características agregadas de cada
+selección.</p>
+<p>Finalmente, las variables generadas fueron organizadas utilizando
+exactamente el mismo conjunto de características (<em>feature set</em>)
+definido para el modelo campeón, asegurando la compatibilidad con el
+pipeline de inferencia y permitiendo realizar las predicciones sin
+necesidad de modificaciones adicionales.</p>
+<h3 id="inferencia-con-el-modelo-campeón">3.4 Inferencia con el modelo
+campeón</h3>
+<p>Una vez generado el conjunto de variables de entrada, se ejecutó el
+proceso de inferencia utilizando el modelo campeón exportado durante la
+etapa de desarrollo.</p>
+<p>En esta instancia no se realizó ningún reentrenamiento del modelo ni
+se modificaron sus hiperparámetros. Se utilizó exactamente la misma
+versión del modelo seleccionada como campeón, junto con el mismo
+conjunto de variables empleado durante su entrenamiento.</p>
+<p>Para cada partido, el modelo estimó las probabilidades asociadas a
+las tres clases posibles (victoria local, empate y victoria visitante),
+así como la predicción final correspondiente.</p>
+<p>Las predicciones obtenidas fueron almacenadas junto con las
+probabilidades estimadas para cada clase, permitiendo posteriormente
+evaluar el desempeño del modelo frente a los resultados reales de los
+encuentros y analizar distintas estrategias de decisión basadas en
+dichas probabilidades.</p>
+<h2 id="ajuste-de-la-regla-de-decisión">4. Ajuste de la regla de
+decisión</h2>
+<p>Durante la evaluación inicial se observó que, si bien el modelo
+generaba probabilidades para las tres clases posibles, la regla de
+decisión estándar basada en seleccionar la clase de mayor probabilidad
+producía una marcada sobreestimación de los empates. Como consecuencia,
+una gran proporción de los encuentros era clasificada como
+<strong>DRAW</strong>, lo que afectaba significativamente el desempeño
+global del sistema.</p>
+<p>Este comportamiento difiere del observado durante la etapa de
+entrenamiento y podría estar asociado a las particularidades del
+escenario de inferencia utilizado en esta validación, donde las
+características de cada selección fueron construidas a partir de los
+jugadores convocados y no de las alineaciones efectivamente utilizadas
+en cada partido.</p>
+<p>Con el objetivo de mejorar la calidad de las predicciones, se
+implementó una regla de decisión alternativa basada en un umbral mínimo
+para la probabilidad de empate.</p>
+<p>En lugar de seleccionar siempre la clase con mayor probabilidad
+estimada, la predicción final se obtuvo aplicando el siguiente
+criterio:</p>
+<ul>
+<li>Si la probabilidad estimada para la clase <strong>DRAW</strong>
+supera un determinado umbral, el partido se clasifica como empate.</li>
+<li>En caso contrario, la predicción corresponde a la clase con mayor
+probabilidad entre <strong>HOME</strong> y <strong>AWAY</strong>.</li>
+</ul>
+<p>Es importante destacar que esta estrategia no modifica el modelo
+entrenado ni las probabilidades generadas por el clasificador.
+Únicamente altera la regla utilizada para convertir dichas
+probabilidades en una predicción final, constituyendo un procedimiento
+de calibración posterior (<em>post-processing</em>) orientado a mejorar
+el equilibrio entre las clases.</p>
+<h2 id="resultados-obtenidos">5. Resultados obtenidos</h2>
+<h3 id="métricas-globales">5.1 Métricas globales</h3>
+<p>La evaluación se realizó sobre un conjunto de <strong>82
+partidos</strong> (y luego 90) correspondientes a la Copa Mundial de la
+FIFA 2026.</p>
+<p>Inicialmente se evaluó el desempeño del modelo utilizando la regla de
+decisión estándar, basada en seleccionar la clase con mayor probabilidad
+estimada. Posteriormente, se aplicó la regla de decisión ajustada
+presentada en la sección anterior, utilizando el umbral que maximizó la
+métrica F1 Macro sobre el conjunto de evaluación.</p>
+<p>La Tabla 1 resume los resultados obtenidos en ambos escenarios.</p>
+<figure>
+<img src="assets/tables/worldcup_global_metrics.png"
+alt="Métricas globales de validación externa" />
+<figcaption aria-hidden="true">Métricas globales de validación
+externa</figcaption>
+</figure>
+<p>Los resultados muestran una mejora sustancial del desempeño una vez
+aplicada la nueva regla de decisión. En particular, la exactitud global
+aumentó aproximadamente 40 puntos porcentuales, mientras que el F1 Macro
+se incrementó más de cuatro veces respecto de la evaluación inicial.</p>
+<p>Estos resultados indican que la información probabilística generada
+por el modelo resultó adecuada, pero que la regla de decisión estándar
+no era la más apropiada para este escenario de inferencia. La estrategia
+de <em>post-processing</em> permitió aprovechar mejor dichas
+probabilidades sin modificar el modelo entrenado.</p>
+<h3 id="desempeño-por-clase">5.2 Desempeño por clase</h3>
+<p>La Tabla 2 presenta el reporte de clasificación obtenido luego de
+aplicar la regla de decisión ajustada.</p>
+<figure>
+<img src="assets/tables/worldcup_classification_report.png"
+alt="Desempeño por clase en la validación externa" />
+<figcaption aria-hidden="true">Desempeño por clase en la validación
+externa</figcaption>
+</figure>
+<p>Los resultados muestran un comportamiento heterogéneo entre las tres
+clases. El modelo alcanzó su mejor desempeño en la predicción de
+victorias visitantes (<strong>AWAY</strong>), obteniendo elevados
+valores de precisión, sensibilidad (<em>recall</em>) y F1-score.</p>
+<p>La clase <strong>HOME</strong> también presentó un desempeño
+satisfactorio, con valores equilibrados de precisión y sensibilidad,
+reflejando una adecuada capacidad del modelo para identificar victorias
+del equipo local.</p>
+<p>Por el contrario, los empates (<strong>DRAW</strong>) continúan
+representando la clase de mayor dificultad. Si bien la estrategia de
+ajuste de la regla de decisión permitió mejorar considerablemente el
+desempeño global del sistema, la identificación de este tipo de
+encuentros sigue siendo limitada, obteniendo los valores más bajos de
+precisión, sensibilidad y F1-score.</p>
+<p>Este comportamiento resulta consistente con la naturaleza de los
+partidos de fútbol, donde los empates suelen depender de factores
+difíciles de capturar mediante variables previas al encuentro. En
+consecuencia, su predicción continúa representando uno de los
+principales desafíos para modelos de clasificación aplicados a
+resultados deportivos.</p>
+<h3 id="matriz-de-confusión">5.3 Matriz de confusión</h3>
+<p>La Figura 1 presenta la matriz de confusión obtenida luego de aplicar
+la regla de decisión ajustada.</p>
+<figure>
+<img src="assets/figures/worldcup_confusion_matrix.png"
+alt="Matriz de confusion" />
+<figcaption aria-hidden="true">Matriz de confusion</figcaption>
+</figure>
+<p>La matriz permite visualizar la distribución de las predicciones
+correctas e incorrectas para cada una de las tres clases consideradas
+por el modelo.</p>
+<p>En términos generales, se observa una buena capacidad para
+identificar victorias locales (<strong>HOME</strong>) y visitantes
+(<strong>AWAY</strong>), reflejada en la elevada concentración de
+observaciones sobre la diagonal principal para ambas categorías.</p>
+<p>Por el contrario, la clase <strong>DRAW</strong> continúa presentando
+la mayor cantidad de errores de clasificación. En la mayoría de estos
+casos, los encuentros que finalizaron en empate fueron clasificados como
+victorias locales o visitantes, evidenciando la dificultad del modelo
+para distinguir este tipo de resultados a partir de la información
+disponible antes del inicio del partido.</p>
+<p>En conjunto, la matriz de confusión confirma las conclusiones
+obtenidas a partir de las métricas presentadas anteriormente: el modelo
+presenta un desempeño sólido para la predicción de victorias, mientras
+que la identificación de empates continúa siendo el principal desafío
+del sistema.</p>
+<figure>
+<img src="images/worldcup_confusion_matrix.png"
+alt="Figura 1. Matriz de confusión obtenida durante la validación externa del modelo campeón sobre la Copa Mundial de la FIFA 2026." />
+<figcaption aria-hidden="true">Figura 1. Matriz de confusión obtenida
+durante la validación externa del modelo campeón sobre la Copa Mundial
+de la FIFA 2026.</figcaption>
+</figure>
+<h2 id="análisis-de-resultados">6. Análisis de resultados</h2>
+<p>La validación realizada sobre la Copa Mundial de la FIFA 2026
+permitió evaluar el comportamiento del modelo campeón en un escenario
+significativamente diferente al utilizado durante su entrenamiento.</p>
+<p>A diferencia del conjunto histórico empleado para desarrollar el
+modelo, compuesto principalmente por partidos correspondientes a las
+principales ligas europeas y competiciones internacionales de clubes;
+esta evaluación se realizó sobre partidos entre selecciones nacionales.
+Además, las variables descriptivas de cada equipo fueron construidas a
+partir de los jugadores convocados al torneo, en lugar de utilizar las
+alineaciones efectivamente empleadas en cada encuentro. Estas
+diferencias representan un escenario de inferencia más cercano a una
+aplicación real, donde la información disponible antes del inicio del
+partido es necesariamente limitada.</p>
+<p>En este contexto, el modelo mostró inicialmente una marcada tendencia
+a sobreestimar la probabilidad de empate. Si bien la causa exacta de
+este comportamiento no fue objeto de análisis específico, una posible
+explicación es que las diferencias metodológicas entre el conjunto de
+entrenamiento y el escenario de inferencia modificaron la distribución
+de algunas de las variables utilizadas por el clasificador, afectando la
+calibración de las probabilidades estimadas.</p>
+<p>La incorporación de una regla de decisión basada en un umbral para la
+probabilidad de empate permitió corregir este comportamiento sin
+necesidad de reentrenar el modelo. Este resultado pone de manifiesto la
+importancia de considerar estrategias de calibración y
+<em>post-processing</em> cuando un modelo es trasladado desde un entorno
+de desarrollo hacia un escenario de producción.</p>
+<p>Finalmente, si bien la identificación de empates continúa siendo el
+principal desafío del sistema, los resultados obtenidos muestran que el
+modelo mantiene una adecuada capacidad de generalización frente a datos
+completamente nuevos, respaldando la robustez del pipeline de inferencia
+desarrollado para este trabajo.</p>
+<h2 id="conclusiones">7. Conclusiones</h2>
+<p>La validación externa realizada sobre la Copa Mundial de la FIFA 2026
+permitió evaluar el desempeño del modelo campeón en un escenario
+completamente independiente del conjunto de datos utilizado durante su
+desarrollo.</p>
+<p>Los resultados obtenidos demuestran que el modelo es capaz de generar
+predicciones consistentes sobre datos previamente no observados y que el
+pipeline de inferencia desarrollado reproduce de manera satisfactoria
+las condiciones esperadas en un entorno de producción.</p>
+<p>Asimismo, la evaluación puso de manifiesto la importancia de
+complementar el modelo con estrategias de calibración de la regla de
+decisión. La incorporación de un umbral para la probabilidad de empate
+permitió mejorar significativamente las métricas de desempeño sin
+modificar el modelo entrenado, evidenciando el valor del
+<em>post-processing</em> como herramienta para adaptar un clasificador a
+nuevos escenarios de aplicación.</p>
+<p>En conjunto, los resultados obtenidos respaldan la capacidad de
+generalización del modelo campeón y constituyen una validación adicional
+del sistema desarrollado, demostrando que tanto el modelo como el
+pipeline de inferencia mantienen un desempeño satisfactorio cuando son
+aplicados sobre datos completamente nuevos y bajo condiciones cercanas a
+un escenario real de producción.</p>
+</body>
+</html>
