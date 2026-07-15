@@ -22,12 +22,6 @@ COPY models/champions/v1.0_model_champion \
 COPY data/assets \
      ./data/assets
 
-COPY data/processed/predictions.csv \
-     ./data/processed/predictions.csv
-
-COPY data/processed/scoring_dataset.csv \
-     ./data/processed/scoring_dataset.csv
-
 COPY data/processed/scoring_dataset.parquet \
      ./data/processed/scoring_dataset.parquet
 
