@@ -1,84 +1,434 @@
 team,player_id,player,position,age,market_value
+AC Milan,1058363,Christian Comotto,Central Midfield,25/04/2008 (18),€5.00m
 ADO Den Haag,559319,Kilian Nikièma,Goalkeeper,22/06/2003 (23),€700k
 ADO Den Haag,989995,Caleb Kramer,Goalkeeper,01/08/2006 (19),-
 ADO Den Haag,719382,Matteo Waem,Centre-Back,21/06/2000 (26),€800k
 ADO Den Haag,460619,Pascal Mulder,Centre-Back,19/01/1999 (27),€500k
 ADO Den Haag,595240,Milan Hokke,Centre-Back,11/10/2003 (22),€400k
-ADO Den Haag,354476,Diogo Tomas,Centre-Back,31/07/1997 (28),€400k
-ADO Den Haag,1069642,Devyn Payne,Centre-Back,26/06/2005 (21),-
-ADO Den Haag,548935,Steven van der Sloot,Right-Back,06/07/2002 (23),€650k
 ADO Den Haag,1104230,Sanyika Bergtop,Right-Back,31/07/2007 (18),€50k
 ADO Den Haag,538642,Juho Kilo,Central Midfield,23/06/2002 (24),€750k
-ADO Den Haag,1031547,Joey Brandt,Central Midfield,05/04/2005 (21),-
 ADO Den Haag,928630,Finn de Bruin,Attacking Midfield,05/04/2004 (22),€175k
 ADO Den Haag,848089,Illaijh de Ruijter,Left Winger,14/09/2006 (19),€400k
-ADO Den Haag,1031551,Lorenzo Maasland,Left Winger,25/02/2005 (21),€100k
+ADO Den Haag,1088642,Dani van Loenen,Left Winger,12/02/2007 (19),-
 ADO Den Haag,433091,Jalen Hawkins,Right Winger,24/01/2001 (25),€400k
+ADO Den Haag,633057,Donát Bárány,Centre-Forward,04/09/2000 (25),€800k
 ADO Den Haag,629039,Luka Reischl,Centre-Forward,10/01/2004 (22),€800k
-Coventry City,258914,Brad Collins,Goalkeeper,18/02/1997 (29),€900k
+AS Roma,1053217,Filippo Reale,Centre-Back,24/02/2006 (20),€750k
+Académico Viseu,980036,Matheus Sampaio,Goalkeeper,01/09/2004 (21),€100k
+Académico Viseu,597201,Rúben Pereira,Centre-Back,19/04/1998 (28),€300k
+Académico Viseu,752592,Pedro Barcelos,Centre-Back,19/01/1996 (30),€225k
+Académico Viseu,1157429,Gu Costa,Left-Back,15/09/2005 (20),€1.70m
+Académico Viseu,789045,Igor Milioransa,Left-Back,12/09/1996 (29),€225k
+Académico Viseu,512129,André Ceitil,Defensive Midfield,11/03/1995 (31),€200k
+Académico Viseu,501087,Soufiane Messeguem,Central Midfield,05/02/2001 (25),€1.50m
+Académico Viseu,1041169,Tomás Silva,Central Midfield,25/10/2003 (22),€150k
+Académico Viseu,303308,Cihan Kahraman,Attacking Midfield,08/10/1998 (27),€800k
+Académico Viseu,942096,Marquinho,Attacking Midfield,05/04/2002 (24),€350k
+Académico Viseu,1256478,Lorougnon Gohi,Left Winger,10/08/2004 (21),€350k
+Académico Viseu,1172592,Simão Silva,Left Winger,27/07/2005 (20),€350k
+Académico Viseu,344415,Dominik Steczyk,Centre-Forward,04/05/1999 (27),€200k
+Alanyaspor,1244036,Omar Ben Ali,Centre-Forward,22/04/2005 (21),€750k
+Alanyaspor,874758,Osman Arslantaş,Centre-Forward,10/02/2005 (21),-
+Alverca,1344793,Toni Tamarit,Right-Back,22/11/2005 (20),€500k
+Alverca,742459,Tiago Octávio,Central Midfield,08/07/2004 (22),-
+Alverca,1307181,Lucca Giuntini,Attacking Midfield,07/12/2005 (20),-
+Alverca,628697,Marco Essimi,Right Winger,18/02/1999 (27),€800k
+Alverca,967688,Armando Jr,Centre-Forward,17/11/2001 (24),€175k
+Amed SK,354197,Miraç Acer,Centre-Back,03/08/1996 (29),€125k
+Amed SK,1506930,Berat Perçin,Centre-Back,20/09/2005 (20),-
+Amed SK,655905,Abdullah Tazgel,Left-Back,12/04/2003 (23),-
+Amed SK,391282,Celal Hanalp,Right-Back,01/05/1996 (30),€200k
+Amed SK,1432630,Ayaz Arslan,Right-Back,26/01/2006 (20),-
+Amed SK,1047511,Muhammed Hasan Yıldırım,Left Winger,10/10/2005 (20),-
+Amed SK,600842,Daniel Moreno,Right Winger,17/01/1995 (31),€400k
+Amed SK,1351480,Cıvan Süer,Right Winger,16/05/2006 (20),-
+Amed SK,1065428,Berk Kızıldemir,Right Winger,11/12/2006 (19),-
+Arouca,575723,Martim Duarte,Goalkeeper,17/01/2003 (23),-
+Arouca,1154528,Si-hoo Park,Left Winger,18/08/2007 (18),€175k
+Athletic Club,709214,Beñat Gerenabarrena,Central Midfield,29/03/2003 (23),€1.00m
+Auxerre,917147,Mamadou Diop,Goalkeeper,03/01/2000 (26),€1.50m
+Auxerre,1265965,Xiangxin Wei,Centre-Forward,05/03/2008 (18),€300k
+Basaksehir,981856,Doğukan Tuzcu,Left-Back,14/09/2005 (20),€150k
+Bolonia,1108253,Dimitar Papazov,Left-Back,15/07/2006 (20),€250k
+Bor. M'gladbach,604358,David Herold,Left-Back,20/02/2003 (23),€4.00m
+Bor. M'gladbach,383362,Enzo Leopold,Central Midfield,23/07/2000 (25),€4.00m
+Brighton,984544,Rodrigo Rêgo,Right Winger,03/01/2005 (21),€1.50m
+C. Rizespor,986258,Siaka Bakayoko,Centre-Back,26/05/2005 (21),€2.50m
+C. Rizespor,673088,Mustafa Şengül,Centre-Back,08/07/1999 (27),€200k
+C. Rizespor,950779,Hüseyincan Kırıkcı,Centre-Back,09/03/2004 (22),-
+C. Rizespor,982403,Zakaria Ariss,Left-Back,17/06/2004 (22),€2.00m
+Cagliari,705097,Davide Veroli,Centre-Back,29/01/2003 (23),€800k
+Cagliari,887650,Francesco Gallea,Centre-Back,29/03/2005 (21),€200k
+Cagliari,926839,Ivan Sulev,Central Midfield,11/09/2006 (19),€200k
+Cagliari,1078164,Demi Akarakiri,Central Midfield,29/09/2007 (18),-
+Cagliari,1048013,Nicola Grandu,Left Midfield,15/07/2006 (20),€300k
+Cagliari,967814,Sebastiano Di Paolo,Right Winger,09/10/2006 (19),€400k
+Casa Pia,567516,Gabi,Central Midfield,18/04/2000 (26),€550k
+Chelsea,1261640,Denner,Left-Back,25/02/2008 (18),-
+Club Brujas,1191293,Tian Nai Koren,Attacking Midfield,31/07/2009 (16),€1.20m
+Colonia,744558,Julian Pauli,Centre-Back,18/07/2005 (20),€2.50m
+Como,1204163,Andréa Le Borgne,Defensive Midfield,27/07/2006 (19),€2.50m
+Como,981136,Fabio Rispoli,Central Midfield,28/09/2006 (19),€4.50m
+Como,691678,Tommaso Fumagalli,Centre-Forward,20/02/2000 (26),€300k
+Corum FK,920118,Arif Şimşir,Goalkeeper,31/05/2005 (21),€200k
+Corum FK,353863,Arda Şengül,Centre-Back,11/12/1998 (27),€700k
+Corum FK,1341829,Taha İbrahim Rençber,Centre-Back,07/03/2008 (18),€50k
+Corum FK,808985,Berkay Arı,Centre-Back,03/03/2003 (23),-
+Corum FK,859269,Kenan Fakılı,Attacking Midfield,03/09/2002 (23),€125k
+Corum FK,634693,Polat Abay,Left Winger,17/09/2003 (22),-
+Corum FK,1181573,Semih Akyıldız,Right Winger,28/05/2001 (25),€100k
 Coventry City,121352,Ben Wilson,Goalkeeper,09/08/1992 (33),€300k
 Coventry City,534701,Liam Kitching,Centre-Back,25/09/1999 (26),€14.00m
 Coventry City,121250,Jake Bidwell,Left-Back,21/03/1993 (33),€600k
 Coventry City,618903,Josh Eccles,Central Midfield,06/04/2000 (26),€9.00m
-Coventry City,257727,Jamie Allen,Central Midfield,29/01/1995 (31),€500k
 Coventry City,466637,Ephron Mason-Clark,Left Midfield,25/08/1999 (26),€16.00m
 Coventry City,662476,Jack Rudoni,Attacking Midfield,14/06/2001 (25),€20.00m
 Coventry City,704398,Raphael Borges Rodrigues,Left Winger,11/09/2003 (22),€450k
 Coventry City,451747,Brandon Thomas-Asante,Centre-Forward,29/12/1998 (27),€16.00m
+Dortmund,1141179,Mussa Kaba,Defensive Midfield,17/11/2008 (17),€200k
+Dortmund,1185507,Justin Lerma,Attacking Midfield,05/05/2008 (18),€3.20m
+Eintracht,1259986,Malik Pimpong,Left Winger,01/01/2008 (18),-
+Elche CF,1060456,Matia Barzic,Centre-Back,31/05/2004 (22),€1.00m
+Elche CF,1064538,Ali Houary,Second Striker,05/08/2005 (20),€300k
+Erzurumspor FK,547307,Matija Orbanic,Goalkeeper,29/05/2000 (26),€1.30m
+Erzurumspor FK,885682,Şerefhan Sağlık,Goalkeeper,08/01/2005 (21),-
+Erzurumspor FK,872080,Yakup Kırtay,Centre-Back,16/07/2003 (23),€1.50m
+Erzurumspor FK,862859,Emre Erdem,Centre-Back,21/06/2002 (24),€150k
+Erzurumspor FK,1296109,Ömer Arda Kara,Centre-Back,31/10/2007 (18),€150k
+Erzurumspor FK,872050,Enes Yiğit,Centre-Back,01/01/2003 (23),-
+Erzurumspor FK,620111,Cengizhan Bayrak,Left-Back,15/11/1999 (26),€150k
+Erzurumspor FK,872051,Eren Özdemir,Central Midfield,26/06/2003 (23),-
+Erzurumspor FK,986918,Mert Önal,Central Midfield,27/05/2004 (22),-
+Erzurumspor FK,618887,Mustafa Fettahoğlu,Left Winger,02/01/2001 (25),€1.40m
+Erzurumspor FK,1054212,İlkan Sever,Centre-Forward,17/10/2004 (21),€225k
+Estoril,1044429,Diogo Brasido,Right-Back,24/05/2003 (23),€200k
+Estrela Amadora,768562,Bénito,Left Winger,21/08/2003 (22),-
+Estrela Amadora,1321718,João Gastão,Centre-Forward,22/07/2006 (19),€200k
+Everton,538216,Hayden Hackney,Defensive Midfield,26/06/2002 (24),€32.00m
+Excelsior,720189,Nolan Martens,Right-Back,07/07/2004 (22),€450k
+Excelsior,1152022,Marlon van de Wetering,Right-Back,26/11/2007 (18),€175k
+Excelsior,942960,Daniel van Vianen,Defensive Midfield,28/04/2003 (23),€600k
+Excelsior,1235199,Yacqub Finey,Attacking Midfield,24/09/2003 (22),€500k
+Excelsior,1021770,Ilano Silva Timas,Left Winger,29/09/2002 (23),€350k
+Excelsior,806281,David Garden,Centre-Forward,20/06/2004 (22),-
+Eyüpspor,959674,Mustafa Eren Damar,Right-Back,07/03/2004 (22),-
+Eyüpspor,685127,Buğra Çağlıyan,Central Midfield,13/04/2004 (22),-
+Eyüpspor,1160599,David Costa,Attacking Midfield,12/01/2004 (22),€500k
+Eyüpspor,1173689,Berkay Kumlu,Right Winger,25/12/2004 (21),-
+FC Augsburgo,954082,Tom Wisbereit,Goalkeeper,17/11/2007 (18),-
+FC Augsburgo,358766,Calvin Brackelmann,Centre-Back,22/08/1999 (26),€3.00m
+FC Augsburgo,928265,Sima Suso,Central Midfield,28/05/2005 (21),€2.80m
+FC Barcelona,938156,Tommy Marqués,Defensive Midfield,30/10/2006 (19),€3.00m
+FC Lorient,981760,Jérémy Hatchi,Left Winger,13/06/2005 (21),€700k
+FC Schalke 04,1047294,Johannes Siebeking,Goalkeeper,02/03/2006 (20),€125k
+FC Schalke 04,969376,Mertcan Ayhan,Centre-Back,08/09/2006 (19),€8.00m
+FC Schalke 04,919703,Vitalie Becker,Left-Back,03/03/2005 (21),€3.00m
+FC Schalke 04,280553,Anton Donkor,Left-Back,11/11/1997 (28),€400k
+FC Schalke 04,410870,Adrian Gantenbein,Right-Back,18/04/2001 (25),€900k
+FC Schalke 04,332392,Ron Schallenberg,Defensive Midfield,06/10/1998 (27),€2.00m
+FC Schalke 04,920946,Max Grüger,Defensive Midfield,24/05/2005 (21),€1.20m
+FC Schalke 04,1017047,Mauro Zalazar,Defensive Midfield,13/04/2005 (21),€300k
+FC Schalke 04,1162413,Luca Vozar,Defensive Midfield,06/05/2007 (19),-
+FC Schalke 04,697740,Soufiane El-Faouzi,Central Midfield,13/07/2002 (24),€9.00m
+FC Schalke 04,327862,Janik Bachmann,Central Midfield,06/05/1996 (30),€500k
+FC Schalke 04,1148239,Mika Wallentowitz,Right Winger,28/12/2007 (18),€1.00m
+FC Schalke 04,929992,Zaid Tchibara,Right Winger,21/02/2006 (20),€300k
+FC Twente,1150220,Björn Titulaer,Centre-Back,13/08/2007 (18),-
+FC Utrecht,1041648,Ferdinand Pohl,Centre-Back,02/02/2007 (19),-
+FC Utrecht,1081906,Jamie Schuldes,Centre-Back,26/01/2007 (19),-
+FC Utrecht,1136980,Emmanuel Chigozie Owen,Right Winger,11/06/2007 (19),-
+Famalicão,678843,Leny Meyer,Left-Back,01/07/2004 (22),€600k
+Famalicão,933240,Tamás Szűcs,Central Midfield,16/01/2005 (21),€1.50m
+Famalicão,1185887,Mathis Jangéal,Attacking Midfield,24/06/2008 (18),€1.00m
+Famalicão,1061686,Rudi Almeida,Centre-Forward,19/03/2005 (21),-
+Fenerbahce,1055247,Yiğit Fidan,Centre-Back,11/05/2005 (21),€1.00m
+Fenerbahce,1133736,Amara Diouf,Left Winger,07/06/2008 (18),€800k
+Fenerbahce,1311982,Alaettin Ekici,Left Winger,01/01/2009 (17),€300k
+Fenerbahce,1457931,Adem Yeşilyurt,Right Winger,13/01/2007 (19),-
+Fiorentina,1057839,Lapo Deli,Defensive Midfield,25/04/2006 (20),€250k
+Fortuna Sittard,639974,Nick de Groot,Left-Back,20/08/2001 (24),€400k
+Fortuna Sittard,746987,Sven Simons,Central Midfield,02/03/2004 (22),€450k
+Fortuna Sittard,1161423,Moussa Gbemou,Central Midfield,09/09/2007 (18),-
 Frosinone,168444,Matteo Pisseri,Goalkeeper,21/11/1991 (34),€150k
 Frosinone,745778,Gabriele Calvani,Centre-Back,12/01/2004 (22),€4.00m
-Frosinone,571600,Gabriele Bracaglia,Centre-Back,19/07/2003 (22),€3.50m
 Frosinone,534081,Jacopo Gelli,Centre-Back,11/05/2001 (25),€750k
+Frosinone,571600,Gabriele Bracaglia,Left-Back,19/07/2003 (22),€3.50m
 Frosinone,444662,Niccolò Corrado,Left-Back,19/03/2000 (26),€800k
 Frosinone,917376,Jérémy Oyono,Right-Back,12/04/2001 (25),€250k
 Frosinone,927905,Matteo Cichella,Defensive Midfield,04/10/2005 (20),€5.00m
 Frosinone,534161,Ilias Koutsoupias,Central Midfield,10/05/2001 (25),€3.00m
 Frosinone,1049596,Filippo Grosso,Central Midfield,07/09/2006 (19),€500k
-Frosinone,1225943,Abdoulie Ndow,Attacking Midfield,06/01/2005 (21),€150k
-Frosinone,704680,Antonio Fiori,Left Winger,21/02/2003 (23),€1.50m
+Frosinone,1331917,Muhammed Colley,Left Winger,01/03/2006 (20),€100k
 Frosinone,1051737,Kevin Barcella,Right Winger,17/06/2006 (20),€400k
-Frosinone,539582,Massimo Zilli,Centre-Forward,17/07/2002 (23),€750k
-Frosinone,820636,Lorenzo Gori,Centre-Forward,08/04/2004 (22),€200k
+Frosinone,1086590,Alejandro Cichero,Centre-Forward,11/07/2006 (20),€250k
+Galatasaray,695475,Siraçhan Nas,Attacking Midfield,20/06/2002 (24),€150k
+Galatasaray,1226512,Ali Efe Çördek,Right Winger,06/05/2005 (21),€50k
+Gaziantep FK,952098,Yusuf Delen,Central Midfield,07/01/2005 (21),-
+Genclerbirligi,875254,Berat Can Sebat,Right-Back,10/10/2003 (22),-
+Genclerbirligi,714612,Dilhan Demir,Right Winger,28/06/2003 (23),€100k
+Genclerbirligi,1210236,Arda Akgül,Centre-Forward,25/03/2005 (21),-
+Gil Vicente,515025,Andreas Lausen,Central Midfield,15/10/2002 (23),€700k
+Gil Vicente,1031292,Walace França,Centre-Forward,24/08/2005 (20),€500k
+Génova,715894,David Puczka,Left-Back,26/01/2005 (21),€2.50m
+Génova,1385195,Latif Ouedraogo,Left-Back,23/10/2007 (18),€1.00m
+Génova,1438038,Marcelo Vaz,Left-Back,31/07/2007 (18),€400k
+Génova,1295778,Samuel Wiafe,Central Midfield,22/06/2008 (18),€2.50m
+Génova,1044794,Alessandro Debenedetti,Centre-Forward,23/09/2003 (22),€700k
+Hamburgo,815838,Joel Agyekum,Centre-Back,08/03/2005 (21),€150k
+Hamburgo,1294853,Louis Lemke,Left-Back,08/10/2009 (16),€300k
+Hamburgo,1281338,Mads Bröcker,Attacking Midfield,03/06/2008 (18),-
+Hamburgo,1149528,Finn Barkowsky,Left Winger,12/02/2008 (18),-
+Heerenveen,1052283,Darling Bladi,Left-Back,11/06/2004 (22),€300k
+Hoffenheim,907277,Sean Dulic,Centre-Back,05/06/2005 (21),€1.20m
+Hoffenheim,1075143,Natnael Abraha,Right-Back,14/03/2008 (18),€400k
+Hoffenheim,1047136,Cajetan Lenz,Defensive Midfield,16/06/2006 (20),€10.00m
+Hull City,655877,Thimothée Lo-Tutala,Goalkeeper,13/02/2003 (23),€400k
+Hull City,712592,Harvey Cartwright,Goalkeeper,09/05/2002 (24),€150k
 Hull City,746357,Charlie Hughes,Centre-Back,16/10/2003 (22),€10.00m
 Hull City,729940,Matty Jacob,Left-Back,03/06/2001 (25),€400k
 Hull City,413402,Lewie Coyle,Right-Back,15/10/1995 (30),€1.20m
-Hull City,647395,Kyle Joseph,Centre-Forward,10/09/2001 (24),€6.00m
-Ipswich,758030,Elkan Baggott,Centre-Back,23/10/2002 (23),€200k
-Ipswich,570336,Dan Neil,Central Midfield,13/12/2001 (24),€4.50m
 Ipswich,871335,Cameron Humphreys,Central Midfield,30/10/2003 (22),€600k
 Ipswich,530813,Anis Mehmeti,Attacking Midfield,09/01/2001 (25),€15.00m
+KAA Gante,1053009,Victor De Coninck,Goalkeeper,08/02/2006 (20),-
+KAA Gante,1064973,Lars Cooman,Left-Back,15/05/2003 (23),-
+KAA Gante,1291709,Josué Vergara,Centre-Forward,25/07/2007 (18),€1.50m
+KV Kortrijk,719670,Matthew Anderson,Left-Back,25/01/2004 (22),€800k
+KV Kortrijk,671678,Liam De Smet,Central Midfield,12/04/2004 (22),€450k
+KV Kortrijk,578655,Ken Masui,Left Midfield,04/04/2001 (25),€900k
+KV Kortrijk,1175165,Mohamed Boussadia,Attacking Midfield,15/01/2006 (20),-
+KV Kortrijk,292815,Jellert Van Landschoot,Left Winger,27/08/1997 (28),€800k
+KV Kortrijk,671679,Lenn De Smet,Left Winger,12/04/2004 (22),€700k
+KV Kortrijk,838792,Csanád Vilmos Dénes,Right Winger,17/11/2004 (21),€350k
+KV Kortrijk,654092,Bryan Adinany,Centre-Forward,13/03/2000 (26),€600k
+KV Kortrijk,1456175,Ilian Temperman,Striker,24/02/2007 (19),-
+KV Kortrijk,1436492,Abdoul Diop,Striker,20/04/2005 (21),-
+KV Mechelen,1097605,Cedric Van Meirvenne,Left Winger,18/04/2005 (21),€400k
+KVC Westerlo,924051,David Amegnaglo,Right Winger,28/01/2005 (21),€175k
+Kasimpasa,1173606,Elson Mendes,Defensive Midfield,18/09/2005 (20),€800k
+Kasimpasa,1313802,Emirhan Boz,Defensive Midfield,12/02/2006 (20),€100k
+Kasimpasa,1223585,Sercan Deniz,Left Winger,29/06/2007 (19),€200k
+Kasimpasa,1557912,Stann Élysée Dalo,Left Winger,07/12/2007 (18),-
+Kasimpasa,952550,Yasin Eratilla,Right Winger,05/04/2004 (22),€75k
+Kocaelispor,1423296,Talha Polat,Goalkeeper,17/11/2006 (19),-
+Kocaelispor,553839,Onur Öztonga,Centre-Back,06/01/2000 (26),€300k
+Kocaelispor,1362377,Mikdat Çil,Centre-Back,16/02/2006 (20),-
+Kocaelispor,1423297,Umut Can Aslan,Left-Back,30/01/2006 (20),€75k
+Kocaelispor,1321749,Ege Bilim,Central Midfield,14/04/2006 (20),-
+Kocaelispor,1052006,Bedirhan Yıldız,Right Winger,30/01/2005 (21),-
+Konyaspor,775978,Emir Bars,Left Winger,11/04/2005 (21),€450k
+La Louvière,917822,Siad Gourville,Centre-Back,25/05/2000 (26),€800k
+La Louvière,899764,Patrick Nkoa,Centre-Back,11/07/1999 (27),€800k
+La Louvière,931555,Mame Wade,Central Midfield,10/10/2002 (23),€300k
+La Louvière,720939,Mátyás Kovács,Right Midfield,07/07/2003 (23),€500k
+La Louvière,617698,Mohamed Guindo,Centre-Forward,01/08/2003 (22),€300k
+Lazio,866255,Valerio Farcomeni,Central Midfield,18/01/2006 (20),€100k
 Le Mans FC,357069,Nicolas Kocik,Goalkeeper,04/08/1998 (27),€1.50m
 Le Mans FC,569359,Augustin Delbecque,Goalkeeper,03/02/2002 (24),-
 Le Mans FC,1169041,Noa Boissé,Centre-Back,20/01/2006 (20),€1.50m
 Le Mans FC,801762,Théo Eyoum,Centre-Back,07/01/2002 (24),€900k
 Le Mans FC,344382,Harold Voyer,Centre-Back,26/03/1997 (29),€700k
+Le Mans FC,1070312,Nathan Tronchet,Centre-Back,22/06/2004 (22),-
 Le Mans FC,941561,Lucas Bretelle,Defensive Midfield,17/04/2002 (24),€1.20m
-Le Mans FC,1004608,Malang Gomes,Defensive Midfield,28/05/2005 (21),€75k
 Le Mans FC,371143,Milan Robin,Central Midfield,24/11/1999 (26),€1.00m
 Le Mans FC,590048,Edwin Quarshie,Central Midfield,25/10/1995 (30),€500k
 Le Mans FC,1166137,Adil Bourabaa,Central Midfield,09/03/2005 (21),€500k
-Le Mans FC,626592,Jean Vercruysse,Central Midfield,03/07/2000 (25),€400k
+Le Mans FC,626592,Jean Vercruysse,Central Midfield,03/07/2000 (26),€400k
 Le Mans FC,1010671,Martin Rossignol,Central Midfield,03/11/2003 (22),€400k
-Le Mans FC,1081626,Izhak Hammoudi,Central Midfield,07/11/2004 (21),€50k
-Le Mans FC,510260,Taylor Luvambo,Left Winger,05/07/1999 (26),€150k
 Le Mans FC,422711,Dame Gueye,Centre-Forward,12/08/1995 (30),€600k
 Le Mans FC,1029482,William Harhouz,Centre-Forward,30/12/1999 (26),€400k
+Lecce,1057563,Christ-Owen Kouassi,Right-Back,15/04/2003 (23),€1.20m
+Lecce,748679,Olaf Gorter,Defensive Midfield,31/01/2005 (21),€200k
+Lecce,899543,Marco Delle Monache,Left Winger,03/02/2005 (21),€700k
+Lecce,1200320,Hjalte Lærke,Right Winger,23/04/2007 (19),€800k
+Lecce,937954,Paco Esteban,Centre-Forward,02/05/2006 (20),€500k
+Lens,918811,Mattia Fortin,Goalkeeper,08/07/2003 (23),€2.20m
+Levante UD,1099061,Dani Martín,Goalkeeper,26/09/2005 (20),€300k
+Levante UD,1063333,Jorge Cabello,Centre-Back,25/04/2004 (22),€900k
+Levante UD,947115,Xavi Grande,Right-Back,28/01/2005 (21),€800k
+Levante UD,707222,Enzo Bardeli,Central Midfield,11/04/2001 (25),€6.00m
+Levante UD,1063336,Edgar Alcañiz,Central Midfield,18/03/2005 (21),€150k
+Leverkusen,1214123,Kennet Eichhorn,Defensive Midfield,27/07/2009 (16),€20.00m
+Leverkusen,991480,Naba Mensah,Central Midfield,08/05/2007 (19),-
+Leverkusen,1392804,Ndjicoura Bomba,Centre-Forward,12/03/2008 (18),-
+Lommel SK,624342,Nikola Ivezic,Goalkeeper,01/04/2003 (23),€200k
+Lommel SK,975201,Jhon Banguera,Centre-Back,03/04/2004 (22),€400k
+Lommel SK,605394,Jesper Tolinsson,Centre-Back,28/02/2003 (23),€400k
+Lommel SK,883915,Henry Oware,Centre-Back,01/04/2004 (22),€400k
+Lommel SK,1300295,Josias Lama,Centre-Back,05/03/2005 (21),-
+Lommel SK,886363,Sam De Grand,Left-Back,05/10/2004 (21),€1.00m
+Lommel SK,1192402,Théo Mununga,Defensive Midfield,23/01/2007 (19),€100k
+Lommel SK,842212,Leon Lalic,Attacking Midfield,23/01/2006 (20),€200k
+Lommel SK,1064475,Álvaro Santos,Left Winger,19/12/2005 (20),€800k
+Lommel SK,1072029,Alexander Reumers,Centre-Forward,27/04/2007 (19),-
+Mainz,817521,Maximilian Kinzig,Goalkeeper,04/12/2003 (22),€150k
+Mainz,901877,Otto Ruoppi,Attacking Midfield,31/01/2006 (20),€1.00m
+Manchester Utd.,1049911,Tyler Fletcher,Central Midfield,19/03/2007 (19),€1.50m
+Marítimo,540182,Gonçalo Tabuaço,Goalkeeper,11/03/2001 (25),€350k
+Marítimo,863819,Kimiss Zavala,Goalkeeper,08/05/2004 (22),€100k
+Marítimo,856406,Noah Madsen,Centre-Back,17/09/2001 (24),€1.30m
+Marítimo,433168,Nathanael Ogbeta,Left-Back,28/04/2001 (25),€400k
+Marítimo,1210902,Nélio Batista,Central Midfield,14/01/2009 (17),-
+Marítimo,537375,Simo Bouzaidi,Left Winger,16/11/1999 (26),€1.20m
+Marítimo,336325,Enrique Peña Zauner,Left Winger,04/03/2000 (26),€300k
+Marítimo,939765,José Melro,Centre-Forward,26/05/2004 (22),€450k
+Marítimo,805595,Maurice Boakye,Centre-Forward,01/09/2004 (21),€300k
 Monza,1009618,Aljaz Strajnar,Goalkeeper,16/08/2007 (18),€200k
-Monza,1049862,Samuele Capolupo,Left-Back,08/04/2006 (20),€250k
 Monza,1010150,Adam Bakoune,Right-Back,06/02/2006 (20),€1.20m
+Monza,1144614,Solomon Loubao,Centre-Forward,03/12/2005 (20),€300k
+Moreirense,811432,Alexandre Parsemain,Centre-Forward,27/05/2003 (23),€350k
+Moreirense,1076505,Koby Mottoh,Striker,31/08/2006 (19),-
+Málaga CF,129478,Alfonso Herrero,Goalkeeper,21/04/1994 (32),€400k
+Málaga CF,1004298,Carlos López,Goalkeeper,13/11/2004 (21),€100k
+Málaga CF,635930,Diego Murillo,Centre-Back,14/03/2001 (25),€1.50m
+Málaga CF,897521,Ángel Recio,Centre-Back,05/01/2003 (23),€300k
+Málaga CF,923080,Moussa Diarra,Centre-Back,20/01/2002 (24),€25k
+Málaga CF,622951,Dani Sánchez,Left-Back,14/01/2000 (26),€400k
+Málaga CF,1064717,Rafita Garrido,Right-Back,09/11/2004 (21),€1.00m
+Málaga CF,776703,Carlos Puga,Right-Back,26/11/2000 (25),€800k
+Málaga CF,1078436,Izan Merino,Central Midfield,15/04/2006 (20),€2.00m
+Málaga CF,455066,Juanpe Jiménez,Central Midfield,31/03/1996 (30),€300k
+Málaga CF,567222,Ramón Enríquez,Central Midfield,19/04/2001 (25),€200k
+Málaga CF,1057392,Pablo Arriaza,Central Midfield,20/08/2003 (22),€50k
+Málaga CF,960562,Dani Lorenzo,Attacking Midfield,05/04/2003 (23),€1.50m
+Málaga CF,1057394,Rafa Rodríguez,Attacking Midfield,10/07/2003 (23),€1.00m
+Málaga CF,1109577,Aarón Ochoa,Attacking Midfield,18/04/2007 (19),€800k
+Málaga CF,635939,David Larrubia,Right Winger,20/04/2002 (24),€5.00m
+Málaga CF,667996,Haitam Abaida,Right Winger,01/06/2002 (24),€200k
+Málaga CF,780817,Chupe,Centre-Forward,24/08/2004 (21),€10.00m
+Mónaco,1171981,Mathys Detourbet,Left Winger,29/04/2007 (19),€15.00m
+NEC Nijmegen,775984,Merijn van de Wiel,Centre-Back,23/12/2005 (20),€100k
+NEC Nijmegen,827260,Adam Tahaui,Central Midfield,21/07/2005 (20),€500k
+NEC Nijmegen,930985,Kevin Kers,Left Winger,04/01/2006 (20),-
+Nacional,1317620,Fricio Caicedo,Centre-Back,17/04/2008 (18),-
+Newcastle,923757,Ewen Jaouen,Goalkeeper,29/12/2005 (20),€12.00m
+Niza,1134250,Hamza Koutoune,Right-Back,17/09/2006 (19),€150k
+Nápoles,704456,Nosa Edward Obaretin,Centre-Back,26/01/2003 (23),€1.50m
+Nápoles,936229,Emanuele Rao,Left Winger,28/03/2006 (20),€6.00m
+Nápoles,535797,Lorenzo Sgarbi,Second Striker,24/03/2001 (25),€350k
+Nápoles,930623,Gianluca Vigliotti,Centre-Forward,24/02/2005 (21),€150k
+PSG,1074986,Alessandro Longoni,Goalkeeper,31/01/2008 (18),€300k
+PSV,1135623,Fabian Merién,Centre-Back,26/09/2008 (17),€750k
+Paris FC,914539,Yoan Koré,Centre-Back,16/11/2004 (21),€600k
+Paris FC,536506,Mathys Tourraine,Right-Back,14/01/2001 (25),€600k
+Paris FC,1132426,Omar Sissoko,Centre-Forward,18/08/2006 (19),€1.00m
+Parma,1009616,Dominik Drobnic,Centre-Back,05/04/2007 (19),€800k
+Parma,858677,Peter Amoran,Centre-Back,22/05/2004 (22),€300k
+Parma,702324,Rachid Kouda,Central Midfield,25/07/2002 (23),€2.20m
+Parma,1087009,Abdou-Salam Konate,Central Midfield,25/11/2006 (19),€200k
+R Charleroi SC,548619,Arthur Cremer,Goalkeeper,18/08/2000 (25),-
+R Charleroi SC,1318685,Naël Piron,Centre-Back,28/09/2008 (17),-
+R Charleroi SC,1173870,Boubakar Dembaga,Defensive Midfield,07/06/2006 (20),-
+R Charleroi SC,983364,Freddy Mbemba,Left Winger,16/12/2002 (23),€600k
+RC Deportivo,786130,Eric Puerto,Goalkeeper,28/10/2002 (23),€200k
+RC Deportivo,857949,Dani Barcia,Centre-Back,19/01/2003 (23),€1.20m
+RC Deportivo,400104,Miguel Loureiro,Right-Back,21/11/1996 (29),€1.20m
+RC Deportivo,596899,Riki Rodríguez,Central Midfield,25/09/1997 (28),€1.50m
+RC Deportivo,590687,Diego Villares,Central Midfield,17/06/1996 (30),€1.00m
+RC Deportivo,1309177,Noé Carrillo,Central Midfield,28/12/2006 (19),€1.00m
+RC Deportivo,891931,Jairo Noriega,Attacking Midfield,14/08/2003 (22),€300k
+RC Deportivo,636385,Yeremay Hernández,Left Winger,10/12/2002 (23),€25.00m
+RC Deportivo,941115,Rubén López,Left Winger,26/08/2004 (21),€500k
+RC Deportivo,741256,David Mella,Right Winger,23/05/2005 (21),€5.00m
+RC Deportivo,941104,Diego Gómez,Right Winger,31/07/2004 (21),€200k
+RC Deportivo,1299392,Bil Nsongo,Centre-Forward,21/09/2004 (21),€3.00m
+RC Deportivo,1064139,Kevin Sánchez,Centre-Forward,20/02/2005 (21),€400k
+RCD Espanyol,946279,Javi Hernández,Attacking Midfield,30/01/2004 (22),€1.50m
+RSC Anderlecht,1232103,Joshua Nga Kana,Right Winger,13/06/2009 (17),€1.20m
+Real Betis,997814,Gonzalo Petit,Centre-Forward,21/09/2006 (19),€4.00m
+Rio Ave,1502255,Samuel Alves,Centre-Forward,30/03/2008 (18),-
+Royal Amberes,1551902,Carlos Mejia,Right Winger,24/07/2007 (18),-
+Royal Amberes,1555142,Luis Narh,Centre-Forward,25/12/2007 (18),-
 SC Cambuur,1197636,Matthijs Kalisvaart,Goalkeeper,06/06/2006 (20),€25k
 SC Cambuur,961050,Ismaël Baouf,Centre-Back,17/09/2006 (19),€3.00m
-SC Cambuur,1182530,Toni Jonker,Centre-Back,18/02/2006 (20),€75k
-SC Cambuur,648540,Bram Marsman,Left-Back,29/01/2003 (23),€200k
 SC Cambuur,469084,Rik Mulders,Right-Back,06/08/2000 (25),€600k
-SC Cambuur,749618,Diyae Jermoumi,Right-Back,19/07/2004 (21),€150k
+SC Cambuur,1025412,Ryan van de Pavert,Right-Back,24/01/2006 (20),€200k
 SC Cambuur,1178714,Ethan Apkakou,Defensive Midfield,15/10/2006 (19),€250k
 SC Cambuur,963511,Daan Visser,Defensive Midfield,05/11/2004 (21),€250k
+SC Cambuur,911990,Ilyes Hamache,Left Winger,11/02/2003 (23),€600k
 SC Cambuur,1242714,Fabian Kvam,Left Winger,18/10/2005 (20),€275k
 SC Cambuur,1177948,Iwan Henstra,Right Winger,10/10/2006 (19),€225k
 SC Cambuur,1149884,Wiebe Kooistra,Right Winger,23/07/2006 (19),€200k
+SC Cambuur,891833,Skye Vink,Centre-Forward,01/07/2006 (20),€350k
 SC Cambuur,500584,Nicolas Binder,Centre-Forward,13/01/2002 (24),€150k
-SC Cambuur,756568,Kian Visser,Centre-Forward,05/12/2001 (24),€125k
+SC Friburgo,907087,Berkay Yılmaz,Left-Back,25/02/2005 (21),€7.00m
+SC Friburgo,907082,Karl Steinmann,Right-Back,13/12/2005 (20),€150k
+SC Paderborn,930013,Florian Pruhs,Goalkeeper,06/02/2006 (20),€150k
+SC Paderborn,694132,Mattes Hansen,Centre-Back,15/05/2004 (22),€2.50m
+SC Paderborn,509650,Tjark Scheller,Centre-Back,12/01/2002 (24),€2.50m
+SC Paderborn,570152,Marcel Hoffmeier,Centre-Back,15/07/1999 (27),€1.00m
+SC Paderborn,521331,Nyamekye Awortwie-Grant,Centre-Back,07/08/2000 (25),€400k
+SC Paderborn,798091,Tristan Zobel,Centre-Back,04/10/2003 (22),€225k
+SC Paderborn,1005509,Santiago Castañeda,Defensive Midfield,13/11/2004 (21),€5.00m
+SC Paderborn,331637,Tom Baack,Defensive Midfield,13/03/1999 (27),€600k
+SC Paderborn,378424,Sebastian Klaas,Central Midfield,30/06/1998 (28),€900k
+SC Paderborn,421323,Timur Gayret,Central Midfield,08/08/1998 (27),€450k
+SC Paderborn,516978,Laurin Curda,Right Midfield,30/10/2001 (24),€3.00m
+SC Paderborn,606113,Jano ter Horst,Right Midfield,19/06/2002 (24),€1.20m
+SC Paderborn,1148887,Clemens Lippmann,Right Midfield,29/06/2006 (20),€400k
+SC Paderborn,698843,Jonah Sticker,Left Midfield,08/05/2004 (22),€750k
+SC Paderborn,949389,Niklas Mohr,Left Midfield,23/07/2004 (21),€500k
+SC Paderborn,814986,Albert Millgramm,Left Winger,12/11/2004 (21),€150k
+SC Paderborn,907085,Ruben Müller,Right Winger,24/08/2005 (20),€1.00m
+SC Paderborn,1104418,Kennedy Okpala,Centre-Forward,17/12/2004 (21),€1.50m
+SC Paderborn,829267,Stefano Marino,Centre-Forward,12/03/2004 (22),€1.00m
+SC Paderborn,1299403,Lasse Eickel,Centre-Forward,28/02/2008 (18),€150k
+SK Beveren,1439393,Tibe S'Jongers,Midfielder,02/04/2007 (19),-
+SK Beveren,451742,Guillaume De Schryver,Attacking Midfield,04/11/1996 (29),€600k
+SK Beveren,538958,Jearl Margaritha,Left Winger,10/04/2000 (26),€1.00m
+SK Beveren,796862,Ilyes Najim,Left Winger,10/09/2002 (23),€300k
+SK Beveren,435868,Lennart Mertens,Centre-Forward,14/08/1992 (33),€300k
+SK Beveren,1492856,Junior Diouf,Centre-Forward,16/08/2007 (18),-
+SV Elversberg,349465,Nicolas Kristof,Goalkeeper,20/12/1999 (26),€2.50m
+SV Elversberg,85534,Tim Boss,Goalkeeper,28/06/1993 (33),€200k
+SV Elversberg,44536,Frank Lehmann,Goalkeeper,29/04/1989 (37),€100k
+SV Elversberg,1159486,Elias Etringer,Goalkeeper,24/11/2007 (18),-
+SV Elversberg,448259,Lukas Pinckert,Centre-Back,22/01/2000 (26),€2.50m
+SV Elversberg,440386,Maximilian Rohr,Centre-Back,27/06/1995 (31),€800k
+SV Elversberg,806007,Luis Seifert,Centre-Back,26/01/2004 (22),€200k
+SV Elversberg,815322,Felix Keidel,Right-Back,14/06/2003 (23),€1.20m
+SV Elversberg,192840,Jan Gyamerah,Right-Back,18/06/1995 (31),€700k
+SV Elversberg,282163,Carlo Sickinger,Defensive Midfield,29/07/1997 (28),€600k
+SV Elversberg,604756,Frederik Schmahl,Central Midfield,21/12/2002 (23),€750k
+SV Elversberg,337097,Tom Zimmerschied,Left Winger,22/09/1998 (27),€1.50m
+SV Elversberg,453307,Filimon Gerezgiher,Left Winger,04/07/2000 (26),€250k
+SV Elversberg,390661,Jason Ceka,Right Winger,10/11/1999 (26),€800k
+SV Elversberg,910538,Raif Adam,Right Winger,07/09/2005 (20),€500k
+SV Elversberg,229991,Luca Schnellbacher,Centre-Forward,06/05/1994 (32),€500k
+Samsunspor,1567412,Cheick Tidiane Diabate,Central Midfield,08/11/2006 (19),-
+Santa Clara,927733,Emanuel Moreira,Centre-Back,23/03/2003 (23),€700k
+Santa Clara,749557,Thauan Lara,Left-Back,22/01/2004 (22),€400k
+Santa Clara,959680,Kamika,Left-Back,04/06/2004 (22),-
+Santa Clara,647540,Douglas Borel,Right-Back,30/03/2002 (24),€300k
+Santa Clara,874853,Mateus Sarará,Defensive Midfield,29/06/2002 (24),€275k
+Santa Clara,1056441,Miguel Pires,Central Midfield,23/05/2002 (24),€700k
+Santa Clara,1005424,Pedro Jesus,Attacking Midfield,26/04/2003 (23),-
+Santa Clara,924533,Jader Gentil,Left Winger,24/07/2003 (22),€500k
+Santa Clara,1219125,Sorriso,Left Winger,15/04/2006 (20),-
+Sassuolo,932763,Alessandro Di Bitonto,Centre-Back,08/10/2005 (20),€300k
+Sassuolo,1019116,Giorgio Vezzosi,Centre-Back,14/01/2007 (19),€250k
+Sassuolo,984373,Tommaso Macchioni,Centre-Back,04/04/2006 (20),€150k
+Sassuolo,724068,Kevin Leone,Central Midfield,28/03/2005 (21),€600k
+Sassuolo,919669,Simone Cinquegrano,Right Midfield,25/06/2004 (22),€500k
+Sassuolo,1028399,Borna Knezovic,Attacking Midfield,29/07/2005 (20),€600k
+Sassuolo,813961,Patrick Nuamah,Left Winger,31/12/2005 (20),€1.60m
+Sassuolo,908788,Flavio Russo,Centre-Forward,31/08/2004 (21),€700k
+Sparta R.,1024693,Younes Jaber el Meftahi,Attacking Midfield,11/10/2007 (18),-
+Sporting CP,1135611,Jesse Derry,Left Winger,30/06/2007 (19),€2.00m
+Stade Brestois,1228465,Noé Poillion,Goalkeeper,22/07/2007 (18),-
+Stade Rennes,1169721,Kilian Belazzoug,Goalkeeper,18/07/2006 (19),-
+Stade Rennes,1119839,Jonathan Do Marcolino,Centre-Back,10/05/2006 (20),€300k
+Standard Lieja,1048452,Laurens Goemaere,Defensive Midfield,07/04/2006 (20),€600k
+Stuttgart,1030528,Tim van der Leij,Centre-Forward,06/03/2006 (20),€400k
+Sunderland,475946,Anthony Patterson,Goalkeeper,10/05/2000 (26),€8.00m
+Sunderland,277697,Alan Browne,Central Midfield,15/04/1995 (31),€2.00m
+Telstar,944694,Abdelnour Soualhia,Centre-Back,27/06/2001 (25),€300k
+Telstar,1227404,Noach Shenkman,Defensive Midfield,02/10/2006 (19),-
+Torino,1056746,Wisdom Acquah,Defensive Midfield,07/02/2007 (19),€400k
+Toulouse,1270796,Christ Tapé,Left-Back,02/03/2006 (20),€800k
+Toulouse,1177290,Ismaïl Diallo,Right-Back,23/08/2003 (22),€900k
+Trabzonspor,658401,Veysel Sönmezsoy,Attacking Midfield,05/05/2003 (23),-
+Trabzonspor,1067782,Zekeriya Bulut,Left Winger,24/10/2005 (20),-
+Trabzonspor,1290539,Thierry Karadeniz,Left Winger,22/06/2008 (18),-
 Troyes,170549,Hillel Konaté,Goalkeeper,28/12/1994 (31),€400k
 Troyes,1179195,Sankhoun Diawara,Centre-Back,13/01/2006 (20),€2.00m
 Troyes,281611,Adrien Monfray,Centre-Back,20/12/1990 (35),€200k
@@ -89,20 +439,35 @@ Troyes,536473,Lucas Maronnier,Right-Back,09/03/2000 (26),€800k
 Troyes,1174523,Roman Murcy,Defensive Midfield,23/02/2006 (20),€50k
 Troyes,933147,Mouhamed Diop,Central Midfield,30/09/2000 (25),€4.00m
 Troyes,807653,Antoine Mille,Central Midfield,14/08/1997 (28),€2.50m
-Troyes,1171981,Mathys Detourbet,Left Winger,29/04/2007 (19),€15.00m
 Troyes,1372119,Elijah Odede,Left Winger,12/01/2007 (19),€600k
 Troyes,976861,Merwan Ifnaoui,Right Winger,22/10/1998 (27),€2.50m
 Troyes,1179193,Amadou Diakité,Right Winger,31/05/2005 (21),€50k
-Troyes,667995,Tawfik Bentayeb,Centre-Forward,14/01/2002 (24),€8.00m
 Troyes,1146422,Ibrahim Traoré,Centre-Forward,12/03/2006 (20),€50k
-Venezia,197901,Stefano Minelli,Goalkeeper,05/03/1994 (32),€100k
+Union SG,1035533,Nohim Chibani,Centre-Back,06/10/2003 (22),€400k
+Union SG,1310356,Ilan Hurtevent,Right Winger,25/05/2005 (21),€500k
+Unión Berlín,1131153,Tim Blaszczak,Defensive Midfield,25/08/2007 (18),-
+Unión Berlín,1033581,Julien Friedrich,Left Winger,12/11/2006 (19),€125k
+Unión Berlín,1162925,Mekhi Gray,Centre-Forward,19/02/2007 (19),-
+Venezia,494805,Alessio Pozzi,Goalkeeper,14/12/2000 (25),€400k
+Venezia,1371198,Ale Gomes,Centre-Back,14/02/2008 (18),€500k
 Venezia,441611,Michael Venturi,Centre-Back,23/01/1999 (27),€350k
+Venezia,731510,Giovanni Di Renzo,Centre-Back,15/06/2002 (24),€100k
 Venezia,744621,Matteo Dagasso,Central Midfield,01/04/2004 (22),€3.50m
+Venezia,1370789,Edoardo Mariani,Central Midfield,15/01/2008 (18),€500k
+Venezia,1130743,Lorenzo Berardi,Left Midfield,05/04/2006 (20),€400k
+Venezia,816861,Alvin Okoro,Centre-Forward,26/03/2005 (21),€2.00m
 Venezia,537767,Antonio Casas,Centre-Forward,30/03/2000 (26),€650k
-Willem II,1175830,Kayen Scheepens,Right-Back,18/08/2006 (19),€75k
+Venezia,1372355,Mohamed Malang Touré,Striker,31/12/2006 (19),-
+Werder Bremen,1032924,Mats Heitmann,Centre-Back,11/02/2006 (20),€125k
+Werder Bremen,1078750,Luca Höcker,Right-Back,01/06/2007 (19),€125k
+Werder Bremen,826795,Dariusz Stalmach,Defensive Midfield,08/12/2005 (20),€1.50m
+Werder Bremen,1071244,Darwin Soylu,Attacking Midfield,23/03/2007 (19),-
+Werder Bremen,1080555,Paul Erevbenagie,Right Winger,19/08/2007 (18),€125k
 Willem II,1054634,Anass Zarrouk,Defensive Midfield,18/07/2006 (19),€250k
 Willem II,1101894,Armin Culum,Left Winger,05/11/2003 (22),€400k
 Willem II,1042888,Lasse Abildgaard,Right Winger,27/02/2007 (19),€125k
 Willem II,704771,Devin Haen,Centre-Forward,18/06/2004 (22),€1.50m
 Willem II,1141074,Siegert Baartmans,Centre-Forward,06/04/2006 (20),€200k
 Willem II,297365,Thomas Verheydt,Centre-Forward,24/01/1992 (34),€125k
+Zulte Waregem,738492,Jevon Simons,Right Winger,31/07/2005 (20),€300k
+Zulte Waregem,1153876,Hemsley Akpa-Chukwu,Centre-Forward,14/07/2005 (21),€400k
